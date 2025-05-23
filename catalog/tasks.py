@@ -40,32 +40,48 @@ def download_img_ozon():
     file = settings.BASE_DIR / 'json' / 'ozon_image_data.json'
     with open(file, 'r', encoding='utf-8') as f:
         data_img = json.load(f)
+
     for items in data_img:
         for img_data in items['items']:
             product_id = img_data.get('product_id')
+
             try:
                 product = OzonData.objects.get(ozon_id=product_id).product
             except Product.DoesNotExist:
                 print(f"❌ Продукт с code_1C={product_id} не найден")
                 continue
+
             # PRIMARY PHOTO → main.jpg
             for url in img_data.get('primary_photo', []):
                 try:
+                    filename = "main.jpg"
+                    image, created = Images.objects.get_or_create(
+                        product=product,
+                        filename=filename,
+                        defaults={'main': True}
+                    )
+                    image.main = True  # на всякий случай
                     response = requests.get(url, timeout=10)
                     if response.status_code == 200:
-                        image = Images(product=product, main=True)
-                        image.image.save('main.jpg', ContentFile(response.content), save=True)
-                        print(f"✅ Сохранено главное изображение для {product.article_1C}")
+                        image.image.save(filename, ContentFile(response.content), save=True)
+                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} главное изображение для {product.article_1C}")
                 except Exception as e:
                     print(f"Ошибка при загрузке primary_photo: {e}")
+
             # PHOTO[] → 1.jpg, 2.jpg, ...
             for i, url in enumerate(img_data.get('photo', []), start=1):
                 try:
+                    filename = f"{i}.jpg"
+                    image, created = Images.objects.get_or_create(
+                        product=product,
+                        filename=filename,
+                        defaults={'main': False}
+                    )
+                    image.main = False  # на всякий случай
                     response = requests.get(url, timeout=10)
                     if response.status_code == 200:
-                        filename = f"{i}.jpg"
-                        image = Images(product=product, main=False)
                         image.image.save(filename, ContentFile(response.content), save=True)
-                        print(f"✅ Сохранено изображение {filename} для {product.article_1C}")
+                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} изображение {filename} для {product.article_1C}")
                 except Exception as e:
                     print(f"Ошибка при загрузке photo[{i}]: {e}")
+

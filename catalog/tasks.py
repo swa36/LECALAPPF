@@ -2,6 +2,9 @@ import json
 import requests
 from celery import shared_task
 from django.conf import settings
+from django.db.models import Q
+from numpy.ma.core import product
+from src.lekala_class.class_1C.ExChange1C import ExChange1C
 from src.lekala_class.class_1C.GetData1C import GetData1C
 from catalog.models import Product, Images
 from django.core.files.base import ContentFile
@@ -80,8 +83,19 @@ def download_img_ozon():
                     image.main = False  # на всякий случай
                     response = requests.get(url, timeout=10)
                     if response.status_code == 200:
+                        filename = f"{i}.jpg"
+                        image = Images(product=product, main=False)
                         image.image.save(filename, ContentFile(response.content), save=True)
-                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} изображение {filename} для {product.article_1C}")
+                        print(f"✅ Сохранено изображение {filename} для {product.article_1C}")
                 except Exception as e:
                     print(f"Ошибка при загрузке photo[{i}]: {e}")
 
+
+def test_get_img():
+    products_without_img = Product.objects.filter(Q(ozon__isnull=True) & Q(prices__retail_price__gt = 0) & Q(
+        stock__gt=0))
+    print(products_without_img.count())
+    c = ExChange1C()
+    for product in products_without_img:
+        print(f'{product.name} {product.code_1C} uuid {product.uuid_1C} id_img {product.main_img_uuid}')
+        c.get_img(id_item=product.uuid_1C)

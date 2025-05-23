@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 
 class Product(models.Model):
     uuid_1C = models.UUIDField(unique=True, editable=False, verbose_name='UUUID class_1C')
+    main_img_uuid = models.UUIDField(null=True, editable=False, verbose_name='UUUID main img')
     article_1C = models.CharField(max_length=255, verbose_name='Артикл 1С')
     code_1C = models.CharField(max_length=255, verbose_name='Код 1С', unique=True,)
     data_version = models.CharField(max_length=30, verbose_name='DataVersion')

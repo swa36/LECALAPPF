@@ -108,15 +108,10 @@ class ExChange1C:
         }
         return self._make_request('GET', endpoint, params=params)
 
-    from django.core.files.base import ContentFile
-    from pathlib import Path
-    from catalog.models import Product, Images
-    import base64
-    import requests
-
-    def get_img(self, id_item, id_main_img):
+    def get_img(self, id_item):
         try:
-            product = Product.objects.get(id=id_item)
+            product = Product.objects.get(uuid_1C=id_item)
+            id_main_img = str(product.main_img_uuid)
         except Product.DoesNotExist:
             print(f"❌ Продукт с id={id_item} не найден")
             return
@@ -137,12 +132,12 @@ class ExChange1C:
             return
 
         actual_filenames = set()
+        sequence_number = 1
 
-        for idx, file_info in enumerate(file_records):
+        for file_info in file_records:
             file_id = file_info.get('Файл')
             is_main = (file_id == id_main_img)
-            filename = "main.jpg" if is_main else f"{idx}.jpg"
-            actual_filenames.add(filename)
+            filename = "main.jpg" if is_main else f"{sequence_number}.jpg"
 
             base64_data = self._fetch_image_base64(file_id)
             if not base64_data:
@@ -169,7 +164,11 @@ class ExChange1C:
             img_obj.filename = filename
             img_obj.save(update_fields=['image', 'main', 'filename'])
 
+            actual_filenames.add(filename)
             print("✅", "Создана" if created else "Обновлена", filename)
+
+            if not is_main:
+                sequence_number += 1
 
         # Удаление устаревших изображений, не вернувшихся из 1С
         Images.objects.filter(product=product).exclude(filename__in=actual_filenames).delete()

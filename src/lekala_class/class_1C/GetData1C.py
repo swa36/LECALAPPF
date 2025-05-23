@@ -65,26 +65,6 @@ class GetData1C(ExChange1C):
 
         wb.save(file_path)
 
-    # Основной метод
-    def download_img_from_1C(self, item_uuid, uuid_main_img=None):
-        product = Product.objects.get(uuid_1C=item_uuid)
-        response = self.get_all_img(item_uuid)
-        all_img = response.get('value', [])
-        if not all_img:
-            print(f"⚠️ Нет изображений для: {product.name} ({product.article_1C})")
-            return  # нет изображений — ничего не делать
-        for i in all_img:
-            img_data = self.get_img_base64(i['Ref_Key'])
-            if 'odata.error' in img_data:
-                print(f"❌ Ошибка загрузки: {product.name} {product.article_1C} {product.stock}")
-                # записываем один раз об ошибке на продукт и прекращаем цикл
-                self.save_image_errors_to_excel([
-                    [product.name, product.article_1C]
-                ])
-                return  # прерываем дальнейшую обработку этого продукта
-
-        # если всё прошло успешно — дальше можно обработать сохранение изображений
-        print(f"✅ Успешно загружены изображения для: {product.name} ({product.article_1C})")
 
     def set_catalog_data_stock(self, data_catalog, data_stock, data_price):
         for item in data_catalog:
@@ -96,6 +76,7 @@ class GetData1C(ExChange1C):
                 elif q['RecordType'] == 'Expense':
                     stock -= q['ВНаличии']
             stock = 0 if stock < 0 else stock
+            print(item.get('ФайлКартинки_Key'))
             product, created = Product.objects.update_or_create(
                 uuid_1C=item['Ref_Key'],
                 defaults={
@@ -104,7 +85,8 @@ class GetData1C(ExChange1C):
                     'data_version': item['DataVersion'],
                     'name': item['Description'].strip(),
                     'description': item['Описание'],
-                    'stock': stock
+                    'stock': stock,
+                    'main_img_uuid':item.get('ФайлКартинки_Key')
                 }
             )
             price_item = list(filter(lambda data_price: data_price['Номенклатура_Key'] == item['Ref_Key'],
@@ -137,8 +119,7 @@ class GetData1C(ExChange1C):
                     )
 
                 # ✅ Обновление изображений
-                id_main_img = item.get('ФайлКартинки_Key')
-                if id_main_img:
-                    self.get_img(product.id, id_main_img)
+
+                self.get_img(product.id)
 
         return

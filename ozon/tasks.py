@@ -1,6 +1,7 @@
 from celery import shared_task
+import requests
 import lekala_ppf.settings as settings
-from catalog.models import Product, MarkUpItems, TypePrices
+from catalog.models import Product, MarkUpItems, TypePrices, Images
 import pandas as pd
 import json
 from order.models import OrderOzon, ItemInOrderOzon
@@ -9,6 +10,7 @@ from src.lekala_class.class_marketplace.OzonExchange import OzonExchange
 from pathlib import Path
 from src.lekala_class.class_marketplace.OzonItem import OzonTape
 from django.db.models import Q, Count
+from django.core.files.base import ContentFile
 
 def get_data_csv_ozon():
     filename = settings.BASE_DIR / 'src' / 'OzonData' / 'full_data_ozon.csv'
@@ -75,6 +77,54 @@ def ozon_get_img():
 
     print(f"Saved all image data to {output_path.resolve()}")
 
+def download_img_ozon():
+    file = settings.BASE_DIR / 'json' / 'ozon_image_data.json'
+    with open(file, 'r', encoding='utf-8') as f:
+        data_img = json.load(f)
+
+    for items in data_img:
+        for img_data in items['items']:
+            product_id = img_data.get('product_id')
+
+            try:
+                product = OzonData.objects.get(ozon_id=product_id).product
+            except OzonData.DoesNotExist:
+                print(f"❌ Продукт с ozon_id={product_id} не найден")
+                continue
+
+            # PRIMARY PHOTO → main.jpg
+            for url in img_data.get('primary_photo', []):
+                try:
+                    filename = "main.jpg"
+                    image, created = Images.objects.get_or_create(
+                        product=product,
+                        filename=filename,
+                        defaults={'main': True}
+                    )
+                    image.main = True  # гарантированно установить как главное
+                    response = requests.get(url, timeout=10)
+                    if response.status_code == 200:
+                        image.image.save(filename, ContentFile(response.content), save=True)
+                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} главное изображение для {product.article_1C}")
+                except Exception as e:
+                    print(f"Ошибка при загрузке primary_photo: {e}")
+
+            # PHOTO[] → 1.jpg, 2.jpg, ...
+            for i, url in enumerate(img_data.get('photo', []), start=1):
+                try:
+                    filename = f"{i}.jpg"
+                    image, created = Images.objects.get_or_create(
+                        product=product,
+                        filename=filename,
+                        defaults={'main': False}
+                    )
+                    image.main = False  # явно указываем
+                    response = requests.get(url, timeout=10)
+                    if response.status_code == 200:
+                        image.image.save(filename, ContentFile(response.content), save=True)
+                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} изображение {filename} для {product.article_1C}")
+                except Exception as e:
+                    print(f"Ошибка при загрузке photo[{i}]: {e}")
 
 def add_new_item_ozon():
     ozon_api = OzonExchange()

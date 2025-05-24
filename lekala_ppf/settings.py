@@ -162,3 +162,46 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # STATIC
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
+
+# Loging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # оставляем встроенные логгеры Django
+
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {name} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname}: {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'ozon': {  # пример кастомного логгера
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}

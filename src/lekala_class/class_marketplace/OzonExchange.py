@@ -41,14 +41,18 @@ class OzonExchange(BaseMarketPlace):
         payload = {'stocks': data}
         if save_to_file:
             return self._save_payload_to_file(payload)
-        return self._request('POST', endpoint, data=payload)
+        response = self._request('POST', endpoint, data=payload)
+        # print(response)
+        return response
 
     def update_price(self, data=None, save_to_file=False):
         endpoint = 'v1/product/import/prices'
         payload = {'prices': data}
         if save_to_file:
             return self._save_payload_to_file(payload)
-        return self._request('POST', endpoint, data=payload)
+        response = self._request('POST', endpoint, data=payload)
+        print(response)
+        return response
 
     def update_article(self, data=None):
         endpoint = 'v1/product/update/offer-id'

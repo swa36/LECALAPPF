@@ -2,7 +2,8 @@ import os
 from datetime import datetime
 from itertools import product
 from typing import Dict
-
+import ijson
+from typing import List, Dict
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from src.lekala_class.class_1C.ExChange1C import ExChange1C
@@ -109,10 +110,11 @@ class GetData1C(ExChange1C):
         return list_reserv_num_id
 
 
-    def set_catalog_data_stock(self, data_catalog, data_stock, data_price):
+    def set_catalog_data_stock(self, data_catalog):
+        type_price = TypePrices.objects.all()
         for item in data_catalog:
             stock = 0
-            item_stock = list(filter(lambda data_stock: data_stock['Номенклатура_Key'] == item['Ref_Key'], data_stock))
+            item_stock = self._get_items_by_key_ijson(file_path='json/data_1C/data_stock.json', key_field='Номенклатура_Key', target_key=item['Ref_Key'])
             for q in item_stock:
                 if q['RecordType'] == 'Receipt':
                     stock += q['ВНаличии']
@@ -130,10 +132,9 @@ class GetData1C(ExChange1C):
                     'main_img_uuid':item.get('ФайлКартинки_Key')
                 }
             )
-            price_item = list(filter(lambda data_price: data_price['Номенклатура_Key'] == item['Ref_Key'],
-                                     data_price))
+            price_item = self._get_items_by_key_ijson(file_path='json/data_1C/data_price.json', key_field='Номенклатура_Key', target_key=item['Ref_Key'])
             price_dict = {}
-            for tp in TypePrices.objects.all():
+            for tp in type_price:
                 value_price = list(filter(lambda price_item: price_item['ВидЦены_Key'] == str(tp.uuid_1C),
                                           price_item))
                 latest_price = 0
@@ -166,3 +167,13 @@ class GetData1C(ExChange1C):
                 self.get_img(product.uuid_1C)
 
         return
+    
+    def _get_items_by_key_ijson(self, file_path: str, key_field: str, target_key: str) -> List[Dict]:
+        result = []
+        with open(file_path, 'r', encoding='utf-8') as f:
+            # Проходим по элементам массива внутри "value"
+            objects = ijson.items(f, 'value.item')
+            for obj in objects:
+                if obj.get(key_field) == target_key:
+                    result.append(obj)
+        return result

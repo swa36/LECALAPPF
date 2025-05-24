@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 import requests
 from celery import shared_task
 from django.conf import settings
@@ -14,31 +15,24 @@ from ozon.models import OzonData
 def get_data_chunck(payload):
     print("Start get data")
     data_catalog = payload['catalog']
-    data_price = payload['price']
-    data_stock = payload['stock']
     data1C = GetData1C()
-    data1C.set_catalog_data_stock(data_catalog, data_stock, data_price)
+    data1C.set_catalog_data_stock(data_catalog)
     print("END get data")
 
 
-
+@shared_task
 def get_data_1C():
     data1C = GetData1C()
     data_catalog = data1C.get_catalog()['value']
-    data_price = data1C.get_price()['value']
-    data_stock = data1C.get_stock()['value']
-
+    data1C.get_price()
+    data1C.get_stock()
     data1C.set_name_attribute()
     data1C.set_type_price()
-
     chunk_size = len(data_catalog) // 5 + (1 if len(data_catalog) % 5 else 0)
     chunks_data_catalog = [data_catalog[i:i + chunk_size] for i in range(0, len(data_catalog), chunk_size)]
-
     for chunk in chunks_data_catalog:
         get_data_chunck.delay({
             'catalog': chunk,
-            'price': data_price,
-            'stock': data_stock
         })
 
 

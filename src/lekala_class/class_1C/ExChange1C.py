@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 import lekala_ppf.settings as settings
 from requests.auth import HTTPBasicAuth
 from requests.adapters import HTTPAdapter
@@ -6,6 +8,7 @@ from django.core.files.base import ContentFile
 from catalog.models import Product, Images
 import base64
 import requests
+
 
 
 class ExChange1C:
@@ -60,6 +63,7 @@ class ExChange1C:
         params = {
             '$select': ','.join(fields),
         }
+
         return self._make_request('GET', endpoint, params=params)
 
     def get_name_additional_attributes(self):
@@ -98,7 +102,9 @@ class ExChange1C:
         params = {
             '$select': ','.join(fields)
         }
-        return self._make_request('GET', endpoint, params=params)
+        result =  self._make_request('GET', endpoint, params=params)
+        self._save_to_json(result, 'data_price.json')
+        return result
 
     def get_reserv_item(self):
         endpoint=f"InformationRegister_СостоянияЗаказовКлиентов"
@@ -117,8 +123,10 @@ class ExChange1C:
         params = {
             '$select': ','.join(fields)
         }
-        return self._make_request('GET', endpoint, params=params)
-
+        result =  self._make_request('GET', endpoint, params=params)
+        self._save_to_json(result, 'data_stock.json')
+        return
+    
     def get_img(self, id_item):
         try:
             product = Product.objects.get(uuid_1C=id_item)
@@ -217,3 +225,14 @@ class ExChange1C:
             print(f"⚠️ Ошибка при попытке получить файл из нового хранилища: {e}")
 
         return None
+
+    def _save_to_json(self, data: dict, filename: str):
+        output_dir = Path("json/data_1C")
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        output_path = output_dir / filename
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    
+
+

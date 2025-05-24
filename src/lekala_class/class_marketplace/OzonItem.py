@@ -5,6 +5,7 @@ from src.lekala_class.class_marketplace.ozon_dict import *
 
 class OzonItem:
     BRAND_ID = 85
+    TYPE_ID = 8229
     CODE_ARTICLE_ID = 7236
     ITEM_TYPE_ID = 8229
     CODE_ITEM_ID = 9048
@@ -27,7 +28,7 @@ class OzonItem:
     def __init__(self, product):
         self.product = product
         self.main_img = self._set_main_img()
-        self.other_img = [f'localhost{i.image.url}' for i in self.product.images.filter(main=False)[:14]]
+        self.other_img = [f'https://89.111.153.195{i.image.url}' for i in self.product.images.filter(main=False)[:14]]
         self.price = int(self.product.prices.retail_price)
         self.attributes = self._get_additional_attributes()
 
@@ -39,7 +40,7 @@ class OzonItem:
 
     def _set_main_img(self):
         img = self.product.images.filter(main=True).first()
-        return f'localhost{img.image.url}' if img else ""
+        return f'https://89.111.153.195{img.image.url}' if img else ""
 
     def create_price(self):
         mark_up = MarkUpItems.objects.last()
@@ -68,15 +69,37 @@ class OzonItem:
             self.build_attribute(self.NAME_ITEM_ID, self.product.name),
             self.build_attribute(self.DESCRIPTION_ID, self.product.description),
             self.build_attribute(self.KEYWORDS_ID, self.generate_keywords()),
-            self.build_attribute(self.CODE_OFFER_ID, self.product.code_1C),
+            self.build_attribute(self.TYPE_ID, "Пленка защитная для автомобиля", 971053255),
         ]
 
     def item(self):
         normal_price, _ = self.create_price()
-        depth = float(self.attributes.get('Длина, см', 0))
-        width = float(self.attributes.get('Ширина, см', 0))
-        height = float(self.attributes.get('Высота, см', 0))
-        weight = float(self.attributes.get('Вес нетто', 0))
+        depth = float(self.attributes.get('Длина, см', 0)) * 10
+        width = float(self.attributes.get('Ширина, см', 0)) * 10
+        height = float(self.attributes.get('Высота, см', 0)) * 10
+
+        # Обработка весов
+        weight = self.attributes.get("Вес нетто", "")
+        gross_weight = self.attributes.get("Вес брутто", "")
+
+        try:
+            weight_val = float(weight)
+        except (ValueError, TypeError):
+            weight_val = 0
+
+        try:
+            gross_weight_val = float(gross_weight)
+        except (ValueError, TypeError):
+            gross_weight_val = 0
+
+        if weight_val == 0 and gross_weight_val > 0:
+            weight_val = gross_weight_val
+        elif gross_weight_val == 0 and weight_val > 0:
+            gross_weight_val = weight_val
+
+        # Преобразуем вес к граммам
+        weight_grams = weight_val * 100
+
         mark = self.attributes.get("Марка", "")
 
         return {
@@ -102,13 +125,13 @@ class OzonItem:
             "images": self.other_img,
             "images360": [],
             "name": self.product.name,
-            "offer_id": str(self.product.offer_id),
+            "offer_id": str(self.product.code_1C),
             "old_price": "0",
             "pdf_list": [],
             "price": str(normal_price),
             "primary_image": self.main_img,
-            "weight": weight,
-            "weight_unit": "kg"
+            "weight": weight_grams,
+            "weight_unit": "g"
         }
 
     @abstractmethod
@@ -122,6 +145,27 @@ class OzonTape(OzonItem):
 
     def set_atribute(self):
         attrs = self.base_attributes()
+
+        weight = self.attributes.get("Вес нетто", "")
+        gross_weight = self.attributes.get("Вес брутто", "")
+
+        # Приводим к числу и сравниваем
+        try:
+            weight_val = float(weight)
+        except (ValueError, TypeError):
+            weight_val = 0
+
+        try:
+            gross_weight_val = float(gross_weight)
+        except (ValueError, TypeError):
+            gross_weight_val = 0
+
+        # Подмена если один из весов отсутствует или равен 0
+        if weight_val == 0 and gross_weight_val > 0:
+            weight = gross_weight
+        elif gross_weight_val == 0 and weight_val > 0:
+            gross_weight = weight
+
         attrs.extend([
             self.build_attribute(
                 self.INSTALLATION_PLACE_ID,
@@ -142,7 +186,7 @@ class OzonTape(OzonItem):
             self.build_attribute(self.WARRANTY_ID, self.attributes.get("Гарантия, мес.", "")),
             self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
             self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("Комплектация", "")),
-            self.build_attribute(self.WEIGHT_ID, self.attributes.get("Вес нетто", "")),
-            self.build_attribute(self.GROSS_WEIGHT_ID, self.attributes.get("Вес брутто", ""))
+            self.build_attribute(self.WEIGHT_ID, weight),
+            self.build_attribute(self.GROSS_WEIGHT_ID, gross_weight)
         ])
         return attrs

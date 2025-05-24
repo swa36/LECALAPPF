@@ -100,6 +100,17 @@ class ExChange1C:
         }
         return self._make_request('GET', endpoint, params=params)
 
+    def get_reserv_item(self):
+        endpoint=f"InformationRegister_СостоянияЗаказовКлиентов"
+        fields=['Заказ', 'Состояние']
+        params = {
+            '$orderby':'ДатаСобытия desc',
+            '$select': ','.join(fields),
+            '$top':100
+
+        }
+        return self._make_request('GET', endpoint, params=params)
+
     def get_stock(self):
         endpoint = 'AccumulationRegister_ЗапасыИПотребности_RecordType'
         fields = ['Номенклатура_Key', 'ВНаличии', 'RecordType']

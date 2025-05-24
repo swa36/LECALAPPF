@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
 from itertools import product
+from typing import Dict
+
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from src.lekala_class.class_1C.ExChange1C import ExChange1C
@@ -65,6 +67,47 @@ class GetData1C(ExChange1C):
 
         wb.save(file_path)
 
+    def get_quantity_in_order(self) -> Dict[str, int]:
+        """
+        Получает количество товаров в заказах со статусом "ВПроцессеОтгрузки".
+        :return: Словарь с количеством товаров по uuid_1C, где ключ — это ID товара, значение — общее количество.
+        """
+        list_reserv_num_id: Dict[str, int] = {}
+
+        try:
+            reserv_orders = self.get_reserv_item().get('value', [])
+        except Exception as e:
+            print(f"❌ Ошибка при получении резервов: {e}")
+            return list_reserv_num_id
+
+        if not reserv_orders:
+            return list_reserv_num_id
+
+        list_reserv_order = [
+            i for i in reserv_orders
+            if i.get('Состояние') == 'ВПроцессеОтгрузки' and 'Заказ' in i
+        ]
+
+        for order in list_reserv_order:
+            order_id = order['Заказ']
+            endpoint = f"Document_ЗаказКлиента(guid'{order_id}')"
+            order_reserv = self._make_request("GET", endpoint)
+
+            if not order_reserv or 'Товары' not in order_reserv:
+                continue
+
+            for item in order_reserv['Товары']:
+                try:
+                    id_num = str(item["Номенклатура_Key"])
+                    quantity = int(item["Количество"])
+                    list_reserv_num_id[id_num] = list_reserv_num_id.get(id_num, 0) + quantity
+                except KeyError as e:
+                    print(f"⚠️ Нет ключа {e} в товаре: {item}")
+                except (ValueError, TypeError):
+                    print(f"⚠️ Ошибка количества: {item.get('Количество')}")
+
+        return list_reserv_num_id
+
 
     def set_catalog_data_stock(self, data_catalog, data_stock, data_price):
         for item in data_catalog:
@@ -106,7 +149,7 @@ class GetData1C(ExChange1C):
             )
             if created or product.data_version != item['DataVersion']:
                 product.data_version = item['DataVersion']
-                product.save() 
+                product.save()
                 # Обновление доп. атрибутов
                 additional_attributes = item['ДополнительныеРеквизиты']
                 for attribute in additional_attributes:

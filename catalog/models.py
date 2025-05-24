@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 
 
 class Product(models.Model):
-    uuid_1C = models.UUIDField(unique=True, editable=False, verbose_name='UUUID class_1C')
+    uuid_1C = models.UUIDField(unique=True, editable=False, verbose_name='UUUID 1C')
     main_img_uuid = models.UUIDField(null=True, editable=False, verbose_name='UUUID main img')
     article_1C = models.CharField(max_length=255, verbose_name='Артикл 1С')
     code_1C = models.CharField(max_length=255, verbose_name='Код 1С', unique=True,)
@@ -16,13 +16,21 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(verbose_name='Остаток', default=0)
 
 
+
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
 
 class NameAdditionalAttributes(models.Model):
     uuid_1C = models.UUIDField(unique=True, editable=False, verbose_name='UUID class_1C')
     name_attribute = models.CharField(max_length=50, verbose_name='Название атрибута')
+
+    def __str__(self):
+        return self.name_attribute
+
 
 class ValueAdditionalAttributes(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='additional_attributes', null=True)

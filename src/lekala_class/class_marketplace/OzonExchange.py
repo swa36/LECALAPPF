@@ -1,3 +1,8 @@
+import inspect
+import json
+from datetime import datetime
+from pathlib import Path
+
 from lekala_ppf.settings import OZON_ID, OZON_KEY
 from src.lekala_class.class_marketplace.BaseMarketPlace import BaseMarketPlace
 from order.models import MarketplaceControl
@@ -20,24 +25,29 @@ class OzonExchange(BaseMarketPlace):
         }
         return self._request('POST', endpoint, data=payload)
 
-    def post_items(self, data=None):
-        endpoint = 'v3/product/import'
+    def post_items(self, data=None, save_to_file=False):
         payload = {'items': data}
-        return self._request('POST', endpoint, data=payload)
+        if save_to_file:
+            return self._save_payload_to_file(payload)
+        return self._request('POST', 'v3/product/import', data=payload)
 
     def get_items(self, data=None):
         endpoint = 'v3/product/info/list'
         payload = {'offer_id': data}
         return self._request('POST', endpoint, data=payload)
 
-    def update_remains(self, data=None):
+    def update_remains(self, data=None, save_to_file=False):
         endpoint = 'v2/products/stocks'
         payload = {'stocks': data}
+        if save_to_file:
+            return self._save_payload_to_file(payload)
         return self._request('POST', endpoint, data=payload)
 
-    def update_price(self, data=None):
+    def update_price(self, data=None, save_to_file=False):
         endpoint = 'v1/product/import/prices'
         payload = {'prices': data}
+        if save_to_file:
+            return self._save_payload_to_file(payload)
         return self._request('POST', endpoint, data=payload)
 
     def update_article(self, data=None):
@@ -76,3 +86,21 @@ class OzonExchange(BaseMarketPlace):
     def work_time_ozon(self):
         work_ozon = MarketplaceControl.objects.get(name='ozon')
         return work_ozon.is_available_now()
+
+    def _save_payload_to_file(self, payload):
+        # Имя вызывающего метода
+        caller_name = inspect.stack()[1].function
+
+        # Путь к папке на основе имени метода
+        folder_path = Path(f'json/ozon_request/{caller_name}')
+        folder_path.mkdir(parents=True, exist_ok=True)
+
+        # Уникальное имя файла по времени
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+        file_path = folder_path / f'{caller_name}_{timestamp}.json'
+
+        # Сохраняем только payload
+        with file_path.open('w', encoding='utf-8') as f:
+            json.dump(payload, f, ensure_ascii=False, indent=4)
+
+        return str(file_path)

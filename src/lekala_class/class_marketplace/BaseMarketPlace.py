@@ -47,6 +47,12 @@ class BaseMarketPlace(ABC):
             num = '-'.join(n)
             return num
 
+    def round_to_nearest_10_custom(self, n):
+        remainder = n % 10
+        if remainder >= 5:
+            return int(n - remainder + 10)
+        else:
+            return int(n - remainder)
 
 
 

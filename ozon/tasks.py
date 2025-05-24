@@ -3,13 +3,12 @@ import lekala_ppf.settings as settings
 from catalog.models import Product, MarkUpItems, TypePrices
 import pandas as pd
 import json
-
 from order.models import OrderOzon, ItemInOrderOzon
 from ozon.models import OzonData
 from src.lekala_class.class_marketplace.OzonExchange import OzonExchange
 from pathlib import Path
 from src.lekala_class.class_marketplace.OzonItem import OzonTape
-from django.db.models import Q
+from django.db.models import Q, Count
 
 def get_data_csv_ozon():
     filename = settings.BASE_DIR / 'src' / 'OzonData' / 'full_data_ozon.csv'
@@ -80,38 +79,50 @@ def ozon_get_img():
 def add_new_item_ozon():
     ozon_api = OzonExchange()
     items = []
-    products_not_ozon = Product.objects.filter(Q(ozon__isnull=True) & Q(stock__gt=0) & Q(images__isnull=False))
+    products_not_ozon = Product.objects.annotate(image_count=Count('images')).filter(
+        Q(image_count__gt=0) & Q(ozon__isnull=True) & Q(stock__gt=0) & Q(prices__retail_price__gt=0)
+    )
     for product in products_not_ozon:
         if len(items) > 99:
-            ozon_api.post_items(data=items)
+            ozon_api.post_items(data=items, save_to_file=True)
             items.clear()
         ozon_item = OzonTape(product)
         items.append(ozon_item.item())
     if len(items) > 0:
-        ozon_api.post_items(data=items)
+        ozon_api.post_items(data=items, save_to_file=True)
 
 
 @shared_task
 def update_price_ozon():
     ozon_api = OzonExchange()
-    ozon_data = OzonData.objects.all().values('offer_id', 'product__prices__retail_price')
+    ozon_data = OzonData.objects.all().values_list('offer_id', 'ozon_id', 'product__prices__retail_price')
     mark_up = MarkUpItems.objects.last()
     data_price = []
+
     for item in ozon_data:
-        item_price_info =  {
-        "auto_action_enabled": "DISABLED",
-        "price_strategy_enabled": "DISABLED",
-        "min_price": str(item[1] + (mark_up.ozon_mark_up * item[1]) / 100),
-        "offer_id": item[0],
-        "old_price":"0",
-        "price": str(item[1] + (mark_up.ozon_mark_up * item[1]) / 100),
-        "vat":0
+        base_price = int(item[2])
+        raw_price = base_price + (mark_up.ozon_mark_up * base_price) / 100
+        final_price = ozon_api.round_to_nearest_10_custom(raw_price)
+
+        item_price_info = {
+            "auto_action_enabled": "DISABLED",
+            "auto_add_to_ozon_actions_list_enabled":"DISABLED",
+            "currency_code": "RUB",
+            "price_strategy_enabled": "DISABLED",
+            "min_price": str(final_price),
+            "offer_id": item[0],
+            "old_price": "0",
+            "price": str(final_price),
+            "product_id": item[1],
+            "vat": "0"
         }
-        if len(data_price) > 999:
+
+        data_price.append(item_price_info)
+
+        if len(data_price) >= 1000:
             ozon_api.update_price(data=data_price)
             data_price.clear()
-        item_price_info.update({"product_id": item[1]})
-        data_price.append(item_price_info)
+
     if data_price:
         ozon_api.update_price(data=data_price)
 
@@ -166,9 +177,9 @@ def ozon_create_order(num_order):
 def update_remains_ozon():
     print("start update remains OZON")
     ozon_api = OzonExchange()
-    products_not_ozon = Product.objects.filter(Q(ozon__isnull=False)).values('ozon__offer_id', 'ozon__ozon_id', 'stock')
+    ozon_data = OzonData.objects.all().values_list('offer_id', 'ozon_id', 'product__stock')
     stock = []
-    for item in products_not_ozon:
+    for item in ozon_data:
         if len(stock) > 99:
             ozon_api.update_remains(data=stock)
             stock.clear()

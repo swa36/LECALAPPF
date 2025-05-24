@@ -189,3 +189,4 @@ migrations/
 *.xml
 *.xlsx
 media/
+*.sh

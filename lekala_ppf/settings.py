@@ -158,3 +158,7 @@ OZON_KEY=env('OZON_KEY')
 # MEDIA
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# STATIC
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'

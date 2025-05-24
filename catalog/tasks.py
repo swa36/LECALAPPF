@@ -12,11 +12,13 @@ from ozon.models import OzonData
 
 @shared_task
 def get_data_chunck(payload):
+    print("Start get data")
     data_catalog = payload['catalog']
     data_price = payload['price']
     data_stock = payload['stock']
     data1C = GetData1C()
     data1C.set_catalog_data_stock(data_catalog, data_stock, data_price)
+    print("END get data")
 
 
 
@@ -39,6 +41,8 @@ def get_data_1C():
             'stock': data_stock
         })
 
+
+
 def download_img_ozon():
     file = settings.BASE_DIR / 'json' / 'ozon_image_data.json'
     with open(file, 'r', encoding='utf-8') as f:
@@ -50,8 +54,8 @@ def download_img_ozon():
 
             try:
                 product = OzonData.objects.get(ozon_id=product_id).product
-            except Product.DoesNotExist:
-                print(f"❌ Продукт с code_1C={product_id} не найден")
+            except OzonData.DoesNotExist:
+                print(f"❌ Продукт с ozon_id={product_id} не найден")
                 continue
 
             # PRIMARY PHOTO → main.jpg
@@ -63,7 +67,7 @@ def download_img_ozon():
                         filename=filename,
                         defaults={'main': True}
                     )
-                    image.main = True  # на всякий случай
+                    image.main = True  # гарантированно установить как главное
                     response = requests.get(url, timeout=10)
                     if response.status_code == 200:
                         image.image.save(filename, ContentFile(response.content), save=True)
@@ -80,15 +84,15 @@ def download_img_ozon():
                         filename=filename,
                         defaults={'main': False}
                     )
-                    image.main = False  # на всякий случай
+                    image.main = False  # явно указываем
                     response = requests.get(url, timeout=10)
                     if response.status_code == 200:
-                        filename = f"{i}.jpg"
-                        image = Images(product=product, main=False)
                         image.image.save(filename, ContentFile(response.content), save=True)
-                        print(f"✅ Сохранено изображение {filename} для {product.article_1C}")
+                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} изображение {filename} для {product.article_1C}")
                 except Exception as e:
                     print(f"Ошибка при загрузке photo[{i}]: {e}")
+
+
 
 
 def test_get_img():

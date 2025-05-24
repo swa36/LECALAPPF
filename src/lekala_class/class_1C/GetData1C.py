@@ -76,13 +76,11 @@ class GetData1C(ExChange1C):
                 elif q['RecordType'] == 'Expense':
                     stock -= q['ВНаличии']
             stock = 0 if stock < 0 else stock
-            print(item.get('ФайлКартинки_Key'))
             product, created = Product.objects.update_or_create(
                 uuid_1C=item['Ref_Key'],
                 defaults={
                     'article_1C': item['Артикул'].strip(),
                     'code_1C': item['Code'],
-                    'data_version': item['DataVersion'],
                     'name': item['Description'].strip(),
                     'description': item['Описание'],
                     'stock': stock,
@@ -107,6 +105,8 @@ class GetData1C(ExChange1C):
                 defaults={**price_dict}
             )
             if created or product.data_version != item['DataVersion']:
+                product.data_version = item['DataVersion']
+                product.save() 
                 # Обновление доп. атрибутов
                 additional_attributes = item['ДополнительныеРеквизиты']
                 for attribute in additional_attributes:
@@ -120,6 +120,6 @@ class GetData1C(ExChange1C):
 
                 # ✅ Обновление изображений
 
-                self.get_img(product.id)
+                self.get_img(product.uuid_1C)
 
         return

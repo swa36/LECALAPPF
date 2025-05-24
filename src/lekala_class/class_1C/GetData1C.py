@@ -1,8 +1,8 @@
+import json
 import os
 from datetime import datetime
 from itertools import product
 from typing import Dict
-import ijson
 from typing import List, Dict
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
@@ -112,14 +112,15 @@ class GetData1C(ExChange1C):
 
     def set_catalog_data_stock(self, data_catalog):
         type_price = TypePrices.objects.all()
+        stock_map, price_map = self._get_data_stocks_prices()
         for item in data_catalog:
             stock = 0
-            item_stock = self._get_items_by_key_ijson(file_path='json/data_1C/data_stock.json', key_field='Номенклатура_Key', target_key=item['Ref_Key'])
-            for q in item_stock:
+            for q in stock_map.get(item['Ref_Key'], []):
                 if q['RecordType'] == 'Receipt':
                     stock += q['ВНаличии']
                 elif q['RecordType'] == 'Expense':
                     stock -= q['ВНаличии']
+            stock = max(stock, 0)
             stock = 0 if stock < 0 else stock
             product, created = Product.objects.update_or_create(
                 uuid_1C=item['Ref_Key'],
@@ -132,7 +133,7 @@ class GetData1C(ExChange1C):
                     'main_img_uuid':item.get('ФайлКартинки_Key')
                 }
             )
-            price_item = self._get_items_by_key_ijson(file_path='json/data_1C/data_price.json', key_field='Номенклатура_Key', target_key=item['Ref_Key'])
+            price_item = price_map.get(item['Ref_Key'], [])
             price_dict = {}
             for tp in type_price:
                 value_price = list(filter(lambda price_item: price_item['ВидЦены_Key'] == str(tp.uuid_1C),
@@ -167,13 +168,20 @@ class GetData1C(ExChange1C):
                 self.get_img(product.uuid_1C)
 
         return
-    
-    def _get_items_by_key_ijson(self, file_path: str, key_field: str, target_key: str) -> List[Dict]:
-        result = []
-        with open(file_path, 'r', encoding='utf-8') as f:
-            # Проходим по элементам массива внутри "value"
-            objects = ijson.items(f, 'value.item')
-            for obj in objects:
-                if obj.get(key_field) == target_key:
-                    result.append(obj)
-        return result
+
+    def _get_data_stocks_prices(self):
+        with open('json/data_1C/data_stock.json', 'r', encoding='utf-8') as d_s:
+            stocks = json.load(d_s)['value']
+        stock_map = {}
+        for item in stocks:
+            key = item['Номенклатура_Key']
+            stock_map.setdefault(key, []).append(item)
+
+        with open('json/data_1C/data_price.json', 'r', encoding='utf-8') as d_p:
+            prices = json.load(d_p)['value']
+        price_map = {}
+        for item in prices:
+            key = item['Номенклатура_Key']
+            price_map.setdefault(key, []).append(item)
+
+        return stock_map, price_map

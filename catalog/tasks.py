@@ -31,7 +31,7 @@ def get_data_1C():
     chunk_size = len(data_catalog) // 5 + (1 if len(data_catalog) % 5 else 0)
     chunks_data_catalog = [data_catalog[i:i + chunk_size] for i in range(0, len(data_catalog), chunk_size)]
     for chunk in chunks_data_catalog:
-        get_data_chunck.delay({
+        get_data_chunck({
             'catalog': chunk,
         })
 

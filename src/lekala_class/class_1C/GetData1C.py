@@ -150,6 +150,7 @@ class GetData1C(ExChange1C):
                 defaults={**price_dict}
             )
             if created or product.data_version != item['DataVersion']:
+                print(f'Создана\обновлена номеклатура {product.name} {product.article_1C}')
                 product.data_version = item['DataVersion']
                 product.save()
                 # Обновление доп. атрибутов

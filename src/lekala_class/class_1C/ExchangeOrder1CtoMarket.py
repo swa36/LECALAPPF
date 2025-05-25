@@ -1,4 +1,6 @@
+import json
 import os
+from pathlib import Path
 import django
 from requests.auth import HTTPBasicAuth
 import requests
@@ -15,8 +17,6 @@ class OrderMarketplaceTo1C:
     # Константы для работы с API 1С
     BASE_URL = BASE_URL_1C
     DEFAULT_VALUES = {
-        "Характеристика_Key": "00000000-0000-0000-0000-000000000000",
-        "Упаковка_Key": "00000000-0000-0000-0000-000000000000",
         "Склад_Key": "e57af514-4c46-11ec-a9c8-f8cab8387a55",
         "СтавкаНДС_Key": "ef585e44-eef9-11ee-88ed-00155d46f78c",
         "ВидЦены_Key": str(TypePrices.objects.get(suffix='retail_price').uuid_1C),
@@ -168,27 +168,20 @@ class OrderMarketplaceTo1C:
         comment = self._generate_order_comment(order_items)
 
         return {
-            "DeletionMark": False,
             "Number": self.order.number_1C,
             "Date": self._get_current_datetime(),
-            "Posted": False,
             "Партнер_Key": str(self.order.id_patner),
             "Контрагент_Key": str(self.order.id_contr),
             "Организация_Key": "e57af50a-4c46-11ec-a9c8-f8cab8387a55",
-            "Соглашение_Key": "00000000-0000-0000-0000-000000000000",
+            "Соглашение_Key": "d7009a1a-f768-11ee-8088-00155d46f78e",
             "Валюта_Key": "12fb735c-4c47-11ec-a9c8-f8cab8387a55",
             "СуммаДокумента": str(self.order.price),
-            "ГрафикОплаты_Key": "00000000-0000-0000-0000-000000000000",
-            "ЖелаемаяДатаОтгрузки": "0001-01-01T00:00:00",
-            "ЦенаВключаетНДС": True,
-            "Статус": "КОтгрузке",
+            "ЦенаВключаетНДС": False,
             "ДатаСогласования": self._get_shipment_date(),
             "Согласован": True,
-            "БанковскийСчет_Key": "ac35163f-020d-11ea-9049-bcee7be013be",
             "ДатаОтгрузки": self._get_shipment_date(),
             "НалогообложениеНДС": "ПродажаНеОблагаетсяНДС",
             "ХозяйственнаяОперация": "РеализацияКлиенту",
-            "ПорядокРасчетов": "ПоНакладным",
             "Назначение_Key": "6b48bbf4-3731-11f0-81cb-00155d46f78d",
             "Приоритет_Key": "12fb7386-4c47-11ec-a9c8-f8cab8387a55",
             "СкидкиРассчитаны": True,
@@ -218,7 +211,12 @@ class OrderMarketplaceTo1C:
         """Отправляет заказ в 1С."""
         order_data = self.prepare_order_data()
         order_url = f"{self.BASE_URL}Document_ЗаказКлиента?$format=application/json;odata=nometadata"
-
+        # timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        # filename = Path("json/orders_to_1c")
+        # filename.mkdir(parents=True, exist_ok=True)
+        # file_path = filename / f"order_{timestamp}.json"
+        # with file_path.open("w", encoding="utf-8") as f:
+        #     json.dump(order_data, f, ensure_ascii=False, indent=4)
         try:
             response = self._make_request(order_url, data=order_data)
             if response:

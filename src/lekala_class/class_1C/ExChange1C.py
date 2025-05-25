@@ -63,8 +63,9 @@ class ExChange1C:
         params = {
             '$select': ','.join(fields),
         }
-
-        return self._make_request('GET', endpoint, params=params)
+        result = self._make_request('GET', endpoint, params=params)
+        self._save_to_json(result, 'data_catalog')
+        return result
 
     def get_name_additional_attributes(self):
         endpoint = 'ChartOfCharacteristicTypes_ДополнительныеРеквизитыИСведения'

@@ -6,6 +6,7 @@ from src.lekala_class.class_1C.ExchangeOrder1CtoMarket import OrderMarketplaceTo
 def order_change():
     # order_avito = OrderAvito.objects.filter(change_1C=False)
     order_ozon = OrderOzon.objects.filter(exchange_1c=False)
+    # order_ozon = OrderOzon.objects.filter(number_1C='OZ00-000001')
     # order_ali = OrderAli.objects.filter(exchange_1c=False)
     # order_wb = OrderWB.objects.filter(exchange_1c=False)
     order_list = [order_ozon]

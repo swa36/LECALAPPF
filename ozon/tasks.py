@@ -164,7 +164,8 @@ def update_price_ozon():
             "old_price": "0",
             "price": str(final_price),
             "product_id": item[1],
-            "vat": "0"
+            "vat": "0",
+            "quant_size":"1"
         }
 
         data_price.append(item_price_info)

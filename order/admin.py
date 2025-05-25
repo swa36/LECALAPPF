@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import OrderOzon, ItemInOrderOzon
+from .models import OrderOzon, ItemInOrderOzon, OrderWB
 
 
 class ItemInOrderOzonInline(admin.TabularInline):
@@ -17,8 +17,23 @@ class OrderOzonAdmin(admin.ModelAdmin):
     readonly_fields = ('date_create', 'price')
     inlines = [ItemInOrderOzonInline]
 
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-        # Пересчитываем сумму после сохранения
-        obj.price = obj.calculate_total()
-        obj.save()
+
+
+
+@admin.register(OrderWB)
+class OrderWBAdmin(admin.ModelAdmin):
+    list_display = ('number_1C', 'number_WB', 'date_create', 'price', 'exchange_1c')
+    search_fields = ('number_WB', 'number_1C')
+    readonly_fields = ('date_create',)
+
+    fieldsets = (
+        (None, {
+            'fields': ('number_WB', 'number_1C', 'price', 'exchange_1c')
+        }),
+        ('Привязка к товару', {
+            'fields': ('content_type', 'object_id')
+        }),
+        ('Дополнительно', {
+            'fields': ('date_create',)
+        }),
+    )

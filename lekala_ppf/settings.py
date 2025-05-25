@@ -155,6 +155,9 @@ CELERY_TASK_SERIALIZER = 'json'
 OZON_ID=env('OZON_ID')
 OZON_KEY=env('OZON_KEY')
 
+# WB
+WB_KEY=env('WB_KEY')
+
 # MEDIA
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

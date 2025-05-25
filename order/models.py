@@ -93,7 +93,7 @@ class OrderWB(AbstractOrder):
     product = GenericForeignKey(ct_field='content_type', fk_field='object_id')
 
     def __str__(self):
-        return self.number_1C or 'WB заказ'
+        return self.number_1C
 
     class Meta:
         verbose_name = 'Заказ WB'

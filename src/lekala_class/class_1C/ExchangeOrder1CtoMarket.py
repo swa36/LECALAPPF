@@ -134,7 +134,7 @@ class OrderMarketplaceTo1C:
         product_data = {
             "LineNumber": line_number,
             "ДатаОтгрузки": self._get_shipment_date(),
-            "Номенклатура_Key": str(prod.uuid_1C) if prod else self.DEFAULT_VALUES["Характеристика_Key"],
+            "Номенклатура_Key": str(prod.uuid_1C) if prod else "00000000-0000-0000-0000-000000000000",
             "Количество": int(quantity),
             "КоличествоУпаковок": quantity,
             "Цена": float(price),

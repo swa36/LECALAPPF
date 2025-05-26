@@ -21,7 +21,10 @@ class BaseMarketPlace(ABC):
         url = self.base_url + endpoint
         response = requests.request(method, url, headers=self.headers, json=data, params=params)
         response.raise_for_status()
-        return response.json()
+        if response.status_code == 204:
+            print(response)
+        else:
+            return response.json()
 
     def _get_model_by_class_name(self):
         name = self.__class__.__name__.lower()  # например: ozonmarketplace

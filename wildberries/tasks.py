@@ -1,7 +1,6 @@
 from typing import Optional, Dict
 import pandas as pd
 from celery import shared_task
-
 from order.models import OrderWB
 from src.lekala_class.class_marketplace.WB import WBItemCard, PriceItemWB, StockItemWB, GetOrderWB
 from catalog.models import Product, MarkUpItems
@@ -53,20 +52,21 @@ def update_price_wb():
     list_price = []
     list_discount_wb = []
     for i in product_wb:
-        price = i[1] + (mark_up.wildberries_mark_up * i[1]) / 100
+        price = wb_api.round_to_nearest_10_custom(i[1] + (mark_up.wildberries_mark_up * i[1]) / 100)
         if price <= 0:
             continue
         if i[0]:
             list_price.append({"nmID": int(i[0]),"price": int(price), "discount": 0})
             list_discount_wb.append({"nmID": int(i[0]), "clubDiscount": 0})
         if len(list_price) > 999:
-            wb_api.update_price(data=list_price, save_to_file=True)
-            wb_api.set_price_club_wb(data=list_discount_wb, save_to_file=True)
+            wb_api.update_price(data=list_price)
+            wb_api.set_price_club_wb(data=list_discount_wb)
             list_price.clear()
             list_discount_wb.clear()
     if list_price:
-        wb_api.update_price(data=list_price, save_to_file=True)
-        wb_api.set_price_club_wb(data=list_discount_wb, save_to_file=True)
+        wb_api.update_price(data=list_price)
+        wb_api.set_price_club_wb(data=list_discount_wb)
+
 
 
 @shared_task
@@ -77,12 +77,12 @@ def update_remains_wb():
     list_stock = []
     for i in product_wb:
         if len(list_stock) > 999:
-            wb_api.update_remains(data=list_stock, save_to_file=True)
+            wb_api.update_remains(data=list_stock, save_to_file=False)
             list_stock.clear()
         if i[0]:
             list_stock.append({"sku": str(i[0]), "amount": int(i[1]) if wb_api.work_time_wb() else 0})
     if list_stock:
-        wb_api.update_remains(data=list_stock, save_to_file=True)
+        wb_api.update_remains(data=list_stock, save_to_file=False)
     print("End update stock WB")
 
 @shared_task

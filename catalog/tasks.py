@@ -11,6 +11,7 @@ from catalog.models import Product, Images
 from django.core.files.base import ContentFile
 from ozon.models import OzonData
 from ozon.tasks import update_remains_ozon
+from wildberries.tasks import update_remains_wb
 
 @shared_task
 def get_data_chunck(payload):
@@ -37,6 +38,7 @@ def get_data_1C():
             'catalog': chunk,
         })
     update_remains_ozon.delay()
+    update_remains_wb.delay()
 
 
 

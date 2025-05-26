@@ -37,12 +37,14 @@ class OrderMarketplaceTo1C:
         'orderozon': {
             'name': 'OZON',
             'number_field': 'number_ozon',
-            'name_template': lambda o: f'{o.name_shop} {o.number_ozon}'
+            'name_template': lambda o: f'{o.name_shop} {o.number_ozon}',
+            'number_1C': lambda o: f'OZ00-{o.number_ozon}'
         },
         'orderwb': {
             'name': 'Wildberries',
             'number_field': 'number_WB',
-            'name_template': lambda o: f'{o.name_shop} {o.number_WB}'
+            'name_template': lambda o: f'{o.name_shop} {o.number_WB}',
+            'number_1C': lambda o: f'WB00-{o.number_WB}'
         }
     }
 
@@ -134,7 +136,7 @@ class OrderMarketplaceTo1C:
         product_data = {
             "LineNumber": line_number,
             "ДатаОтгрузки": self._get_shipment_date(),
-            "Номенклатура_Key": str(prod.uuid_1C) if prod else self.DEFAULT_VALUES["Характеристика_Key"],
+            "Номенклатура_Key": str(prod.uuid_1C) if prod else "00000000-0000-0000-0000-000000000000",
             "Количество": int(quantity),
             "КоличествоУпаковок": quantity,
             "Цена": float(price),
@@ -168,7 +170,7 @@ class OrderMarketplaceTo1C:
         comment = self._generate_order_comment(order_items)
 
         return {
-            "Number": self.order.number_1C,
+            "Number": self.platform_info['number_1C'](self.order),
             "Date": self._get_current_datetime(),
             "Партнер_Key": str(self.order.id_patner),
             "Контрагент_Key": str(self.order.id_contr),
@@ -211,26 +213,14 @@ class OrderMarketplaceTo1C:
         """Отправляет заказ в 1С."""
         order_data = self.prepare_order_data()
         order_url = f"{self.BASE_URL}Document_ЗаказКлиента?$format=application/json;odata=nometadata"
-        # timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        # filename = Path("json/orders_to_1c")
-        # filename.mkdir(parents=True, exist_ok=True)
-        # file_path = filename / f"order_{timestamp}.json"
-        # with file_path.open("w", encoding="utf-8") as f:
-        #     json.dump(order_data, f, ensure_ascii=False, indent=4)
         try:
             response = self._make_request(order_url, data=order_data)
             if response:
-                if hasattr(self.order, 'exchange_1c'):
-                    self.order.exchange_1c = True
-                elif hasattr(self.order, 'change_1C'):
-                    self.order.change_1C = True
-                if hasattr(self.order, 'uuid_order_1C'):
-                    self.order.uuid_order_1C = response['Ref_Key']
+                self.order.exchange_1c = True
                 self.order.save()
                 post_url = f"{self.BASE_URL}Document_ЗаказКлиента(guid'{response['Ref_Key']}')/Post()"
                 self._make_request(url=post_url)
             return True
         except requests.exceptions.RequestException as e:
             print(f'Error sending order to 1C: {str(e)}')
-            return False
-
+        return False

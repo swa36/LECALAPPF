@@ -162,7 +162,6 @@ class StockItemWB(BaseMarketPlace):
         if save_to_file:
             return self._save_payload_to_file(body)
         req = self._request("PUT", endpoint, body)
-        print(req)
         return req
 
     def del_stock_item(self, data=None):
@@ -196,6 +195,7 @@ class PriceItemWB(BaseMarketPlace):
             headers=self.headers,
             json=body
         )
+        print(post.json())
         return post
         # return self._make_request("POST", endpoint, params, body)
 
@@ -209,6 +209,7 @@ class PriceItemWB(BaseMarketPlace):
             headers=self.headers,
             json=body
         )
+        print(post.json())
         return post
 
 

@@ -92,39 +92,47 @@ def download_img_ozon():
                 print(f"❌ Продукт с ozon_id={product_id} не найден")
                 continue
 
+            # ✅ Удаляем все файлы в media/img/{product.code_1C}
+            product_folder = Path(settings.MEDIA_ROOT) / 'img' / product.code_1C
+            if product_folder.exists() and product_folder.is_dir():
+                for file in product_folder.iterdir():
+                    if file.is_file():
+                        file.unlink()
+                print(f"🗑️ Удалена папка изображений: {product_folder}")
+
             # PRIMARY PHOTO → main.jpg
             for url in img_data.get('primary_photo', []):
                 try:
                     filename = "main.jpg"
-                    image, created = Images.objects.get_or_create(
+                    image, _ = Images.objects.get_or_create(
                         product=product,
                         filename=filename,
                         defaults={'main': True}
                     )
-                    image.main = True  # гарантированно установить как главное
+                    image.main = True
                     response = requests.get(url, timeout=10)
                     if response.status_code == 200:
                         image.image.save(filename, ContentFile(response.content), save=True)
-                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} главное изображение для {product.article_1C}")
+                        print(f"✅ Главное изображение для {product.code_1C}")
                 except Exception as e:
-                    print(f"Ошибка при загрузке primary_photo: {e}")
+                    print(f"❌ Ошибка primary_photo: {e}")
 
             # PHOTO[] → 1.jpg, 2.jpg, ...
             for i, url in enumerate(img_data.get('photo', []), start=1):
                 try:
                     filename = f"{i}.jpg"
-                    image, created = Images.objects.get_or_create(
+                    image, _ = Images.objects.get_or_create(
                         product=product,
                         filename=filename,
                         defaults={'main': False}
                     )
-                    image.main = False  # явно указываем
+                    image.main = False
                     response = requests.get(url, timeout=10)
                     if response.status_code == 200:
                         image.image.save(filename, ContentFile(response.content), save=True)
-                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} изображение {filename} для {product.article_1C}")
+                        print(f"✅ Изображение {filename} для {product.article_1C}")
                 except Exception as e:
-                    print(f"Ошибка при загрузке photo[{i}]: {e}")
+                    print(f"❌ Ошибка photo[{i}]: {e}")
 
 def add_new_item_ozon():
     ozon_api = OzonExchange()

@@ -197,19 +197,19 @@ class ExChange1C:
 
     def _fetch_image_base64(self, file_id):
         """Пробует получить base64 из двух возможных источников."""
-        try:
-            # Старое хранилище
-            url_old = (
-                f"{self.BASE_URL}"
-                f"InformationRegister_УдалитьДвоичныеДанныеФайлов(Файл='{file_id}', "
-                f"Файл_Type='StandardODATA.Catalog_НоменклатураПрисоединенныеФайлы')"
-                f"?$select=ДвоичныеДанныеФайла_Base64Data&$format=application/json;odata=nometadata"
-            )
-            response = requests.get(url_old, auth=self.auth, timeout=10)
-            if response.ok:
-                return response.json().get('ДвоичныеДанныеФайла_Base64Data')
-        except Exception as e:
-            print(f"⚠️ Ошибка при попытке получить файл из старого хранилища: {e}")
+        # try:
+        #     # Старое хранилище
+        #     url_old = (
+        #         f"{self.BASE_URL}"
+        #         f"InformationRegister_УдалитьДвоичныеДанныеФайлов(Файл='{file_id}', "
+        #         f"Файл_Type='StandardODATA.Catalog_НоменклатураПрисоединенныеФайлы')"
+        #         f"?$select=ДвоичныеДанныеФайла_Base64Data&$format=application/json;odata=nometadata"
+        #     )
+        #     response = requests.get(url_old, auth=self.auth, timeout=10)
+        #     if response.ok:
+        #         return response.json().get('ДвоичныеДанныеФайла_Base64Data')
+        # except Exception as e:
+        #     print(f"⚠️ Ошибка при попытке получить файл из старого хранилища: {e}")
 
         try:
             # Новое хранилище

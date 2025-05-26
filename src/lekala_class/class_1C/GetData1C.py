@@ -22,6 +22,43 @@ class GetData1C(ExChange1C):
             )
         return
 
+    def set_category_catalog(self):
+        data_category = self.get_category()['value']
+        dict_cat = {"main_cat":[], "sub_cat":[], "sub_sub_cat":[]}
+        for i in data_category:
+            if i['Parent_Key'] == "00000000-0000-0000-0000-000000000000":
+                dict_cat['main_cat'].append(i)
+        list_id_main_cat = [i['Ref_Key'] for i in dict_cat['main_cat']]
+        for i in data_category:
+            if i['Parent_Key'] in list_id_main_cat:
+                dict_cat['sub_cat'].append(i)
+        list_id_sub_cat = [i['Ref_Key'] for i in dict_cat['sub_cat']]
+        for i in data_category:
+            if i['Parent_Key'] in list_id_sub_cat:
+                dict_cat['sub_sub_cat'].append(i)
+        for k,v in dict_cat.items():
+            if k == 'main_cat':
+                for i in v:
+                    Category.objects.update_or_create(
+                        uuid_1C=i['Ref_Key'], defaults={'name': i['Description']}
+                    )
+            elif k == 'sub_cat':
+                for i in v:
+                    Category.objects.update_or_create(
+                        uuid_1C=i['Ref_Key'], defaults={
+                            'name': i['Description'],
+                            'parent': Category.objects.get(uuid_1C=i['Parent_Key'])
+                        }
+                    )
+            elif k == 'sub_sub_cat':
+                for i in v:
+                    Category.objects.update_or_create(
+                        uuid_1C=i['Ref_Key'], defaults={
+                            'name': i['Description'],
+                            'parent': Category.objects.get(uuid_1C=i['Parent_Key'])
+                        }
+                    )
+
 
     def set_type_price(self):
         suffix_type_price = {
@@ -130,7 +167,8 @@ class GetData1C(ExChange1C):
                     'name': item['Description'].strip(),
                     'description': item['Описание'],
                     'stock': stock,
-                    'main_img_uuid':item.get('ФайлКартинки_Key')
+                    'main_img_uuid':item.get('ФайлКартинки_Key'),
+                    'category':Category.objects.get(uuid_1C=item['Parent_Key'])
                 }
             )
             price_item = price_map.get(item['Ref_Key'], [])

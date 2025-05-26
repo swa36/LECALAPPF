@@ -16,23 +16,51 @@ class BaseMarketPlace(ABC):
         self.headers = headers
         self.base_url = base_url
 
-
-    def _request(self, method, endpoint, data=None, params=None):
+    def _request(self, method, endpoint, data=None, params=None, use_json=True, extra_headers=None):
+        """
+        :param method: HTTP метод (GET, POST и т.д.)
+        :param endpoint: путь к API
+        :param data: тело запроса (dict)
+        :param params: параметры в URL (dict)
+        :param use_json: если False — передаётся как form-urlencoded (data), иначе — json
+        :param extra_headers: дополнительные заголовки (например, Authorization)
+        """
         url = self.base_url + endpoint
-        response = requests.request(method, url, headers=self.headers, json=data, params=params)
-        response.raise_for_status()
+        headers = self.headers.copy()
+        if extra_headers:
+            headers.update(extra_headers)
+
+        request_kwargs = {
+            'method': method,
+            'url': url,
+            'headers': headers,
+            'params': params
+        }
+        if data:
+            if use_json:
+                request_kwargs['json'] = data
+            else:
+                request_kwargs['data'] = data
+
+        try:
+            response = requests.request(**request_kwargs)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            print(f"❌ HTTP error for {method} {url}")
+            print(f"Status code: {response.status_code}")
+            print(f"Response text: {response.text}") # если нужно, можешь убрать или заменить на return None
         if response.status_code == 204:
-            print(response)
-        else:
-            return response.json()
+            print(f"204 No Content: {url}")
+            return None
+        return response.json()
 
     def _get_model_by_class_name(self):
         name = self.__class__.__name__.lower()  # например: ozonmarketplace
         if 'OzonExchange'.lower() in name:
             return OzonData
-        # elif 'wb'.lower() in name:
-        #     from wildberries.models import WBData
-        #     return WBData
+        elif 'wb'.lower() in name:
+            from wildberries.models import WBData
+            return WBData
         else:
             raise NotImplementedError(f"Модель не определена для класса: {self.__class__.__name__}")
 

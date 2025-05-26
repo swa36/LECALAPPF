@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django_mptt_admin.admin import DjangoMpttAdmin
+
 from .models import (
     Product,
     NameAdditionalAttributes,
@@ -6,7 +8,7 @@ from .models import (
     TypePrices,
     Prices,
     Images,
-    MarkUpItems,
+    MarkUpItems, Category,
 )
 from django.utils.safestring import mark_safe
 
@@ -41,7 +43,7 @@ class ProductAdmin(admin.ModelAdmin):
         'cost_price', 'wholesale_price', 'wholesale_price_2', 'wholesale_price_3', 'retail_price'
     ]
     search_fields = ['name', 'code_1C', 'article_1C']
-    fields = ['uuid_1C', 'name', ('code_1C', 'article_1C', 'stock'), 'description']
+    fields = ['uuid_1C', 'name', 'category', ('code_1C', 'article_1C', 'stock'), 'description']
     inlines = [ValueAdditionalAttributesInline, ImagesInline]
     readonly_fields = ['uuid_1C', 'code_1C', 'article_1C', 'stock']
 
@@ -65,7 +67,10 @@ class ProductAdmin(admin.ModelAdmin):
         return obj.prices.retail_price if hasattr(obj, 'prices') else '-'
     retail_price.short_description = "Розница"
 
+class CategoryAdmin(DjangoMpttAdmin):
+    readonly_fields = ('id',)
 
+admin.site.register(Category, CategoryAdmin)
 
 
 # @admin.register(MarkUpItems)

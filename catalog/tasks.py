@@ -31,6 +31,7 @@ def get_data_1C():
     data1C.get_stock()
     data1C.set_name_attribute()
     data1C.set_type_price()
+    data1C.set_category_catalog()
     chunk_size = len(data_catalog) // 5 + (1 if len(data_catalog) % 5 else 0)
     chunks_data_catalog = [data_catalog[i:i + chunk_size] for i in range(0, len(data_catalog), chunk_size)]
     for chunk in chunks_data_catalog:

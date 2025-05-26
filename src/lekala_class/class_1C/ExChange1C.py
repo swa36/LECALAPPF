@@ -57,7 +57,7 @@ class ExChange1C:
     def get_catalog(self):
         endpoint = 'Catalog_Номенклатура?$filter=IsFolder eq false and DeletionMark eq false'
         fields = [
-            'Ref_Key', 'DataVersion', 'IsFolder', 'Code', 'Артикул',
+            'Ref_Key', 'Parent_Key', 'DataVersion', 'IsFolder', 'Code', 'Артикул',
             'ВесЧислитель', 'Description', 'Описание', 'ФайлКартинки_Key', 'ДополнительныеРеквизиты'
         ]
         params = {
@@ -67,6 +67,17 @@ class ExChange1C:
         self._save_to_json(result, 'data_catalog.json')
         return result
 
+    def get_category(self):
+        endpoint = 'Catalog_Номенклатура?$filter=IsFolder eq true and DeletionMark eq false'
+        fields = [
+            'Ref_Key', 'Parent_Key', 'Description'
+        ]
+        params = {
+            '$select': ','.join(fields),
+        }
+        result = self._make_request('GET', endpoint, params=params)
+        self._save_to_json(result, 'data_catalog')
+        return result
     def get_name_additional_attributes(self):
         endpoint = 'ChartOfCharacteristicTypes_ДополнительныеРеквизитыИСведения'
         fields = [

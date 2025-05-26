@@ -11,6 +11,7 @@ from pathlib import Path
 from src.lekala_class.class_marketplace.OzonItem import OzonTape
 from django.db.models import Q, Count
 from django.core.files.base import ContentFile
+import pandas as pd
 
 def get_data_csv_ozon():
     filename = settings.BASE_DIR / 'src' / 'OzonData' / 'full_data_ozon.csv'
@@ -257,5 +258,18 @@ def update_remains_ozon():
     if len(stock) > 0:
         ozon_api.update_remains(data=stock)
     print("end update remains OZON")
+
+
+def ozon_update_articel():
+    ozon_artile = pd.read_excel('src/OzonData/update_vendor_code(1).xlsx')
+    for index, row in ozon_artile.iterrows():
+        value_from_a = row["Старый артикул"]  # Значение из столбца A
+        try:
+            prod = OzonData.objects.get(offer_id=value_from_a)
+            ozon_artile.at[index, "Новый артикул"] = prod.product.code_1C
+        except:
+            pass
+        # Вставляем результат в столбец B той же строки
+    ozon_artile.to_excel("update_article_result.xlsx", index=False)
 
 

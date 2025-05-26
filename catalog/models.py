@@ -1,8 +1,31 @@
 import os
 from django.db import models
 from django.core.exceptions import ValidationError
+from mptt.fields import TreeForeignKey
+from mptt.models import MPTTModel
+
 
 # Create your models here.
+
+class Category(MPTTModel):
+    uuid_1C = models.UUIDField(unique=True)
+    name = models.TextField(verbose_name='Название')
+    parent = TreeForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, related_name='children',
+                            db_index=True, verbose_name='Родительская категория')
+
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+
+    def __str__(self):
+        return self.name
+
 
 
 class Product(models.Model):
@@ -14,6 +37,8 @@ class Product(models.Model):
     name = models.TextField(verbose_name='Наименование товара')
     description = models.TextField(verbose_name='Описание товара')
     stock = models.PositiveIntegerField(verbose_name='Остаток', default=0)
+    category = TreeForeignKey(Category, null=True, on_delete=models.PROTECT, related_name='category',
+                              verbose_name='Категория')
 
 
 
@@ -27,6 +52,7 @@ class Product(models.Model):
 class NameAdditionalAttributes(models.Model):
     uuid_1C = models.UUIDField(unique=True, editable=False, verbose_name='UUID class_1C')
     name_attribute = models.CharField(max_length=50, verbose_name='Название атрибута')
+    slug_name = models.CharField(max_length=50, verbose_name='suffix', null=True, unique=True)
 
     def __str__(self):
         return self.name_attribute

@@ -48,11 +48,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'django_celery_beat',
+    'mptt',
+    'django_mptt_admin',
     
     'catalog.apps.CatalogConfig',
     'ozon.apps.OzonConfig',
     'wildberries.apps.WildberriesConfig',
     'order.apps.OrderConfig',
+    'avito.apps.AvitoConfig',
 ]
 
 MIDDLEWARE = [
@@ -151,6 +154,18 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # Можно поменять на 0, 2 и т.д.
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # "PASSWORD": "your_password",  # если Redis требует пароль
+        }
+    }
+}
+
 # OZON
 OZON_ID=env('OZON_ID')
 OZON_KEY=env('OZON_KEY')
@@ -165,6 +180,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # STATIC
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
+
+# AVITO
+AVITO_ID = env('AVITO_ID')
+AVITO_KEY = env('AVITO_KEY')
+
 
 # Loging
 LOGGING = {

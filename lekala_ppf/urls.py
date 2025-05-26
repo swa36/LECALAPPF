@@ -21,7 +21,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ozon/', include('ozon.urls', namespace='Ozon')),
+    path('ozon/', include('ozon.urls', namespace='ozon')),
+    path('avito/', include('avito.urls', namespace='avito')),
 ]
 
 

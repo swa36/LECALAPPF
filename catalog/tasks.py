@@ -1,5 +1,7 @@
 import json
+import os
 from pathlib import Path
+import re
 import requests
 from celery import shared_task
 from django.conf import settings
@@ -12,6 +14,7 @@ from django.core.files.base import ContentFile
 from ozon.models import OzonData
 from ozon.tasks import update_remains_ozon
 from wildberries.tasks import update_remains_wb
+from django.core.files import File
 
 @shared_task
 def get_data_chunck(payload):
@@ -43,57 +46,6 @@ def get_data_1C():
 
 
 
-def download_img_ozon():
-    file = settings.BASE_DIR / 'json' / 'ozon_image_data.json'
-    with open(file, 'r', encoding='utf-8') as f:
-        data_img = json.load(f)
-
-    for items in data_img:
-        for img_data in items['items']:
-            product_id = img_data.get('product_id')
-
-            try:
-                product = OzonData.objects.get(ozon_id=product_id).product
-            except OzonData.DoesNotExist:
-                print(f"❌ Продукт с ozon_id={product_id} не найден")
-                continue
-
-            # PRIMARY PHOTO → main.jpg
-            for url in img_data.get('primary_photo', []):
-                try:
-                    filename = "main.jpg"
-                    image, created = Images.objects.get_or_create(
-                        product=product,
-                        filename=filename,
-                        defaults={'main': True}
-                    )
-                    image.main = True  # гарантированно установить как главное
-                    response = requests.get(url, timeout=10)
-                    if response.status_code == 200:
-                        image.image.save(filename, ContentFile(response.content), save=True)
-                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} главное изображение для {product.article_1C}")
-                except Exception as e:
-                    print(f"Ошибка при загрузке primary_photo: {e}")
-
-            # PHOTO[] → 1.jpg, 2.jpg, ...
-            for i, url in enumerate(img_data.get('photo', []), start=1):
-                try:
-                    filename = f"{i}.jpg"
-                    image, created = Images.objects.get_or_create(
-                        product=product,
-                        filename=filename,
-                        defaults={'main': False}
-                    )
-                    image.main = False  # явно указываем
-                    response = requests.get(url, timeout=10)
-                    if response.status_code == 200:
-                        image.image.save(filename, ContentFile(response.content), save=True)
-                        print(f"{'♻️ Обновлено' if not created else '✅ Сохранено'} изображение {filename} для {product.article_1C}")
-                except Exception as e:
-                    print(f"Ошибка при загрузке photo[{i}]: {e}")
-
-
-
 
 def test_get_img():
     products_without_img = Product.objects.filter(Q(ozon__isnull=True) & Q(prices__retail_price__gt = 0) & Q(
@@ -103,3 +55,17 @@ def test_get_img():
     for product in products_without_img:
         print(f'{product.name} {product.code_1C} uuid {product.uuid_1C} id_img {product.main_img_uuid}')
         c.get_img(id_item=product.uuid_1C)
+
+
+def extract_number(filename):
+    match = re.search(r'(\d+)', filename)
+    return int(match.group(1)) if match else float('inf')  # inf для нерелевантных
+
+
+
+def get_img_1C():
+    data_1c=ExChange1C()
+    product = Product.objects.all()
+    for i in product:
+        if not i.images.all():
+            data_1c.get_img(i.uuid_1C)

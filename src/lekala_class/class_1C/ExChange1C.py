@@ -147,7 +147,7 @@ class ExChange1C:
             print(f"❌ Продукт с id={id_item} не найден")
             return
 
-        # Получение списка файлов из 1С
+        # Получение списка файлов, связанных с товаром
         try:
             response = requests.get(
                 f"{self.BASE_URL}InformationRegister_СведенияОФайлах?"
@@ -162,7 +162,11 @@ class ExChange1C:
             print(f"❌ Ошибка при получении списка файлов: {e}")
             return
 
-        actual_filenames = set()
+        if not file_records:
+            print(f"⚠️ Нет изображений в 1С для товара {product.name}")
+            return
+
+        pending_images = []
         sequence_number = 1
 
         for file_info in file_records:
@@ -172,39 +176,37 @@ class ExChange1C:
 
             base64_data = self._fetch_image_base64(file_id)
             if not base64_data:
-                print(f"⚠️ Не удалось получить изображение для файла {file_id}")
-                continue
+                print(f"⚠️ Не удалось получить изображение для файла {file_id}, обновление отменено.")
+                return
 
             try:
                 image_bytes = base64.b64decode(base64_data)
             except Exception as e:
-                print(f"⚠️ Ошибка декодирования base64: {e}")
-                continue
+                print(f"⚠️ Ошибка декодирования base64 для файла {file_id}: {e}, обновление отменено.")
+                return
 
-            img_obj, created = Images.objects.get_or_create(
-                product=product,
-                filename=filename,
-                defaults={'main': is_main}
-            )
-
-            if not created:
-                img_obj.image.delete(save=False)
-
-            img_obj.image.save(filename, ContentFile(image_bytes), save=False)
-            img_obj.main = is_main
-            img_obj.filename = filename
-            img_obj.save(update_fields=['image', 'main', 'filename'])
-
-            actual_filenames.add(filename)
-            print("✅", "Создана" if created else "Обновлена", filename)
+            pending_images.append({
+                'filename': filename,
+                'main': is_main,
+                'bytes': image_bytes
+            })
 
             if not is_main:
                 sequence_number += 1
 
-        # Удаление устаревших изображений, не вернувшихся из 1С
-        Images.objects.filter(product=product).exclude(filename__in=actual_filenames).delete()
+        # ✅ Только если все изображения были успешно скачаны и декодированы
+        product.images.all().delete()
+        for image in pending_images:
+            img_obj = Images.objects.create(
+                product=product,
+                filename=image['filename'],
+                main=image['main']
+            )
+            img_obj.image.save(image['filename'], ContentFile(image['bytes']), save=True)
+            print(f"✅ Сохранено изображение: {image['filename']}")
 
-        print("✅ Загрузка и синхронизация изображений завершена")
+        print(f"✅ Успешно обновлены изображения для товара {product.name}")
+
 
     def _fetch_image_base64(self, file_id):
         """Пробует получить base64 из двух возможных источников."""

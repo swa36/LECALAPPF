@@ -79,6 +79,7 @@ def ozon_get_img():
     print(f"Saved all image data to {output_path.resolve()}")
 
 def download_img_ozon():
+    ozon_get_img()
     file = settings.BASE_DIR / 'json' / 'ozon_image_data.json'
     with open(file, 'r', encoding='utf-8') as f:
         data_img = json.load(f)

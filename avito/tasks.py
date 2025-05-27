@@ -5,7 +5,7 @@ from order.models import ItemInOrderAvito, OrderAvito
 from src.lekala_class.class_feed import CreatorFeed
 from src.lekala_class.class_marketplace.Avito import AvitoExchange
 
-
+@shared_task
 def create_feed():
     avito_feed = CreatorFeed("avito")
     avito_feed.create_items()

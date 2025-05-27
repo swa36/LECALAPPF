@@ -1,7 +1,6 @@
 import json
 import os
 from datetime import datetime
-from itertools import product
 from typing import Dict
 from typing import List, Dict
 from openpyxl import Workbook, load_workbook
@@ -191,6 +190,11 @@ class GetData1C(ExChange1C):
                 print(f'Создана\обновлена номеклатура {product.name} {product.article_1C}')
                 product.data_version = item['DataVersion']
                 product.save()
+                
+                if created:
+                    with open('logs\new_item.txt', 'a', encoding='utf-8') as f:
+                        f.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\t{product.name}\t{product.article_1C}\t{product.code_1C}\n")
+                
                 # Обновление доп. атрибутов
                 additional_attributes = item['ДополнительныеРеквизиты']
                 for attribute in additional_attributes:

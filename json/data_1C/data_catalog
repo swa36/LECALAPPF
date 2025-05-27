@@ -1,0 +1,4234 @@
+{
+  "value": [
+    {
+      "Ref_Key": "50b67835-4dd7-11ec-afee-049226c3c1d8",
+      "Parent_Key": "00000000-0000-0000-0000-000000000000",
+      "Description": "Антигравийные защитные плёнки"
+    },
+    {
+      "Ref_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Parent_Key": "00000000-0000-0000-0000-000000000000",
+      "Description": "Готовые лекала для оклейки"
+    },
+    {
+      "Ref_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Parent_Key": "00000000-0000-0000-0000-000000000000",
+      "Description": "Защитное стекло экранов мультимедиа, приборных панелей, климат-контроля"
+    },
+    {
+      "Ref_Key": "50b6783c-4dd7-11ec-afee-049226c3c1d8",
+      "Parent_Key": "00000000-0000-0000-0000-000000000000",
+      "Description": "Инструмент и оборудование для нанесения плёнок"
+    },
+    {
+      "Ref_Key": "50b6783a-4dd7-11ec-afee-049226c3c1d8",
+      "Parent_Key": "00000000-0000-0000-0000-000000000000",
+      "Description": "Лекала для оклейки мотоциклов"
+    },
+    {
+      "Ref_Key": "6ccbd100-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "6ccbd101-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "48e84962-da2f-11ef-9d67-00155d46f78c",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "6ccbd102-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "a052364a-da3e-11ef-9d67-00155d46f78c",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "6ccbd103-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "54caa1f2-da3f-11ef-9d67-00155d46f78c",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "04431150-da40-11ef-9d67-00155d46f78c",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "3a00f04a-0331-11f0-8dc2-00155d46f78f",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "6ccbd104-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "6ccbd105-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "a0b1e56a-41ae-11ee-87f8-00155d46f78f",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "6ccbd106-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "6ccbd107-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "af424ed0-0331-11f0-8dc2-00155d46f78f",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "6ccbd108-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "6ccbd109-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "7e68db36-e788-11ef-8e78-00155d46f78c",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "6ccbd10a-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "6ccbd10b-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "6ccbd10c-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "6ccbd10e-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "6ccbd10f-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "75ec73f6-0334-11f0-8dc2-00155d46f78f",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "6cb84cb4-de3c-11ef-89e9-00155d46f78d",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "79453122-de3c-11ef-89e9-00155d46f78d",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "OPEL"
+    },
+    {
+      "Ref_Key": "b554bb38-de3c-11ef-89e9-00155d46f78d",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "6ccbd110-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "PORSCHE"
+    },
+    {
+      "Ref_Key": "70772e6a-0335-11f0-8dc2-00155d46f78f",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "8e2ab808-0337-11f0-8dc2-00155d46f78f",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "6ccbd111-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "6ccbd112-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "6ccbd113-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "65b81b4a-e785-11ef-8e78-00155d46f78c",
+      "Parent_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "e7de617c-2716-11ef-976a-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "1e620fde-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "edbce2ee-2716-11ef-976a-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "760a0d52-b795-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "230e2f68-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "BIAC"
+    },
+    {
+      "Ref_Key": "2767c6e6-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "c440bf04-2ef9-11ef-86f4-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "38022d8c-8239-11ef-8a8d-00155d46f78e",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "2d5c5166-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "341974f2-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "3a295f6e-9061-11ef-99c1-00155d46f78f",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "42d56fa0-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "39a70d58-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "2fa0b91c-a352-11ef-8aec-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "46a41d52-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "4d065dc2-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "53339278-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "57c610a4-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "3bf102ca-8256-11ef-9bb2-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "6b590d10-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "70b33fb0-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "d49eed62-2ef9-11ef-86f4-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "dcc0b0ac-2ef9-11ef-86f4-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "ISUZU"
+    },
+    {
+      "Ref_Key": "75b51f7e-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "7bb4c7bc-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "07b6c570-0fba-11f0-895f-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "9bf8b9a0-b227-11ef-89ca-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "855058f4-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "80bf5966-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "90d2ab82-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "9493c904-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "7e2b27bc-ad65-11ef-97f8-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "9b1701f6-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "a12bffce-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "ab7c596a-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "b04f23e6-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LIVAN"
+    },
+    {
+      "Ref_Key": "a6ba97ca-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "4235dd90-2efa-11ef-86f4-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "b4f31e8e-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "bb6467fa-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "bdbd598c-9068-11ef-99c1-00155d46f78f",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "c23023b2-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "59581066-f2a8-11ef-8649-00155d46f78f",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "MOSKVICH"
+    },
+    {
+      "Ref_Key": "c84f2072-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "db9cec2c-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "4910a752-e229-11ef-9791-00155d46f78f",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "OPEL"
+    },
+    {
+      "Ref_Key": "bef2e626-f2a8-11ef-8649-00155d46f78f",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "ORA"
+    },
+    {
+      "Ref_Key": "e182c0cc-825e-11ef-892d-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "ce203b6c-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "2caedb82-3185-11f0-9381-00155d46f78e",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "ROX"
+    },
+    {
+      "Ref_Key": "b68d9eaa-9cd5-11ef-9548-00155d46f78c",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "1aafcc0c-a7ec-11ef-8a72-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "5ce6fe94-b6f9-11ef-9faf-00155d46f78e",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "eedffac2-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "108da40e-6f4f-11ef-8e5c-00155d46f78e",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "f3de6784-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "005f9546-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "059b0edc-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "0b65104c-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "145b1f84-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "19130a0a-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "1e378ee8-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "45b5ed00-b791-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "8f305efa-6f7c-11ef-9d21-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "22b4731e-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "82eb175a-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "876e5e54-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "BIAC"
+    },
+    {
+      "Ref_Key": "8b270b86-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "915709ac-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "9629a890-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "b8e030d4-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "a370c7f4-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "9d5c73a4-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "a81ce1c0-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "aded4f18-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "f45aeeda-a0ce-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "fb620e8e-a0ce-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "0063413c-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "0d47ec7c-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "16a0a9c6-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "22e1cd28-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "1c135fac-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "36b81c80-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "403bf11e-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "28f54c80-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "5c5240ce-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "68538234-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "62491cc8-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LI AUTO"
+    },
+    {
+      "Ref_Key": "7007d91c-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "LIVAN"
+    },
+    {
+      "Ref_Key": "7babb07c-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "82e84db4-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "8c3e14b6-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "90da51ec-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "95aca698-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "a0e3f5e8-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "a6678b56-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "ac0cc896-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "b064ec7a-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "b5afe2b6-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "d4483c14-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "d9f97f6a-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "e19137cc-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "e9ab87dc-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "ef9e14a2-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "f535e34a-a0cf-11ee-8400-00155d46f78d",
+      "Parent_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "69107fa2-26f2-11ef-88aa-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "c2339030-a0c7-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "6f44fbaa-26f2-11ef-88aa-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "2d5b4332-1f4c-11ef-9c85-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BAIC "
+    },
+    {
+      "Ref_Key": "64be2b28-b795-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "4b68edce-1f4d-11ef-9c85-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "91eb6006-218c-11ef-9ce3-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "08901500-817b-11ef-9c5e-00155d46f78e",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "9a10430a-218c-11ef-9ce3-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "de550d5c-a0c7-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "e766dc70-9042-11ef-88f9-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "e3ab0504-a0c7-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "f30d4e12-a0c7-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "f41d3ba6-a28c-11ef-8812-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "f90cda44-a0c7-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "ff91a566-a0c7-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "0ba2702e-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "105ba644-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "50265076-8164-11ef-813f-00155d46f78f",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "21fe6b98-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "27300ed2-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "01e963f6-2efa-11ef-86f4-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "159f8b6e-2efa-11ef-86f4-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ISUZU"
+    },
+    {
+      "Ref_Key": "3115da3a-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "361f9d04-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "b2c8678c-0e36-11f0-9415-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "17c3a644-b0a2-11ef-8eb4-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "3bf206a4-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "4b674b62-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "50a4bef2-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "5e9c491c-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "fa22f7a2-b0a6-11ef-8eb4-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "62893d14-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "69270002-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "78bb0270-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "85ff5e04-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LIVAN"
+    },
+    {
+      "Ref_Key": "80faf760-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "3b76823e-2efa-11ef-86f4-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "8fd66936-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "987860d0-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "ab1b2aba-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "b4858e56-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "b9c82fae-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "f44f17d4-8176-11ef-9c5e-00155d46f78e",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "c1262c6a-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "6a4c166a-2be2-11f0-8f8a-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ROX"
+    },
+    {
+      "Ref_Key": "57c328de-9043-11ef-88f9-00155d46f78c",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "cc3efd66-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "0848ddfe-b6f8-11ef-9faf-00155d46f78e",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "d165c586-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "e6de89fc-5bd0-11ef-8ac1-00155d46f78e",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "d6a42c72-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "e507ae56-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "eb2d7162-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "ef6e35fe-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "13846404-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "f4d696a8-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "fcbc4548-a0c8-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "fcbccd04-a736-11ef-901f-00155d46f78f",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "65db33ba-6601-11ef-9535-00155d46f78f",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "0233bc54-a0c9-11ee-8400-00155d46f78d",
+      "Parent_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "914ea206-4b22-11ef-903a-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "0533a9a8-a0d0-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "f52af794-e798-11ef-8e78-00155d46f78c",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "9d5b6888-b3a8-11ef-88bc-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "40f70622-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BIAC"
+    },
+    {
+      "Ref_Key": "450346ae-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "65c00352-4da0-11ef-82ff-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "3ebea7e8-8d53-11ef-8891-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "4a8bcca4-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "4f07b20c-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "cdbb769e-9116-11ef-9925-00155d46f78c",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "59382ee6-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "5ea8ea5a-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "58091ba2-a347-11ef-85d5-00155d46f78e",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "5499a9dc-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "63bfcc0c-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "6aac1462-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "6ee1b15e-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "734b91fa-8494-11ef-8197-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "73d61d94-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "797bef9e-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "7419ef0c-7808-11ef-87d5-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "ff0e60f2-780d-11ef-9e55-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ISUZU"
+    },
+    {
+      "Ref_Key": "8540dbc8-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "8a35a348-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "f6853238-0ef0-11f0-9322-00155d46f78e",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "c2db3e38-b210-11ef-89ca-00155d46f78c",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "9f981d4c-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "9acc71aa-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "a5ae35ae-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "a932645c-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "26ca61b6-b217-11ef-89ca-00155d46f78c",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "ae253bec-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "b4fc9910-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "c0e4e9a8-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "c7264c76-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LIVAN"
+    },
+    {
+      "Ref_Key": "bbbf4fa4-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "5feea5da-7b38-11ef-8e64-00155d46f78e",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "cf9adc96-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "db52cb16-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "e966a5fc-913a-11ef-97cd-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "e3c67e32-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "39f60b9e-f2a1-11ef-8649-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MOSKVICH"
+    },
+    {
+      "Ref_Key": "e81745de-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "ed19d93e-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "effce2de-dfbc-11ef-8928-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "OPEL"
+    },
+    {
+      "Ref_Key": "de3af26e-f2a1-11ef-8649-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ORA"
+    },
+    {
+      "Ref_Key": "91a6e316-8499-11ef-840a-00155d46f78e",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "f44f8294-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "77b31520-3181-11f0-9381-00155d46f78e",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ROX"
+    },
+    {
+      "Ref_Key": "648ada14-a7e3-11ef-8a72-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "fb595cb8-a0d2-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "2cc04b3a-b3b6-11ef-88bc-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "0084491e-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "0064c67a-84ad-11ef-8287-00155d46f78f",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "058d97d0-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "0a212a96-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "0ec89f98-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "134b5894-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "1b6fecce-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "20e69806-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "27659d62-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "e343d5a2-b6fe-11ef-9faf-00155d46f78e",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "3582e616-84b2-11ef-9818-00155d46f78c",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "2c89acde-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "cb3da92a-3485-11ef-808d-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "38c2d070-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "d0f2652c-3485-11ef-808d-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "3ce0f0ec-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BAIC"
+    },
+    {
+      "Ref_Key": "8df4371c-b795-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "416a8448-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "52a5807c-2efa-11ef-86f4-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "d819bea0-854c-11ef-8769-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "47157b32-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "4c8b439e-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "f04a9ee2-907b-11ef-88f9-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "52195d6e-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "5766cb8a-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "cfb0111e-a357-11ef-8aec-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "5b96e6cc-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "601648fa-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "680be4e8-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "6d755a54-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "def69216-854c-11ef-8769-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "7445b5a4-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "7a51a55c-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "59005276-2efa-11ef-86f4-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "5f96d59c-2efa-11ef-86f4-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ISUZU"
+    },
+    {
+      "Ref_Key": "83530920-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "8a39fd02-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "52afda18-b230-11ef-89ca-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "938df50c-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "8e65085e-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "9ac68ba4-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "9e4eec30-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "76187468-b232-11ef-89ca-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "a233d392-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "a94237a0-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "b7c9c040-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "bc118cf0-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LIVAN"
+    },
+    {
+      "Ref_Key": "b3715d0a-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "4b399f62-2efa-11ef-86f4-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "c01899b0-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "cdd7ef7e-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "de7a293c-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "e5ef6e02-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "ecea4f38-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "ecd0b110-f297-11ef-8649-00155d46f78f",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ORA"
+    },
+    {
+      "Ref_Key": "461e2bb2-8560-11ef-9517-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "f25d823c-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "d893259e-a746-11ef-9df1-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "f7be2d4e-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "1a2eda30-b6ff-11ef-9faf-00155d46f78e",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "fda0b7fe-a0d3-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "6d0e75fa-8566-11ef-923d-00155d46f78c",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "025cbc2a-a0d4-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "06965bd4-a0d4-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "0bd87762-a0d4-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "0ff116c4-a0d4-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "17ad1cc8-a0d4-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "1cba4b96-a0d4-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "21e11d3e-a0d4-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "f95275e8-b793-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "c5b9b5c0-857a-11ef-948b-00155d46f78e",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "2736525e-a0d4-11ee-8400-00155d46f78d",
+      "Parent_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "2e558b0c-2fbf-11ef-8c3c-00155d46f78c",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "057912d2-0e06-11f0-9415-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ALFA ROMEO"
+    },
+    {
+      "Ref_Key": "30bc567a-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "7da02326-b795-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "36e63f66-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BIAC"
+    },
+    {
+      "Ref_Key": "3dd09790-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "6ab3ba5a-0e36-11f0-9415-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "53901546-8185-11ef-9eeb-00155d46f78e",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "44b4335a-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "4abd6852-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "bf12804c-9143-11ef-8f60-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "55b955c2-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "508b3dc2-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "5af559dc-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "603ada16-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "d82573ea-0e2b-11f0-9415-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "65d66648-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "6de169fa-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "2a00ea40-8188-11ef-9eeb-00155d46f78e",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "74935560-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "7a0c071c-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "1c89b9b8-321f-11ef-8a4a-00155d46f78c",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "85fc7b74-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "8aff5272-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "355cef96-0e2e-11f0-9415-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "ce6f8b28-b099-11ef-8eb4-00155d46f78c",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "95d77742-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "90d2c760-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "d9699a9e-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "b987e0fa-3224-11ef-8a4a-00155d46f78c",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "29651234-b304-11ef-844a-00155d46f78e",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "ded1c754-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "e49cfdf2-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "eeabd840-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "f2aef7f6-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LIVAN"
+    },
+    {
+      "Ref_Key": "e977596c-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "f9c088b6-a0ca-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "036e1f90-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "c31ddc54-9143-11ef-8f60-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "0bbdb7d2-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "16fcdbe6-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "1bd44956-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "b8c1c494-dfab-11ef-8928-00155d46f78f",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "OPEL"
+    },
+    {
+      "Ref_Key": "7b57c94a-dfac-11ef-8928-00155d46f78f",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "21bf0ed2-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "7fea714e-c1d7-11ef-9c31-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "315f2c50-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "57ef29dc-b6fb-11ef-9faf-00155d46f78e",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "448a5eee-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "e19fd7c4-66bc-11ef-8025-00155d46f78f",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "26e6c97c-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "5241480e-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "49c674ba-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "79081a3a-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "5cb24d4c-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "62245fea-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "679d0e5e-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "09a40f58-b792-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "fbd9ceb8-66d2-11ef-8e66-00155d46f78c",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "6d0cc212-a0cb-11ee-8400-00155d46f78d",
+      "Parent_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "579240de-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "ACURA"
+    },
+    {
+      "Ref_Key": "47e86ece-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "5f0f3b96-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "ALFA ROMEO"
+    },
+    {
+      "Ref_Key": "521bb180-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "4d1860f2-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "72fad3d6-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "BAIC"
+    },
+    {
+      "Ref_Key": "6958d698-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "6dabe050-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "780339d6-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "83bf5ec6-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "8a0cc98a-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "8e9fec98-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "96d7ae6e-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "CHEVROLET"
+    },
+    {
+      "Ref_Key": "a04ece6e-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "a4fe5754-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "CUPRA"
+    },
+    {
+      "Ref_Key": "adb7f8a0-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "DENZA"
+    },
+    {
+      "Ref_Key": "b4085240-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "DODGE"
+    },
+    {
+      "Ref_Key": "be9688e4-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "c666243a-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "cd78e532-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "d4ff476a-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "da417ff4-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "e0743272-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "e6dceb7c-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "f13caf58-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "f6fa5b52-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "08a725a6-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "14604300-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "1ca75f9e-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "20c1daaa-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "5f1f3f5e-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "2c24bd5e-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "6e1aacb4-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "26780dac-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "685da218-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "7a7f186e-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "8d889cc8-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "981ee444-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "a2dedff6-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "acca52b6-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "ba0e865e-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "cf5831ae-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "c4ef4810-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "d6be1238-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "e05376b2-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "e89ef062-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "f7486e54-0a1a-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "08892820-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "MOSKVICH"
+    },
+    {
+      "Ref_Key": "10b40060-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "16db761c-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "25510cf2-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "OPEL"
+    },
+    {
+      "Ref_Key": "1c5ff4b4-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "ORA"
+    },
+    {
+      "Ref_Key": "31c9b66e-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "39dee6c6-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "PORSCHE"
+    },
+    {
+      "Ref_Key": "443f4156-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "4f411246-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "4a87c560-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "5d1d317e-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "SKYWELL"
+    },
+    {
+      "Ref_Key": "63b22800-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "7148c46a-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "7a48185e-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "816d83a8-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "86f49596-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "8ed09526-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "9a82856e-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "abcdd4ea-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "a2ed1430-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "b581a3a4-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "bd5f31a4-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "c43cc130-0a1b-11f0-8a26-00155d46f78d",
+      "Parent_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "8717cdc2-9a90-11ef-8cbc-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "ACURA"
+    },
+    {
+      "Ref_Key": "910503fe-9a90-11ef-8cbc-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "96f6b424-9a90-11ef-8cbc-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "a019a156-9a90-11ef-8cbc-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "45a99d52-9b62-11ef-9f0b-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "56fab454-9aab-11ef-8cbc-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "2a3c9266-9b4b-11ef-989a-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "f64b0408-9b52-11ef-9161-00155d46f78f",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "e9a7ec0c-c69f-11ef-8f7f-00155d46f78f",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "58d8a42a-ad70-11ef-97f8-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "345bf8f2-ad72-11ef-97f8-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "f9df7708-9b5b-11ef-9f0b-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "d97aae4c-2be3-11f0-8f8a-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "22aaab02-9b5d-11ef-98fc-00155d46f78c",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "412c16e6-9b5e-11ef-98fc-00155d46f78c",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "756418aa-9b63-11ef-9f0b-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "e413acd8-1c47-11f0-8fd6-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "08e150c8-9b7a-11ef-881a-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "9567601e-9b7a-11ef-881a-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "e6144ddc-9b7b-11ef-8f34-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "ac332b36-9b7d-11ef-8e51-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "b3341f0c-9c14-11ef-98d2-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "bad6f472-9c15-11ef-98d2-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "ad603496-9c17-11ef-98d2-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "85b5ec9e-ad77-11ef-97f8-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "f3daf8de-9c1c-11ef-98d2-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "bcf9a10e-ad82-11ef-97f8-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "64916c12-ad83-11ef-97f8-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "753715ce-9c23-11ef-96d5-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "158f05c8-9c32-11ef-96d5-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "55c4837c-b0b2-11ef-8eb4-00155d46f78c",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "75704e2c-9c3a-11ef-8ea0-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "b5a3d42c-9c45-11ef-9d6d-00155d46f78c",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "dd154fe6-9cdf-11ef-9548-00155d46f78c",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "510221d4-9ce7-11ef-9548-00155d46f78c",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "eac9df84-9cea-11ef-8bfa-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "c97a7bb2-9ceb-11ef-8bfa-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "f6de2f8e-9a95-11ef-8cbc-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "f9654936-ad87-11ef-97f8-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "4f053e0a-b6fc-11ef-9faf-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "27e0fba8-9ced-11ef-8bfa-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "ea9e33f0-ffed-11ef-98ba-00155d46f78f",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "ac58ffde-9ced-11ef-8bfa-00155d46f78e",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "5ae8b372-9cf4-11ef-8c9d-00155d46f78f",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "443e9672-9cfa-11ef-8c9d-00155d46f78f",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "eb73782c-9cfa-11ef-8c9d-00155d46f78f",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "8a042d1c-9d0d-11ef-91b6-00155d46f78c",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "e8fc4d5a-b792-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "13ac2e0e-ad8d-11ef-97f8-00155d46f78d",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "f207b710-9d0f-11ef-91b6-00155d46f78c",
+      "Parent_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "d2b3e92c-8f92-11ef-9a02-00155d46f78c",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "ACURA"
+    },
+    {
+      "Ref_Key": "9ee6a1c0-3399-11ef-9bab-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "eec25aae-53bb-11ee-950b-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "ALFA ROMEO "
+    },
+    {
+      "Ref_Key": "034ba286-6a57-11ed-9979-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "a4ed9dee-3399-11ef-9bab-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "5828a6cc-a651-11ef-9b8f-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "BAIC"
+    },
+    {
+      "Ref_Key": "a976ade0-a02e-11ef-9021-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "2fc8912e-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "e5165ec1-cfc1-11ed-b82a-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "e5165ecb-cfc1-11ed-b82a-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "f2333362-9898-11ed-a6f1-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "2fc8912f-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "e5165edb-cfc1-11ed-b82a-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "CHEVROLET"
+    },
+    {
+      "Ref_Key": "8d730d57-98bf-11ed-a6f1-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "cc3801b4-53ca-11ee-950b-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "CUPRA"
+    },
+    {
+      "Ref_Key": "c99efa86-dfc2-11ef-8928-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "DENZA"
+    },
+    {
+      "Ref_Key": "8d730d5e-98bf-11ed-a6f1-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "29fe740a-6121-11ee-8f2e-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "b4e758b2-a657-11ef-8579-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "bdfed4c2-8874-11ee-8916-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "2fc89130-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "39cbd972-9b1f-11ed-bd93-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "e5165ee2-cfc1-11ed-b82a-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "1f59f216-494a-11ed-bd1c-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "39cbd985-9b1f-11ed-bd93-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "cc9d65a4-8548-11ee-9015-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "2fc89131-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "a67caaf6-9beb-11ed-acaa-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "8ebc1b99-f566-11ed-b355-00155d464300",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "9f29189a-854b-11ee-9015-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "JAECOO "
+    },
+    {
+      "Ref_Key": "a67caaf7-9beb-11ed-acaa-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "a67caaf8-9beb-11ed-acaa-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "3cbba6a0-480b-11ee-8291-00155d46f78c",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "79e18624-f572-11ed-b355-00155d464300",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "2fc89132-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "3ae4cd24-b17e-11ef-8669-00155d46f78c",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "fcf8b772-1448-11f0-9688-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "2fc89133-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "2fbd38f6-062d-11f0-94e8-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "ae4babd4-d3a4-11ed-b78c-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "959b01ae-89e1-11ee-9574-00155d46f78d",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "LIVAN"
+    },
+    {
+      "Ref_Key": "cb03d340-3f6a-11ef-8201-00155d46f78d",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "b30d6844-3f6c-11ef-8201-00155d46f78d",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "ae4babf0-d3a4-11ed-b78c-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "72e40664-d464-11ed-be7b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "7920db2b-d9ca-11ed-a333-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "2fc89134-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "a642d1d0-f2a4-11ef-8649-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "MOSKVICH"
+    },
+    {
+      "Ref_Key": "7920db44-d9ca-11ed-a333-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "7920db57-d9ca-11ed-a333-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "7920db5b-d9ca-11ed-a333-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "627299c7-d9f9-11ed-a333-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "7d3d5812-a030-11ef-9021-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "ffa3eb92-e334-11ed-ac10-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "ebf06734-b6fd-11ef-9faf-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "c8e732c3-e368-11ed-ac10-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "5b53e6a6-5956-11ef-89b1-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "79e18620-f572-11ed-b355-00155d464300",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "TANK "
+    },
+    {
+      "Ref_Key": "ab136e10-3399-11ef-9bab-00155d46f78f",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "2fc89135-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "111a7a53-036e-11ee-b355-00155d462403",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "2fc89136-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "c8e732ee-e368-11ed-ac10-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "045e9b86-724b-11ee-8b72-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "b2370d62-a02e-11ef-9021-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "f56a7daa-7247-11ee-8b72-00155d46f78e",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "1f59f214-494a-11ed-bd1c-049226c3c1d8",
+      "Parent_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Description": "Универсальные"
+    },
+    {
+      "Ref_Key": "3a2960c1-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "1d306458-bed2-11ef-9fdf-00155d46f78c",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "ee5c0988-1909-11f0-8b39-00155d46f78f",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "3a2960c0-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "1990ca33-8d92-11ed-afa4-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "3a2960c3-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "1990ca34-8d92-11ed-afa4-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "3a2960c4-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "bf271bb4-c434-11ef-8f27-00155d46f78c",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "DODGE"
+    },
+    {
+      "Ref_Key": "3a2960c5-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "c4096a7c-bb94-11ef-836b-00155d46f78d",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "3a2960c7-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "3a2960c8-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "3651d7f6-bbb1-11ef-836b-00155d46f78d",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "3a2960c9-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "3a2960ca-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "3a2960cb-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "3a2960cc-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "8336b756-bc76-11ef-9f5e-00155d46f78c",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "3a2960c6-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "3a2960cd-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "3a2960ce-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "3a2960c2-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "3a2960cf-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "3a2960d0-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "3a2960d1-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "3a2960d2-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "3a2960d5-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "3a2960d3-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "3a2960d4-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "3a2960d6-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "3a2960d7-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "1990ca35-8d92-11ed-afa4-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "9663c990-c379-11ef-94d2-00155d46f78d",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "3a2960d8-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "PORSCHE"
+    },
+    {
+      "Ref_Key": "3a2960d9-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "3a2960da-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "8f7b3318-d182-11ef-9f6f-00155d46f78c",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "58edf570-b890-11ef-8e42-00155d46f78d",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "3a2960dc-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "3a2960db-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "3a2960dd-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "3a2960de-8b11-11ec-85c3-049226c3c1d8",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "5ea605c8-b7c0-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "c6e3b960-b7ba-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "cee26d1b-8a76-11ec-9a1d-049226c3c1d8",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "bec0d446-8f9e-11ef-9a02-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "ACURA"
+    },
+    {
+      "Ref_Key": "d3584656-8c82-11ef-93ba-00155d46f78d",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "d05d974a-efcf-11ed-9dac-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "ALFA ROMEO"
+    },
+    {
+      "Ref_Key": "d05d974b-efcf-11ed-9dac-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "108fde38-b156-11ef-9757-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "f60ed5e0-a34b-11ef-8aec-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "BAIC"
+    },
+    {
+      "Ref_Key": "6e302512-b795-11ef-9e5f-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "19347b57-efd9-11ed-9f0c-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "dd6c434c-8c76-11ef-952e-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "8c1d3994-efe8-11ed-9f0c-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "8c1d3999-efe8-11ed-9f0c-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "b564921e-eff5-11ed-a3be-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "CHERY "
+    },
+    {
+      "Ref_Key": "f9046222-a34d-11ef-8aec-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "CHEVROLET"
+    },
+    {
+      "Ref_Key": "63dbc37c-8fa0-11ef-9a02-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "7ffe0ff2-637c-11ee-8dc3-00155d46f78e",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "CUPRA"
+    },
+    {
+      "Ref_Key": "6bf2a1a8-dfc7-11ef-8928-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "DENZA"
+    },
+    {
+      "Ref_Key": "b5649227-eff5-11ed-a3be-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "eea93896-637c-11ee-8dc3-00155d46f78e",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "0f122d14-a34f-11ef-8aec-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "1a143068-8857-11ee-8916-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "08e3177e-f00b-11ed-9f0f-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "8c1d396f-efe8-11ed-9f0c-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "3c24ddee-f2ec-11ed-a1a9-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "e246dc24-8c76-11ef-952e-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "9acb4850-851d-11ee-9015-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "ad35ade9-f2fb-11ed-9f02-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "f7304f6b-f30b-11ed-aca4-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "cde3f6ae-637d-11ee-8dc3-00155d46f78e",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "f7304f71-f30b-11ed-aca4-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "f5e3b06c-b157-11ef-9757-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "ae95202a-480c-11ee-8291-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "f7304f70-f30b-11ed-aca4-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "f7304f7a-f30b-11ed-aca4-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "2b631154-b15a-11ef-9757-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "f7304f94-f30b-11ed-aca4-bcee7be013be",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "ffba1096-f481-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "dd78f89a-8523-11ee-9015-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "812d04f6-8c5b-11ef-94d2-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "ffba10b3-f481-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "bec36c86-f48a-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "f03cb402-8faa-11ef-9c42-00155d46f78e",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "2c74956a-31ce-11ee-ab67-00155d469e06",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "bec36cbf-f48a-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "8afbc605-f499-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "1f40cca4-f2aa-11ef-8649-00155d46f78f",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "ORA"
+    },
+    {
+      "Ref_Key": "684d5966-8c80-11ef-93ba-00155d46f78d",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "8afbc610-f499-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "PORSCHE"
+    },
+    {
+      "Ref_Key": "25489dc0-2c02-11f0-8f8a-00155d46f78d",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "ROX"
+    },
+    {
+      "Ref_Key": "fe19fbac-a7f1-11ef-8a72-00155d46f78d",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "8afbc61a-f499-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "00ea249e-863f-11ef-85d3-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "b29cba62-863f-11ef-85d3-00155d46f78c",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "8afbc62f-f499-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "007d59ee-f4a3-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "8afbc63c-f499-11ed-ab68-00155d469804",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "5bd2620c-724c-11ee-8b72-00155d46f78e",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "429cbc94-8c84-11ef-93ba-00155d46f78d",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "67ec85a4-7247-11ee-8b72-00155d46f78e",
+      "Parent_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "5669ac97-2638-11ee-ab68-00155d469805",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "ACURA"
+    },
+    {
+      "Ref_Key": "d02d14a6-1690-11ef-9432-00155d46f78f",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "41d9d5c4-bf3d-11ed-8160-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "ALFA ROMEO"
+    },
+    {
+      "Ref_Key": "998119cc-d835-11ec-812d-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "8cb54670-1687-11ef-9394-00155d46f78f",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "a6767644-8bba-11ef-9dff-00155d46f78e",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "BELGEE"
+    },
+    {
+      "Ref_Key": "540f938a-83b5-11ee-929e-00155d46f78f",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "BIAC"
+    },
+    {
+      "Ref_Key": "998119cd-d835-11ec-812d-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "41d9d5ce-bf3d-11ed-8160-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "f443b23d-81c7-11ed-8de9-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "f443b24a-81c7-11ed-8de9-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "4f628956-028a-11ed-86c2-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "41d9d5d8-bf3d-11ed-8160-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "CHEVROLET"
+    },
+    {
+      "Ref_Key": "eb46a1d6-8d59-11ef-8edc-00155d46f78e",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "919e0438-6110-11ee-8f2e-00155d46f78e",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "CUPRA"
+    },
+    {
+      "Ref_Key": "bce8ff24-c324-11ed-9602-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "DAEWOO"
+    },
+    {
+      "Ref_Key": "67590810-e235-11ef-9791-00155d46f78f",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "DENZA"
+    },
+    {
+      "Ref_Key": "f443b25e-81c7-11ed-8de9-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "DODGE"
+    },
+    {
+      "Ref_Key": "f443b263-81c7-11ed-8de9-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "8b6efb3a-6110-11ee-8f2e-00155d46f78e",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "f443b26d-81c7-11ed-8de9-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "f443b27a-81c7-11ed-8de9-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "4f628955-028a-11ed-86c2-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "04796a9c-81fb-11ed-8de9-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "bce8ff2e-c324-11ed-9602-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "GREAT WAII"
+    },
+    {
+      "Ref_Key": "04796ab2-81fb-11ed-8de9-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "fee9d5f0-8297-11ed-afa5-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "2c039d3c-8478-11ee-8f8c-00155d46f78c",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "e40755ea-da90-11ec-b8b1-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "fee9d62e-8297-11ed-afa5-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "8ebc1b9d-f566-11ed-b355-00155d464300",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "2a29be02-6370-11ee-8dc3-00155d46f78e",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "e89645f6-82b7-11ed-afa5-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "86f36b4b-26cb-11ee-ab68-00155d469805",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "46778942-47fd-11ee-8291-00155d46f78c",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "79e18636-f572-11ed-b355-00155d464300",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "cf7312e5-0603-11ee-b35b-00155d46a100",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "998119ce-d835-11ec-812d-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "00fb7d56-b093-11ef-8eb4-00155d46f78c",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "KNEWSTAR"
+    },
+    {
+      "Ref_Key": "998119d0-d835-11ec-812d-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "6d84f228-84f3-11ed-9f10-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "4ebd9e65-8512-11ed-9f10-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "8f8a2c7e-89df-11ee-9574-00155d46f78d",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "LIVAN"
+    },
+    {
+      "Ref_Key": "42e9fb30-8483-11ee-8f8c-00155d46f78c",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "LiXiang"
+    },
+    {
+      "Ref_Key": "d2065ae0-183d-11ef-9240-00155d46f78c",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "e40755f3-da90-11ec-b8b1-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "a2af6911-85d0-11ed-8644-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "e099b9a9-8681-11ed-af39-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "4f628957-028a-11ed-86c2-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "MITSUBICHI"
+    },
+    {
+      "Ref_Key": "e9557c46-f28d-11ef-8649-00155d46f78f",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "MOSKVICH"
+    },
+    {
+      "Ref_Key": "e099b9d1-8681-11ed-af39-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "e099b9d8-8681-11ed-af39-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "e099b9dc-8681-11ed-af39-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "OPEL"
+    },
+    {
+      "Ref_Key": "f19eea76-f28e-11ef-8649-00155d46f78f",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "ORA"
+    },
+    {
+      "Ref_Key": "e099b9e0-8681-11ed-af39-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "c98dba59-f580-11ed-b355-00155d464300",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "POLESTAR"
+    },
+    {
+      "Ref_Key": "e40755ed-da90-11ec-b8b1-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "PORSCHE"
+    },
+    {
+      "Ref_Key": "93f47e08-8754-11ed-b5a2-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "5a716f1e-2c06-11f0-8f8a-00155d46f78d",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "ROX"
+    },
+    {
+      "Ref_Key": "c4cc7a84-9dd6-11ef-949a-00155d46f78c",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "93f47e09-8754-11ed-b5a2-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "c98dba54-f580-11ed-b355-00155d464300",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "SKYWEEL"
+    },
+    {
+      "Ref_Key": "2afd9620-b6f6-11ef-9faf-00155d46f78e",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "SOLARIS"
+    },
+    {
+      "Ref_Key": "93f47e0a-8754-11ed-b5a2-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "979c94ae-5a1a-11ef-9819-00155d46f78d",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "79e1862f-f572-11ed-b355-00155d464300",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "93f47e0b-8754-11ed-b5a2-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "e40755eb-da90-11ec-b8b1-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "d152277b-1646-11ee-ab67-00155d469e06",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "UAZ"
+    },
+    {
+      "Ref_Key": "998119cf-d835-11ec-812d-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "93f47e0c-8754-11ed-b5a2-049226c3c1d8",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "f1e47886-8488-11ee-8f8c-00155d46f78c",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "VOYAH"
+    },
+    {
+      "Ref_Key": "e6c07c06-8bbd-11ef-88ac-00155d46f78d",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "XCITE"
+    },
+    {
+      "Ref_Key": "19cf3c22-5a1d-11ef-9819-00155d46f78d",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "79e18648-f572-11ed-b355-00155d464300",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "3f44524c-f5c9-11ef-84fd-00155d46f78c",
+      "Parent_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Description": "Бронеплёнка"
+    },
+    {
+      "Ref_Key": "50b67837-4dd7-11ec-afee-049226c3c1d8",
+      "Parent_Key": "50b67835-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Полиуретановая плёнка TM SONORA PPF"
+    },
+    {
+      "Ref_Key": "6722b016-0fa9-11f0-895f-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Антигравийные защитные пленки"
+    },
+    {
+      "Ref_Key": "6ccbd0ff-3287-11ed-8211-049226c3c1d8",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала внутренних порогов автомобиля"
+    },
+    {
+      "Ref_Key": "00b968dc-a0c5-11ee-8400-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для зеркал заднего вида"
+    },
+    {
+      "Ref_Key": "39b96f10-0a19-11f0-8a26-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для камер кругового обзора"
+    },
+    {
+      "Ref_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для салона автомобиля"
+    },
+    {
+      "Ref_Key": "d05d9749-efcf-11ed-9dac-bcee7be013be",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для стоек дверей автомобиля"
+    },
+    {
+      "Ref_Key": "e76dc936-a0c4-11ee-8400-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для стоек лобового стекла"
+    },
+    {
+      "Ref_Key": "ff4c5ba9-c6c4-11ec-a4cb-049226c3c1d8",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для фар/фонарей автомобиля"
+    },
+    {
+      "Ref_Key": "35e5e1ca-a0c5-11ee-8400-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала зоны погрузки заднего бампера"
+    },
+    {
+      "Ref_Key": "7cb4fb02-9a90-11ef-8cbc-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала лючка бензобака и зарядки"
+    },
+    {
+      "Ref_Key": "2fc8912d-3e3c-11ed-929b-049226c3c1d8",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала под ручками/ручек автомобиля"
+    },
+    {
+      "Ref_Key": "f48940c8-a0c4-11ee-8400-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала полосы на капот"
+    },
+    {
+      "Ref_Key": "0f448b8e-a0c5-11ee-8400-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала полосы над лобовым стеклом"
+    },
+    {
+      "Ref_Key": "28598cd2-a0c5-11ee-8400-00155d46f78d",
+      "Parent_Key": "50b67838-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала уголки на передние крылья"
+    },
+    {
+      "Ref_Key": "24004936-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783a-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для BMW"
+    },
+    {
+      "Ref_Key": "24004938-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783a-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для DUCATI"
+    },
+    {
+      "Ref_Key": "24004939-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783a-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для HARLEY-DAVIDSON"
+    },
+    {
+      "Ref_Key": "2400493a-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783a-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для HONDA"
+    },
+    {
+      "Ref_Key": "2400493c-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783a-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для KAWASAKI"
+    },
+    {
+      "Ref_Key": "2400493e-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783a-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для SUZUKI"
+    },
+    {
+      "Ref_Key": "2400493f-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783a-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Лекала для YAMAHA"
+    },
+    {
+      "Ref_Key": "1a260288-a65c-11ef-89bf-00155d46f78d",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "ACURA"
+    },
+    {
+      "Ref_Key": "fe544802-c2c7-11ef-8303-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "AITO"
+    },
+    {
+      "Ref_Key": "cc7974ae-a677-11ef-9338-00155d46f78f",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "ALFA ROMEO"
+    },
+    {
+      "Ref_Key": "2400490a-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "AUDI"
+    },
+    {
+      "Ref_Key": "c9822218-6420-11ee-904f-00155d46f78d",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "AVATR"
+    },
+    {
+      "Ref_Key": "86552e8a-6421-11ee-904f-00155d46f78d",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "BAIC"
+    },
+    {
+      "Ref_Key": "24004923-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "BENTLEY"
+    },
+    {
+      "Ref_Key": "2400490b-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "BMW"
+    },
+    {
+      "Ref_Key": "111a7a5e-036e-11ee-b355-00155d462403",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "BYD"
+    },
+    {
+      "Ref_Key": "2400490c-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "CADILLAC"
+    },
+    {
+      "Ref_Key": "551ab795-d902-11ed-a8eb-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "CHANGAN"
+    },
+    {
+      "Ref_Key": "2400490d-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "CHERY"
+    },
+    {
+      "Ref_Key": "0e487485-801a-11ec-8874-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "CHEVROLET"
+    },
+    {
+      "Ref_Key": "38544a4c-8d36-11ef-8472-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "CITROEN"
+    },
+    {
+      "Ref_Key": "6f5956a2-dfcc-11ef-8928-00155d46f78f",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "DENZA"
+    },
+    {
+      "Ref_Key": "ad694af5-e1a4-11ec-8373-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "EXEED"
+    },
+    {
+      "Ref_Key": "42f53c28-641e-11ee-904f-00155d46f78d",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "FAW"
+    },
+    {
+      "Ref_Key": "0e487486-801a-11ec-8874-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "FORD"
+    },
+    {
+      "Ref_Key": "03dbcbb2-887a-11ee-8916-00155d46f78f",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "GAC"
+    },
+    {
+      "Ref_Key": "2400490e-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "GEELY"
+    },
+    {
+      "Ref_Key": "2400490f-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "GENESIS"
+    },
+    {
+      "Ref_Key": "8ebc1bb4-f566-11ed-b355-00155d464300",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "GREAT WALL"
+    },
+    {
+      "Ref_Key": "795e2ccc-e63f-11ec-89b7-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "HAVAL"
+    },
+    {
+      "Ref_Key": "0e487487-801a-11ec-8874-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "HONDA"
+    },
+    {
+      "Ref_Key": "786dd6e0-879a-11ee-8214-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "HONGQI"
+    },
+    {
+      "Ref_Key": "24004910-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "HYUNDAI"
+    },
+    {
+      "Ref_Key": "8d7509de-5f39-11ec-926e-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "INFINITI"
+    },
+    {
+      "Ref_Key": "8ebc1b94-f566-11ed-b355-00155d464300",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "JAC"
+    },
+    {
+      "Ref_Key": "71e561e8-87a0-11ee-8214-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "JAECOO"
+    },
+    {
+      "Ref_Key": "24004911-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "JAGUAR"
+    },
+    {
+      "Ref_Key": "fe31351c-b172-11ef-8669-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "JEEP"
+    },
+    {
+      "Ref_Key": "18a8e6f0-47e4-11ee-8291-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "JETOUR"
+    },
+    {
+      "Ref_Key": "f5b6f37a-5a2b-11ef-9573-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "JETTA"
+    },
+    {
+      "Ref_Key": "1cc8ef5c-87a2-11ee-8214-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "KAIYI"
+    },
+    {
+      "Ref_Key": "24004912-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "KIA"
+    },
+    {
+      "Ref_Key": "24004913-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "LADA"
+    },
+    {
+      "Ref_Key": "24004914-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "LAND ROVER"
+    },
+    {
+      "Ref_Key": "24004915-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "LEXUS"
+    },
+    {
+      "Ref_Key": "30c4d132-87a3-11ee-8214-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "LIXIANG"
+    },
+    {
+      "Ref_Key": "ca14ba4a-50a8-11ef-8626-00155d46f78d",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "LYNK AND CO"
+    },
+    {
+      "Ref_Key": "29c38f2c-c68b-11ef-8f7f-00155d46f78f",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "M-HERO"
+    },
+    {
+      "Ref_Key": "24004916-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "MAZDA"
+    },
+    {
+      "Ref_Key": "24004917-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "MERCEDES-BENZ"
+    },
+    {
+      "Ref_Key": "120f1e7f-6ee3-11ec-890d-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "MINI"
+    },
+    {
+      "Ref_Key": "24004918-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "MITSUBISHI"
+    },
+    {
+      "Ref_Key": "2dd68d70-0389-11ee-b355-00155d462403",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "MOSKVICH"
+    },
+    {
+      "Ref_Key": "24004919-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "NISSAN"
+    },
+    {
+      "Ref_Key": "2dd68d76-0389-11ee-b355-00155d462403",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "OMODA"
+    },
+    {
+      "Ref_Key": "1f84f778-f375-11ef-8baf-00155d46f78f",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "PEUGEOT"
+    },
+    {
+      "Ref_Key": "2400491a-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "PORSCHE"
+    },
+    {
+      "Ref_Key": "2400491b-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "RENAULT"
+    },
+    {
+      "Ref_Key": "2400491c-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "ROLLS-ROYCE"
+    },
+    {
+      "Ref_Key": "0310eb7a-c2c8-11ef-8303-00155d46f78c",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "SERES"
+    },
+    {
+      "Ref_Key": "2400491d-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "SKODA"
+    },
+    {
+      "Ref_Key": "79e1860f-f572-11ed-b355-00155d464300",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "SKYWELL"
+    },
+    {
+      "Ref_Key": "24004922-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "SUBARU"
+    },
+    {
+      "Ref_Key": "83b138be-03ed-11f0-96e3-00155d46f78d",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "SUZUKI"
+    },
+    {
+      "Ref_Key": "bd04701a-50a9-11ef-8626-00155d46f78d",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "TANK"
+    },
+    {
+      "Ref_Key": "2400491e-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "TESLA"
+    },
+    {
+      "Ref_Key": "2400491f-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "TOYOTA"
+    },
+    {
+      "Ref_Key": "24004920-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "VOLKSWAGEN"
+    },
+    {
+      "Ref_Key": "24004921-5c0d-11ec-9f78-049226c3c1d8",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "VOLVO"
+    },
+    {
+      "Ref_Key": "8ebc1ba2-f566-11ed-b355-00155d464300",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "VOYAH "
+    },
+    {
+      "Ref_Key": "dc7bded0-5ade-11ef-9a5b-00155d46f78f",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "XIAOMI"
+    },
+    {
+      "Ref_Key": "79e18618-f572-11ed-b355-00155d464300",
+      "Parent_Key": "50b6783b-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "ZEEKR"
+    },
+    {
+      "Ref_Key": "bced8b97-527a-11ec-93de-049226c3c1d8",
+      "Parent_Key": "50b6783c-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Гели, праймеры, спирты"
+    },
+    {
+      "Ref_Key": "50b6783f-4dd7-11ec-afee-049226c3c1d8",
+      "Parent_Key": "50b6783c-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Ножи и лезвия"
+    },
+    {
+      "Ref_Key": "50b67841-4dd7-11ec-afee-049226c3c1d8",
+      "Parent_Key": "50b6783c-4dd7-11ec-afee-049226c3c1d8",
+      "Description": "Распылители, опрыскиватели, триггеры"
+    }
+  ]
+}

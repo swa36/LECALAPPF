@@ -54,7 +54,7 @@ class CreatorFeed:
 
     def create_items(self):
         products = Product.objects.annotate(image_count=Count('images')).filter(
-            Q(image_count__gt=0) & Q(stock__gt=0) & Q(prices__retail_price__gt=0)
+            Q(image_count__gt=0) & Q(stock__gt=0) & Q(prices__retail_price__gt=0) & Q(ozon__isnull=False)
         )
         self.create_data_category()
         for c in products:
@@ -280,11 +280,11 @@ class CreatorFeed:
         max_images = limit_by_market.get(self.name_market)
         if max_images:
             all_img = all_img[:max_images]
-
+        print(item.code_1C)
         for img in all_img:
+            
             base_url = img.image.url
             url = self.url_site + base_url
-
             tag_name = 'Image' if self.name_market == 'avito' else 'picture'
             elem = xml.SubElement(offer, tag_name)
             if tag_name == 'Image':

@@ -78,6 +78,7 @@ class ExChange1C:
         result = self._make_request('GET', endpoint, params=params)
         self._save_to_json(result, 'data_catalog')
         return result
+
     def get_name_additional_attributes(self):
         endpoint = 'ChartOfCharacteristicTypes_ДополнительныеРеквизитыИСведения'
         fields = [
@@ -150,9 +151,9 @@ class ExChange1C:
         # Получение списка файлов, связанных с товаром
         try:
             response = requests.get(
-                f"{self.BASE_URL}InformationRegister_СведенияОФайлах?"
-                f"$filter=ВладелецФайла eq cast(guid'{id_item}', 'Catalog_Номенклатура')&"
-                f"$select=Файл&$format=application/json;odata=nometadata",
+                f"{self.BASE_URL}Catalog_НоменклатураПрисоединенныеФайлы?"
+                f"$filter=ВладелецФайла_Key eq guid'{id_item}'&"
+                f"$select=Ref_Key&$format=application/json;odata=nometadata",
                 auth=self.auth,
                 timeout=10
             )
@@ -170,7 +171,7 @@ class ExChange1C:
         sequence_number = 1
 
         for file_info in file_records:
-            file_id = file_info.get('Файл')
+            file_id = file_info.get('Ref_Key')
             is_main = (file_id == id_main_img)
             filename = "main.jpg" if is_main else f"{sequence_number}.jpg"
 
@@ -210,19 +211,19 @@ class ExChange1C:
 
     def _fetch_image_base64(self, file_id):
         """Пробует получить base64 из двух возможных источников."""
-        # try:
-        #     # Старое хранилище
-        #     url_old = (
-        #         f"{self.BASE_URL}"
-        #         f"InformationRegister_УдалитьДвоичныеДанныеФайлов(Файл='{file_id}', "
-        #         f"Файл_Type='StandardODATA.Catalog_НоменклатураПрисоединенныеФайлы')"
-        #         f"?$select=ДвоичныеДанныеФайла_Base64Data&$format=application/json;odata=nometadata"
-        #     )
-        #     response = requests.get(url_old, auth=self.auth, timeout=10)
-        #     if response.ok:
-        #         return response.json().get('ДвоичныеДанныеФайла_Base64Data')
-        # except Exception as e:
-        #     print(f"⚠️ Ошибка при попытке получить файл из старого хранилища: {e}")
+        try:
+            # Старое хранилище
+            url_old = (
+                f"{self.BASE_URL}"
+                f"InformationRegister_УдалитьДвоичныеДанныеФайлов(Файл='{file_id}', "
+                f"Файл_Type='StandardODATA.Catalog_НоменклатураПрисоединенныеФайлы')"
+                f"?$select=ДвоичныеДанныеФайла_Base64Data&$format=application/json;odata=nometadata"
+            )
+            response = requests.get(url_old, auth=self.auth, timeout=10)
+            if response.ok:
+                return response.json().get('ДвоичныеДанныеФайла_Base64Data')
+        except Exception as e:
+            print(f"⚠️ Ошибка при попытке получить файл из старого хранилища: {e}")
 
         try:
             # Новое хранилище

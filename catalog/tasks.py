@@ -67,5 +67,4 @@ def get_img_1C():
     data_1c=ExChange1C()
     product = Product.objects.all()
     for i in product:
-        if not i.images.all():
-            data_1c.get_img(i.uuid_1C)
+        data_1c.get_img(i.uuid_1C)

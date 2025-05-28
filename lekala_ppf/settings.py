@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'wildberries.apps.WildberriesConfig',
     'order.apps.OrderConfig',
     'avito.apps.AvitoConfig',
+    'aliexpress.apps.AliexpressConfig'
 ]
 
 MIDDLEWARE = [
@@ -185,6 +186,8 @@ STATIC_ROOT = BASE_DIR / 'static'
 AVITO_ID = env('AVITO_ID')
 AVITO_KEY = env('AVITO_KEY')
 
+# ALIEXPRESS
+ALI_KEY = env('ALI_KEY')
 
 # Loging
 LOGGING = {

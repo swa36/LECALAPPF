@@ -68,7 +68,7 @@ class CreatorFeed:
             else:
                 offer = xml.SubElement(self.offers, 'offer')
                 offer.attrib = {
-                    'id': str(c.market_article_num),
+                    'id': str(c.id),
                 }
             self.set_description(offer, item_data)
             if self.name_market == 'avito':
@@ -79,8 +79,8 @@ class CreatorFeed:
                 self.set_img(c, offer)
                 categoryId = xml.SubElement(offer, 'categoryId')
                 categoryId.text = str(
-                    c.category.get_root().market_category_num if self.name_market == 'vk' else str(
-                        c.category.market_category_num))
+                    c.category.get_root().id if self.name_market == 'vk' else str(
+                        c.category.id))
                 if self.name_market in ['yandex', 'vk']:
                     self._feed_for_yandex_vk(offer, item_data)
                 elif self.name_market == 'ali':
@@ -138,17 +138,16 @@ class CreatorFeed:
         price.text = str(data_item['price_items'] + (self.mark_up * data_item['price_items']) / 100)
         if data_item['producer_items']:
             brand = xml.SubElement(offer, 'brand')
-            brand.text = data_item['producer_items'].name_producer
+            brand.text = data_item['producer_items']
         article = xml.SubElement(offer, 'article')
         article.text = data_item['article_items']
-        if data_item['sizes_items']:
-            lenght_num, width_num, height_num = data_item['sizes_items'].split('X')
+        if data_item['length'] and data_item['width'] and data_item['height']:
             length = xml.SubElement(offer, 'length')
-            length.text = str(lenght_num)
+            length.text = str(data_item['length'])
             width = xml.SubElement(offer, 'width')
-            width.text = str(width_num)
+            width.text = str(data_item['width'])
             height = xml.SubElement(offer, 'height')
-            height.text = str(height_num)
+            height.text = str(data_item['height'])
         if data_item['weight_items']:
             weight = xml.SubElement(offer, 'weight')
             weight.text = data_item['weight_items']

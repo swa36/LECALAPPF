@@ -2,11 +2,7 @@ import inspect
 import json
 from  abc import ABC
 from datetime import datetime
-from itertools import product
 from pathlib import Path
-
-from PIL.ImImagePlugin import number
-
 from ozon.models import OzonData
 from order.models import *
 import requests

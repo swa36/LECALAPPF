@@ -193,6 +193,7 @@ ALI_KEY = env('ALI_KEY')
 # YAMARKET
 
 YA_KEY = env('YA_KEY')
+TOKEN_YA_MARKET = env('TOKEN_YA_MARKET')
 
 # Loging
 LOGGING = {

@@ -45,7 +45,13 @@ class OrderMarketplaceTo1C:
             'number_field': 'number_WB',
             'name_template': lambda o: f'{o.name_shop} {o.number_WB}',
             'number_1C': lambda o: f'WB00-{o.number_WB}'
-        }
+        },
+            'orderym': {
+            'name': 'YandexMarket',
+            'number_field': 'number_ym',
+            'name_template': lambda o: f'{o.name_shop} {o.number_ym}',
+            'number_1C': lambda o: f'YA00-{o.number_ym}'
+        },
     }
 
     def __init__(self, order):
@@ -205,7 +211,6 @@ class OrderMarketplaceTo1C:
                 if hasattr(item, 'name_advertisement_item')
             ]
             return f"{self.platform_info['name']}\n" + "\n".join(adv_names)
-
         number = getattr(self.order, self.platform_info['number_field'], "")
         return f"{self.platform_info['name']}\n{number}"
 

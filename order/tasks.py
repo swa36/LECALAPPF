@@ -1,15 +1,15 @@
 from celery import shared_task
-from order.models import OrderOzon, OrderWB
+from order.models import OrderOzon, OrderWB, OrderYM
 from src.lekala_class.class_1C.ExchangeOrder1CtoMarket import OrderMarketplaceTo1C
 from wildberries.tasks import get_new_order_wb
 @shared_task
 def order_change():
     # order_avito = OrderAvito.objects.filter(change_1C=False)
     order_ozon = OrderOzon.objects.filter(exchange_1c=False)
-    # order_ozon = OrderOzon.objects.filter(number_1C='OZ00-000001')
     # order_ali = OrderAli.objects.filter(exchange_1c=False)
     order_wb = OrderWB.objects.filter(exchange_1c=False)
-    order_list = [order_ozon, order_wb]
+    order_ya = OrderYM.objects.filter(exchange_1c=False)
+    order_list = [order_ozon, order_wb, order_ya]
     for orders in order_list:
         for order in orders:
             order_exchange = OrderMarketplaceTo1C(order)

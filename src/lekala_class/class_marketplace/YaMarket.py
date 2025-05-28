@@ -1,5 +1,4 @@
-from django.db.models import Q
-from unicodedata import category
+from django.db.models import Q, Count
 from src.lekala_class.class_marketplace.YaMarketApi import YaMarketApi
 from catalog.models import Product, MarkUpItems, Category
 
@@ -11,9 +10,11 @@ class YaMarket(YaMarketApi):
         self.categories_in = self._get_category_ids("Защитное стекло экранов мультимедиа, приборных панелей, климат-контроля")
         self.categories_moto = self._get_category_ids("Лекала для оклейки мотоциклов")
         self.excluded_categories = self.categories_out + self.categories_in + self.categories_moto
-        self.products = Product.objects.filter(Q(category__in=self.excluded_categories) & Q(
-            prices__retail_price__gt=0)).prefetch_related(
-            "images","additional_attributes__attribute_name")
+        self.products = Product.objects.annotate(image_count=Count('images')).filter(
+            Q(category__in=self.excluded_categories),
+            Q(prices__retail_price__gt=0),
+            Q(image_count__gt=0)
+        ).prefetch_related("images", "additional_attributes__attribute_name")
         super().__init__()
 
     def _get_category_ids(self, name):
@@ -31,7 +32,11 @@ class YaMarket(YaMarketApi):
             }
 
             price_with_markup = round(product.prices.retail_price + (self.mark_up * product.prices.retail_price) / 100, 2)
-
+            weight = attrib.get("weight_netto") or attrib.get("weight_brutto", 0)
+            if weight:
+                weight = float(weight)
+            else:
+                weight = 0.3
             offer = {
                 "offerId": product.code_1C,
                 "basicPrice": {"value": int(price_with_markup), "currencyId": "RUR"},
@@ -52,7 +57,7 @@ class YaMarket(YaMarketApi):
                     "length": attrib.get("length", 0),
                     "width": attrib.get("width", 0),
                     "height": attrib.get("height", 0),
-                    "weight": attrib.get("weight_netto") or attrib.get("weight_brutto", 0),
+                    "weight": weight,
                 },
             }
             if len(data) > 30:
@@ -98,14 +103,18 @@ class YaMarket(YaMarketApi):
 
         return param
 
-    def sentFrameStock(self):
+    def sent_stock_market(self):
         data = []
         for f in self.products:
+            if len(data) > 1999:
+                self.sent_stock(data)
+                data.clear()
             data.append(
                 {
                     'sku':f.code_1C,
                     'items':[{'count':f.stock}]
                 }
             )
-        self.sent_stock(data)
+        if data:
+            self.sent_stock(data)
         return

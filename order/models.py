@@ -99,6 +99,20 @@ class OrderWB(AbstractOrder):
         verbose_name = 'Заказ WB'
         verbose_name_plural = 'Заказы WB'
 
+class OrderYM(AbstractOrder):
+    number_ym = models.CharField(max_length=200, blank=True, null=True, verbose_name='Номер заказа YaMarket')
+
+    def __str__(self):
+        return self.number_1C or 'YaMarket заказ'
+
+    class Meta:
+        verbose_name = 'Заказ YaMarket'
+        verbose_name_plural = 'Заказы YaMarket'
+
+
+class ItemInOrderYM(AbstractOrderItem):
+    order_num = models.ForeignKey(OrderYM, on_delete=models.CASCADE, related_name='items', verbose_name='Номер заказа')
+
 
 class MarketplaceChoices(models.TextChoices):
     OZON = 'ozon', 'Ozon'

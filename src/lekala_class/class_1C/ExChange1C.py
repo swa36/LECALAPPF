@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import shutil
 import lekala_ppf.settings as settings
 from requests.auth import HTTPBasicAuth
 from requests.adapters import HTTPAdapter
@@ -140,6 +141,7 @@ class ExChange1C:
         self._save_to_json(result, 'data_stock.json')
         return
     
+
     def get_img(self, id_item):
         try:
             product = Product.objects.get(uuid_1C=id_item)
@@ -195,8 +197,19 @@ class ExChange1C:
             if not is_main:
                 sequence_number += 1
 
-        # ✅ Только если все изображения были успешно скачаны и декодированы
+        # ✅ Удаляем старые изображения и их файлы
         product.images.all().delete()
+        media_path = settings.BASE_DIR / 'media' / 'img' / product.code_1C
+        if media_path.exists() and media_path.is_dir():
+            try:
+                shutil.rmtree(media_path)
+                print(f"🗑️ Удалена папка со всеми изображениями: {media_path}")
+            except Exception as e:
+                print(f"❌ Ошибка при удалении папки: {e}")
+        else:
+            print(f"⚠️ Папка {media_path} не найдена")
+                
+        # ✅ Сохраняем новые изображения
         for image in pending_images:
             img_obj = Images.objects.create(
                 product=product,
@@ -207,6 +220,7 @@ class ExChange1C:
             print(f"✅ Сохранено изображение: {image['filename']}")
 
         print(f"✅ Успешно обновлены изображения для товара {product.name}")
+
 
 
     def _fetch_image_base64(self, file_id):

@@ -280,7 +280,6 @@ class CreatorFeed:
         max_images = limit_by_market.get(self.name_market)
         if max_images:
             all_img = all_img[:max_images]
-        print(item.code_1C)
         for img in all_img:
             
             base_url = img.image.url

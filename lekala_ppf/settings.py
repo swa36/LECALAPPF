@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'wildberries.apps.WildberriesConfig',
     'order.apps.OrderConfig',
     'avito.apps.AvitoConfig',
-    'aliexpress.apps.AliexpressConfig'
+    'aliexpress.apps.AliexpressConfig',
+    'yamarket.apps.YamarketConfig',
 ]
 
 MIDDLEWARE = [
@@ -188,6 +189,10 @@ AVITO_KEY = env('AVITO_KEY')
 
 # ALIEXPRESS
 ALI_KEY = env('ALI_KEY')
+
+# YAMARKET
+
+YA_KEY = env('YA_KEY')
 
 # Loging
 LOGGING = {

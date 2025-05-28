@@ -208,7 +208,7 @@ class GetData1C(ExChange1C):
 
                 # ✅ Обновление изображений
 
-                self.get_img(product.uuid_1C)
+                # self.get_img(product.uuid_1C)
 
         return
 

@@ -140,7 +140,9 @@ class CreatorFeed:
             brand = xml.SubElement(offer, 'brand')
             brand.text = data_item['producer_items']
         article = xml.SubElement(offer, 'article')
-        article.text = data_item['article_items']
+        article.text = data_item['id']
+        name = xml.SubElement(offer, 'name')
+        name.text = data_item['name']
         if data_item['length'] and data_item['width'] and data_item['height']:
             length = xml.SubElement(offer, 'length')
             length.text = str(data_item['length'])

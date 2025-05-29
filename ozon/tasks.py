@@ -13,7 +13,7 @@ from django.core.files.base import ContentFile
 import pandas as pd
 
 def get_data_csv_ozon():
-    filename = settings.BASE_DIR / 'src' / 'OzonData' / 'full_data_ozon.csv'
+    filename = settings.BASE_DIR / 'src' / 'OzonData' / 'all_data_ozon.csv'
     # Оставляем только нужные столбцы
     df = pd.read_csv(filename, sep=';', encoding='utf-8')
     df["Артикул"] = df["Артикул"].astype(str).str.lstrip("'")
@@ -260,7 +260,7 @@ def update_remains_ozon():
     print("end update remains OZON")
 
 
-def ozon_update_articel():
+def ozon_update_file_article():
     ozon_artile = pd.read_excel('src/OzonData/update_vendor_code(1).xlsx')
     for index, row in ozon_artile.iterrows():
         value_from_a = row["Старый артикул"]  # Значение из столбца A
@@ -271,5 +271,17 @@ def ozon_update_articel():
             pass
         # Вставляем результат в столбец B той же строки
     ozon_artile.to_excel("update_article_result.xlsx", index=False)
+
+
+def ozon_article():
+    ozon_artile = pd.read_excel('update_article_result.xlsx')
+
+    for index, row in ozon_artile.iterrows():
+        new_article = str(row["Новый артикул"]).strip()
+        OzonData.objects.update_or_create(product=Product.objects.get(code_1C=new_article),
+                                          defaults={
+                                              'offer_id':new_article
+                                          }
+                                          )
 
 

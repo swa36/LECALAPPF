@@ -1,8 +1,5 @@
-import json
-import os
 from pathlib import Path
 import re
-import requests
 from celery import shared_task
 from django.conf import settings
 from django.db.models import Q
@@ -14,6 +11,7 @@ from django.core.files.base import ContentFile
 from ozon.models import OzonData
 from ozon.tasks import update_remains_ozon
 from wildberries.tasks import update_remains_wb
+from yamarket.tasks import sent_stock as sent_stock_ya
 from django.core.files import File
 
 @shared_task
@@ -41,8 +39,10 @@ def get_data_1C():
         get_data_chunck({
             'catalog': chunk,
         })
-    # update_remains_ozon.delay()
-    # update_remains_wb.delay()
+    update_remains_ozon.delay()
+    update_remains_wb.delay()
+    sent_stock_ya.delay()
+    
 
 
 

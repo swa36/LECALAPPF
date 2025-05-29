@@ -1,5 +1,4 @@
 from aliexpress.models import AliData
-from ozon.models import OzonData
 from src.lekala_class.class_marketplace.BaseMarketPlace import BaseMarketPlace
 from django.conf import settings
 from catalog.models import Product
@@ -52,14 +51,16 @@ class AliExpress(BaseMarketPlace):
             return body
         return self._request("POST", endpoint, data=body, params=params)
 
-    def get_order(self, params=None):
+    def get_order(self, params=None, save_to_file=False):
         endpoint = 'seller-api/v1/order/get-order-list'
         body = {
             "order_statuses": ["Created"],
             "page_size": 5,
             "page": 1
         }
-        self._save_payload_to_file(body)
+        if save_to_file:
+            self._save_payload_to_file(body)
+            return
         return self._request("POST", endpoint, data=body, params=params)
 
     def delete_ali(self, params=None, data=None, save_to_file=False):
@@ -71,11 +72,8 @@ class AliExpress(BaseMarketPlace):
         return self._request("POST", endpoint, data=body, params=params)
 
     def set_id_ali(self, article, id_ali):
-
         try:
-            obj = None
-            if OzonData.objects.filter(offer_id=article).exists():
-                obj = OzonData.objects.get(offer_id=article).product
-            AliData.objects.update_or_create(product=obj, id_ali=id_ali)
+            product = Product.objects.get(code_1C=article)
+            AliData.objects.update_or_create(product=product, id_ali=id_ali)
         except Exception as ex:
             print(f'❌ Ошибка для артикула {article}: {ex}')

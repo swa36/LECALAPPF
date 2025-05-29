@@ -1,12 +1,13 @@
 from django.core.cache import cache
 from src.lekala_class.class_marketplace.BaseMarketPlace import BaseMarketPlace
+from django.conf import settings
 
 class AvitoExchange(BaseMarketPlace):
     REDIS_TOKEN_KEY = 'avito_access_token'
 
-    def __init__(self, client_id, client_secret):
-        self.client_id = client_id
-        self.client_secret = client_secret
+    def __init__(self):
+        self.client_id = settings.AVITO_ID
+        self.client_secret = settings.AVITO_KEY
         super().__init__(headers={}, base_url='https://api.avito.ru')
 
     def get_token(self):
@@ -28,12 +29,14 @@ class AvitoExchange(BaseMarketPlace):
         cache.set(self.REDIS_TOKEN_KEY, token, timeout=60 * 50)
         return token
 
-    def get_order(self):
+    def get_order(self, save_to_file=False):
         token = self.get_token()
         endpoint = '/order-management/1/orders'
         headers = {'Authorization': f'Bearer {token}'}
         params = {'statuses': 'on_confirmation'}
 
         response = self._request('GET', endpoint, params=params, extra_headers=headers)
-        self._save_payload_to_file(response)
+        print(response)
+        if save_to_file:
+            self._save_payload_to_file(response)
         return response

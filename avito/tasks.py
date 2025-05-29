@@ -14,7 +14,7 @@ def create_feed():
 
 @shared_task
 def getOrderAvito():
-    avito = AvitoExchange(client_id='...', client_secret='...')  # передай реальные значения или через settings
+    avito = AvitoExchange()  # передай реальные значения или через settings
     try:
         orders = avito.get_order().get('orders', [])
     except Exception as e:

@@ -2,7 +2,6 @@ from celery import shared_task
 import requests
 import lekala_ppf.settings as settings
 from catalog.models import Product, MarkUpItems, TypePrices, Images
-import pandas as pd
 import json
 from order.models import OrderOzon, ItemInOrderOzon
 from ozon.models import OzonData

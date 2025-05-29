@@ -7,7 +7,7 @@ def post_item_ya():
     return
 
 @shared_task
-def sent_stock():
+def sent_stock_ya():
     market = YaMarket()
     market.sent_stock_market()
     return

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import OrderOzon, ItemInOrderOzon, OrderWB, ItemInOrderYM, OrderYM
+from .models import OrderOzon, ItemInOrderOzon, OrderWB, ItemInOrderYM, OrderYM, ItemInOrderAvito, OrderAvito, \
+    ItemInOrderAli, OrderAli
 
 
 class ItemInOrderOzonInline(admin.TabularInline):
@@ -53,3 +54,27 @@ class OrderWBAdmin(admin.ModelAdmin):
             'fields': ('date_create',)
         }),
     )
+
+
+class ItemInOrderAvitoInline(admin.TabularInline):
+    model = ItemInOrderAvito
+    extra = 0
+
+
+@admin.register(OrderAvito)
+class OrderAvitoAdmin(admin.ModelAdmin):
+    list_display = ('number_1C', 'number_avito', 'name_advertisement', 'product')
+    search_fields = ('number_1C', 'number_avito', 'name_advertisement')
+    inlines = [ItemInOrderAvitoInline]
+
+
+class ItemInOrderAliInline(admin.TabularInline):
+    model = ItemInOrderAli
+    extra = 0
+
+
+@admin.register(OrderAli)
+class OrderAliAdmin(admin.ModelAdmin):
+    list_display = ('number_1C', 'number_ali', 'name', 'family')
+    search_fields = ('number_1C', 'number_ali', 'name', 'family')
+    inlines = [ItemInOrderAliInline]

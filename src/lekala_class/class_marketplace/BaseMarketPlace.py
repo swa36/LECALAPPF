@@ -74,6 +74,8 @@ class BaseMarketPlace(ABC):
             number = OrderWB.objects.last().number_1C if OrderWB.objects.last() else "WB00-000000"
         elif 'YaMarket'.lower() in name:
             number = OrderYM.objects.last().number_1C if OrderWB.objects.last() else "YA00-000000"
+        elif 'AliExpress'.lower() in name:
+            number = OrderAli.objects.last().number_1C if OrderWB.objects.last() else "AL00-000000"
         if number:
             mask = '000000'
             n = number.split('-')

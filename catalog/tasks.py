@@ -3,15 +3,13 @@ import re
 from celery import shared_task
 from django.conf import settings
 from django.db.models import Q
-from numpy.ma.core import product
 from src.lekala_class.class_1C.ExChange1C import ExChange1C
 from src.lekala_class.class_1C.GetData1C import GetData1C
-from catalog.models import Product, Images
-from django.core.files.base import ContentFile
-from ozon.models import OzonData
+from catalog.models import Product
 from ozon.tasks import update_remains_ozon
 from wildberries.tasks import update_remains_wb
-from yamarket.tasks import sent_stock as sent_stock_ya
+from yamarket.tasks import sent_stock_ya
+from aliexpress.tasks import update_stock_ali
 from django.core.files import File
 
 @shared_task
@@ -36,12 +34,13 @@ def get_data_1C():
     chunk_size = len(data_catalog) // 5 + (1 if len(data_catalog) % 5 else 0)
     chunks_data_catalog = [data_catalog[i:i + chunk_size] for i in range(0, len(data_catalog), chunk_size)]
     for chunk in chunks_data_catalog:
-        get_data_chunck({
+        get_data_chunck.delay({
             'catalog': chunk,
         })
-    update_remains_ozon.delay()
-    update_remains_wb.delay()
-    sent_stock_ya.delay()
+    # update_remains_ozon.delay()
+    # update_remains_wb.delay()
+    # sent_stock_ya.delay()
+    # update_stock_ali.delay()
     
 
 

@@ -14,11 +14,9 @@ from django.core.files import File
 
 @shared_task
 def get_data_chunck(payload):
-    print("Start get data")
     data_catalog = payload['catalog']
     data1C = GetData1C()
     data1C.set_catalog_data_stock(data_catalog)
-    print("END get data")
 
 
 @shared_task
@@ -37,10 +35,10 @@ def get_data_1C():
         get_data_chunck.delay({
             'catalog': chunk,
         })
-    # update_remains_ozon.delay()
-    # update_remains_wb.delay()
-    # sent_stock_ya.delay()
-    # update_stock_ali.delay()
+    update_remains_ozon.delay()
+    update_remains_wb.delay()
+    sent_stock_ya.delay()
+    update_stock_ali.delay()
     
 
 

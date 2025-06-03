@@ -139,7 +139,7 @@ def add_new_item_ozon():
     ozon_api = OzonExchange()
     items = []
     products_not_ozon = Product.objects.annotate(image_count=Count('images')).filter(
-        Q(image_count__gt=0) & Q(ozon__isnull=True) & Q(stock__gt=0) & Q(prices__retail_price__gt=0)
+        Q(image_count__gt=0) & Q(ozon__isnull=True) & Q(prices__retail_price__gt=0)
     )
     for product in products_not_ozon:
         if len(items) > 99:
@@ -228,9 +228,9 @@ def ozon_create_order(num_order):
             new_order.save()
         else:
             print(f'Заказ OZON {num_order} уже существует в системе')
-        return True, num_order
+        return True
     except:
-        return False, num_order
+        return False
 
 
 @shared_task

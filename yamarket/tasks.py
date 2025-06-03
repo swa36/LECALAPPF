@@ -8,6 +8,8 @@ def post_item_ya():
 
 @shared_task
 def sent_stock_ya():
+    print('Start update sotck YM')
     market = YaMarket()
     market.sent_stock_market()
+    print('End update sotck YM')
     return

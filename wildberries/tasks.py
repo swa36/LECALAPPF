@@ -56,8 +56,8 @@ def update_price_wb():
         if price <= 0:
             continue
         if i[0]:
-            list_price.append({"nmID": int(i[0]),"price": int(price), "discount": 0})
-            list_discount_wb.append({"nmID": int(i[0]), "clubDiscount": 0})
+            list_price.append({"nmID": int(i[0]),"price": int(price), "discount": 10})
+            list_discount_wb.append({"nmID": int(i[0]), "clubDiscount": 30})
         if len(list_price) > 999:
             wb_api.update_price(data=list_price)
             wb_api.set_price_club_wb(data=list_discount_wb)

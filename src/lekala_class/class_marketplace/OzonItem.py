@@ -28,7 +28,7 @@ class OzonItem:
     def __init__(self, product):
         self.product = product
         self.main_img = self._set_main_img()
-        self.other_img = [f'https://89.111.153.195{i.image.url}' for i in self.product.images.filter(main=False)[:14]]
+        self.other_img = [f'https://lpff.ru{i.image.url}' for i in self.product.images.filter(main=False)[:14]]
         self.price = int(self.product.prices.retail_price)
         self.attributes = self._get_additional_attributes()
 
@@ -40,7 +40,7 @@ class OzonItem:
 
     def _set_main_img(self):
         img = self.product.images.filter(main=True).first()
-        return f'https://89.111.153.195{img.image.url}' if img else ""
+        return f'https://lpff.ru{img.image.url}' if img else ""
 
     def create_price(self):
         mark_up = MarkUpItems.objects.last()
@@ -130,7 +130,7 @@ class OzonItem:
             "pdf_list": [],
             "price": str(normal_price),
             "primary_image": self.main_img,
-            "weight": weight_grams,
+            "weight": weight_grams if weight_grams else 300,
             "weight_unit": "g"
         }
 
@@ -186,7 +186,9 @@ class OzonTape(OzonItem):
             self.build_attribute(self.WARRANTY_ID, self.attributes.get("Гарантия, мес.", "")),
             self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
             self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("Комплектация", "")),
-            self.build_attribute(self.WEIGHT_ID, weight),
-            self.build_attribute(self.GROSS_WEIGHT_ID, gross_weight)
         ])
+        if self.WEIGHT_ID:       
+            attrs.append(self.build_attribute(self.WEIGHT_ID, weight))
+        if self.GROSS_WEIGHT_ID:
+            attrs(self.build_attribute(self.GROSS_WEIGHT_ID, gross_weight))
         return attrs

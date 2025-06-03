@@ -3,7 +3,9 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+from catalog.models import Product
 from lekala_ppf.settings import OZON_ID, OZON_KEY
+from ozon.models import OzonData
 from src.lekala_class.class_marketplace.BaseMarketPlace import BaseMarketPlace
 from order.models import MarketplaceControl
 
@@ -74,15 +76,19 @@ class OzonExchange(BaseMarketPlace):
         return self._request('POST', endpoint, data=payload)
 
     def set_num_sku_id_ozon(self, info_ozon):
-        for it in info_ozon['result']['items']:
-            if it['sku'] != 0:
+        for it in info_ozon['items']:
+            if len(it['barcodes'])> 0:
                 try:
-                    model = self.prod_in_catalog(it['offer_id'])
-                    num = model.objects.get(offer_id=it['offer_id'])
+                    num = Product.objects.get(code_1C=it['offer_id'])
+                    OzonData.objects.update_or_create(
+                        offer_id=it['offer_id'],
+                        product_id=num,
+                        defaults={
+                            'ozon_id':it['id'],
+                            'ozon_sku':it['barcodes'][0]
+                        }
+                    )
                     print(f"{it['offer_id']} - {it['id']} - {num.name} - Ozon")
-                    num.ozon_id = it['id']
-                    num.ozon_sku = it['sku']
-                    num.save()
                 except Exception as ex:
                     print(it['offer_id'])
 

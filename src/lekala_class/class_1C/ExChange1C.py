@@ -153,7 +153,7 @@ class ExChange1C:
         try:
             response = requests.get(
                 f"{self.BASE_URL}Catalog_НоменклатураПрисоединенныеФайлы?"
-                f"$filter=ВладелецФайла_Key eq guid'{id_item}'&"
+                f"$filter=ВладелецФайла_Key eq guid'{id_item}' and DeletionMark eq false&"
                 f"$select=Ref_Key&$format=application/json;odata=nometadata",
                 auth=self.auth,
                 timeout=10

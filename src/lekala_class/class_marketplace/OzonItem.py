@@ -34,7 +34,7 @@ class OzonItem:
 
     def _get_additional_attributes(self):
         return {
-            attr.attribute_name.name_attribute: attr.value_attribute
+            attr.attribute_name.slug_name: attr.value_attribute
             for attr in self.product.additional_attributes.all()
         }
 
@@ -48,18 +48,22 @@ class OzonItem:
         return result_price, result_price
 
     def generate_keywords(self):
-        brand = self.attributes.get("Марка", "")
+        brand = self.attributes.get("mark", "")
         return f"lekalappf;LEKALAPPF бронепленка для {brand}; пленка для {brand}; защитная пленка {brand}"
 
     def build_attribute(self, attr_id, value, dict_id=None):
-        return {
+        if not value:
+            return value
+        val = {"value": value}
+        if dict_id:
+            val["dictionary_value_id"]=dict_id
+        attrib = {
             "complex_id": 0,
             "id": attr_id,
-            "values": [{
-                "dictionary_value_id": dict_id or 0,
-                "value": value
-            }]
+            "values": [val]
         }
+
+        return attrib
 
     def base_attributes(self):
         return [
@@ -74,13 +78,13 @@ class OzonItem:
 
     def item(self):
         normal_price, _ = self.create_price()
-        depth = float(self.attributes.get('Длина, см', 0)) * 10
-        width = float(self.attributes.get('Ширина, см', 0)) * 10
-        height = float(self.attributes.get('Высота, см', 0)) * 10
+        depth = float(self.attributes.get('length', 0)) * 10
+        width = float(self.attributes.get('width', 0)) * 10
+        height = float(self.attributes.get('height', 0)) * 10
 
         # Обработка весов
-        weight = self.attributes.get("Вес нетто", "")
-        gross_weight = self.attributes.get("Вес брутто", "")
+        weight = self.attributes.get("weight_netto", "")
+        gross_weight = self.attributes.get("weight_brutto", "")
 
         try:
             weight_val = float(weight)
@@ -92,21 +96,17 @@ class OzonItem:
         except (ValueError, TypeError):
             gross_weight_val = 0
 
-        if weight_val == 0 and gross_weight_val > 0:
-            weight_val = gross_weight_val
-        elif gross_weight_val == 0 and weight_val > 0:
-            gross_weight_val = weight_val
+        if weight_val == 0:
+            weight_val = 3
 
         # Преобразуем вес к граммам
-        weight_grams = weight_val * 100
+        weight_grams = weight_val * 1000
 
-        mark = self.attributes.get("Марка", "")
+        mark = self.attributes.get("mark", "")
 
         return {
             "attributes": self.set_atribute(),
-            "barcode": "",
             "description_category_id": 17028755,
-            "color_image": "",
             "complex_attributes": [
                 {
                     "id": self.MARK_ID['id'],
@@ -127,11 +127,11 @@ class OzonItem:
             "name": self.product.name,
             "offer_id": str(self.product.code_1C),
             "old_price": "0",
-            "pdf_list": [],
             "price": str(normal_price),
             "primary_image": self.main_img,
-            "weight": weight_grams if weight_grams else 300,
-            "weight_unit": "g"
+            "weight": weight_grams if weight_val else 300,
+            "weight_unit": "g",
+            "type_id": 971053255
         }
 
     @abstractmethod
@@ -146,8 +146,8 @@ class OzonTape(OzonItem):
     def set_atribute(self):
         attrs = self.base_attributes()
 
-        weight = self.attributes.get("Вес нетто", "")
-        gross_weight = self.attributes.get("Вес брутто", "")
+        weight = self.attributes.get("weight_netto", "")
+        gross_weight = self.attributes.get("weight_brutto", "")
 
         # Приводим к числу и сравниваем
         try:
@@ -169,26 +169,24 @@ class OzonTape(OzonItem):
         attrs.extend([
             self.build_attribute(
                 self.INSTALLATION_PLACE_ID,
-                self.attributes.get("Место установки", ""),
-                INSTALLATION_PLACE_DICT.get(self.attributes.get("Место установки", ""))
+                self.attributes.get("position_install", ""),
+                INSTALLATION_PLACE_DICT.get(self.attributes.get("position_install", ""))
             ),
             self.build_attribute(
                 self.POSITION_ID,
-                self.attributes.get("Расположение детали", ""),
-                POSITION_DICT.get(self.attributes.get("Расположение детали", ""))
+                self.attributes.get("location_detail", ""),
+                POSITION_DICT.get(self.attributes.get("location_detail", ""))
             ),
             self.build_attribute(
                 self.COLOR_ITEM_ID,
-                self.attributes.get("Цвет", ""),
-                COLOR_DICT.get(self.attributes.get("Цвет", "").lower())
+                self.attributes.get("color", ""),
+                COLOR_DICT.get(self.attributes.get("color", "").lower())
             ),
             self.build_attribute(self.MATERIAL_ID, "Полиуретан", 62036),
-            self.build_attribute(self.WARRANTY_ID, self.attributes.get("Гарантия, мес.", "")),
+            self.build_attribute(self.WARRANTY_ID, self.attributes.get("waranty", "")),
             self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
-            self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("Комплектация", "")),
+            self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("equipment", "")),
+            self.build_attribute(self.WEIGHT_ID, weight if weight else "300"),
+            self.build_attribute(self.GROSS_WEIGHT_ID, gross_weight if gross_weight else "300"),
         ])
-        if self.WEIGHT_ID:       
-            attrs.append(self.build_attribute(self.WEIGHT_ID, weight))
-        if self.GROSS_WEIGHT_ID:
-            attrs(self.build_attribute(self.GROSS_WEIGHT_ID, gross_weight))
         return attrs

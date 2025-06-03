@@ -143,12 +143,12 @@ def add_new_item_ozon():
     )
     for product in products_not_ozon:
         if len(items) > 99:
-            ozon_api.post_items(data=items, save_to_file=True)
+            ozon_api.post_items(data=items)
             items.clear()
         ozon_item = OzonTape(product)
         items.append(ozon_item.item())
     if len(items) > 0:
-        ozon_api.post_items(data=items, save_to_file=True)
+        ozon_api.post_items(data=items)
 
 
 @shared_task
@@ -189,7 +189,7 @@ def update_price_ozon():
 
 def set_ozon_prod_and_sku():
     ozon_api = OzonExchange()
-    products_not_ozon = Product.objects.filter(Q(ozon__isnull=True) & Q(stock__gt=0) & Q(images__isnull=True)).values('code_1C')
+    products_not_ozon = Product.objects.filter(Q(stock__gt=0)).values_list('code_1C')
     list_article = []
     for items in products_not_ozon:
         if len(list_article) > 999:

@@ -53,17 +53,15 @@ class OzonItem:
 
     def build_attribute(self, attr_id, value, dict_id=None):
         if not value:
-            return value
+            return None  # Ключевой момент
         val = {"value": value}
         if dict_id:
-            val["dictionary_value_id"]=dict_id
-        attrib = {
+            val["dictionary_value_id"] = dict_id
+        return {
             "complex_id": 0,
             "id": attr_id,
             "values": [val]
         }
-
-        return attrib
 
     def base_attributes(self):
         return [
@@ -166,7 +164,7 @@ class OzonTape(OzonItem):
         elif gross_weight_val == 0 and weight_val > 0:
             gross_weight = weight
 
-        attrs.extend([
+        attrs.extend(filter(None,[
             self.build_attribute(
                 self.INSTALLATION_PLACE_ID,
                 self.attributes.get("position_install", ""),
@@ -188,5 +186,5 @@ class OzonTape(OzonItem):
             self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("equipment", "")),
             self.build_attribute(self.WEIGHT_ID, weight if weight else "300"),
             self.build_attribute(self.GROSS_WEIGHT_ID, gross_weight if gross_weight else "300"),
-        ])
+        ]))
         return attrs

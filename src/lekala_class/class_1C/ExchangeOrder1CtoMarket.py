@@ -27,7 +27,8 @@ class OrderMarketplaceTo1C:
         'orderali': {
             'name': 'Aliexpress',
             'number_field': 'number_ali',
-            'name_template': lambda o: f'{o.name_shop} {o.name} {o.family}'
+            'name_template': lambda o: f'{o.name_shop} {o.name} {o.family}',
+            'number_1C': lambda o: f'AL00-{o.number_ali}'
         },
         'orderavito': {
             'name': 'Avito',

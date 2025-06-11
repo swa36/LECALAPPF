@@ -31,12 +31,16 @@ class OzonExchange(BaseMarketPlace):
         payload = {'items': data}
         if save_to_file:
             return self._save_payload_to_file(payload)
-        return self._request('POST', 'v3/product/import', data=payload)
+        res =  self._request('POST', 'v3/product/import', data=payload)
+        print(res)
+        return res
 
     def get_items(self, data=None):
         endpoint = 'v3/product/info/list'
         payload = {'offer_id': data}
-        return self._request('POST', endpoint, data=payload)
+        res = self._request('POST', endpoint, data=payload)
+        # print(res)
+        return res
 
     def update_remains(self, data=None, save_to_file=False):
         endpoint = 'v2/products/stocks'
@@ -77,15 +81,15 @@ class OzonExchange(BaseMarketPlace):
 
     def set_num_sku_id_ozon(self, info_ozon):
         for it in info_ozon['items']:
-            if len(it['barcodes'])> 0:
+            if it['id']:
                 try:
                     num = Product.objects.get(code_1C=it['offer_id'])
                     OzonData.objects.update_or_create(
                         offer_id=it['offer_id'],
-                        product_id=num,
+                        product=num,
                         defaults={
                             'ozon_id':it['id'],
-                            'ozon_sku':it['barcodes'][0]
+                            'ozon_sku':it['barcodes'][0] if it['barcodes'] else None
                         }
                     )
                     print(f"{it['offer_id']} - {it['id']} - {num.name} - Ozon")

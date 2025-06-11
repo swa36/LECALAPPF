@@ -189,7 +189,7 @@ def update_price_ozon():
 
 def set_ozon_prod_and_sku():
     ozon_api = OzonExchange()
-    products_not_ozon = Product.objects.filter(Q(stock__gt=0)).values_list('code_1C')
+    products_not_ozon = Product.objects.filter(ozon__isnull=True).values_list('code_1C')
     list_article = []
     for items in products_not_ozon:
         if len(list_article) > 999:
@@ -198,7 +198,7 @@ def set_ozon_prod_and_sku():
             list_article.clear()
         if items[0]:
             list_article.append(items[0])
-    if len(list_article) > 0:
+    if list_article:
         info_ozon = ozon_api.get_items(data=list_article)
         ozon_api.set_num_sku_id_ozon(info_ozon)
 

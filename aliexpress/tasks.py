@@ -105,7 +105,7 @@ def get_order_ali():
                         item_ALI.total_price = i['total_amount']/100
                         item_ALI.order_num = new_order
                         item_ALI.save()
-                    new_order.price = sum([i.total_price for i in new_order.number_order.all()])
+                    new_order.price = sum([i.total_price for i in new_order.items.all()])
                     new_order.save()
 
 # def delete_item():

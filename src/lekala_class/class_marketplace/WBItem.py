@@ -1,6 +1,7 @@
 from catalog.models import MarkUpItems
 
 
+
 class WBItem:
     MAIN_CAT_ID = "8891"
     SUB_CAT_ID = "6466"
@@ -8,7 +9,7 @@ class WBItem:
         self.prod = prod
         self.price = int(self.prod.prices.retail_price)
         self.attribs = self._set_attrib()
-        self.article = self.prod.article
+        self.article = self.prod.article_1C
 
     def create_price(self):
         mark_up = MarkUpItems.objects.last()
@@ -22,33 +23,35 @@ class WBItem:
 
     def characteristics(self):
         list_characteristics = [
-            {"id": 17596, "value": [self.attribs['material']]},
-            {"id": 90673, "value": [self.attribs['width']]},
-            {"id": 90675, "value": [self.attribs['length']]},
+            {"id": 17596, "value": [self.attribs.get('material', 'Полиуритан')]},
             {"id": 378533, "value": [self.attribs['equipment']]},
-            {"id": 14177449, "value": [self.attribs['color']]},
-            {"id": 14177451, "value": ["Россия"]},
             {"id": 14177451, "value": ["Россия"]},
         ]
+
         return list_characteristics
 
     def dataItemCard(self):
-        list_characteristics = self.characteristics()
-        data = {
-            "subjectID": self.SUB_CAT_ID,
-            "variants": [
-                {
-                    "vendorCode": self.prod.article_1C,
-                    "title": self.prod.name[:59],
-                    "description": self.prod.description,
-                    "brand": "LekalaPPF",
-                    "dimensions": {
-                        "length": int(self.attribs['length']),
-                        "width": int(self.attribs['width']),
-                        "height": int(self.attribs['height'])
-                    },
-                    "characteristics": list_characteristics,
-                }
-            ]
-        }
-        return data
+        if self.attribs.get('material') and self.attribs.get('width') and self.attribs.get('length') and self.attribs.get('equipment') and self.attribs.get('color'):
+            list_characteristics = self.characteristics()
+            weight = self.attribs.get('weight_netto') or self.attribs.get('weight_brutto') or 0.3
+            data = {
+                "subjectID": self.SUB_CAT_ID,
+                "variants": [
+                    {
+                        "vendorCode": self.prod.article_1C,
+                        "title": self.prod.name[:59],
+                        "description": self.prod.description,
+                        "brand": "LekalaPPF",
+                        "dimensions": {
+                            "length": int(self.attribs['length']),
+                            "width": int(self.attribs['width']),
+                            "height": int(self.attribs['height']),
+                            "weightBrutto": float(weight)
+                        },
+                        "characteristics": list_characteristics,
+                    }
+                ]
+            }
+            return data
+        else:
+            return False

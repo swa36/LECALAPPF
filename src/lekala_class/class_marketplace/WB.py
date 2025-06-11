@@ -18,13 +18,14 @@ class WBItemCard(BaseMarketPlace):
         }
         super().__init__(self.headers, self.BASE_URL,)
 
-    def post_items(self, data):
+    def post_items(self, data, save_to_file=True):
         endpoint = 'v2/cards/upload'
-        try:
-            req = self._request("POST", endpoint, data)
-            return req
-        except:
-            print(data)
+        if save_to_file:
+            self._save_payload_to_file(data)
+            return
+        req = self._request("POST", endpoint, data)
+        return req
+
 
     def del_item(self, data=None):
         endpoint = 'v2/cards/delete/trash'

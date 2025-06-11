@@ -1,9 +1,12 @@
 from typing import Optional, Dict
 import pandas as pd
 from celery import shared_task
+from django.db.models import Q
+
 from order.models import OrderWB
 from src.lekala_class.class_marketplace.WB import WBItemCard, PriceItemWB, StockItemWB, GetOrderWB
-from catalog.models import Product, MarkUpItems
+from catalog.models import Product, MarkUpItems, Category
+from src.lekala_class.class_marketplace.WBItem import WBItem
 
 
 def exele_wb():
@@ -31,9 +34,9 @@ def exele_wb():
 def set_id_wb(next_cursor:Optional[Dict]=None) -> None:
     wb_api = WBItemCard()
     if next_cursor:
-        data = wb_api.get_items(param='all',cursor=next_cursor)
+        data = wb_api.get_items(param='withoutImg',cursor=next_cursor)
     else:
-        data = wb_api.get_items(param='all')
+        data = wb_api.get_items(param='withoutImg')
     wb_api.set_id_wb_num(data)
     if 'nmID' in  data['cursor'] and 'updatedAt' in data['cursor']:
         next_cursor = {
@@ -105,3 +108,23 @@ def get_new_order_wb():
             )
             print('New order create WB')
     return
+
+def add_new_item_wb():
+    wb_api = WBItemCard()
+    exclude_cat = Category.objects.get(name='Инструмент и оборудование для нанесения плёнок').get_family()
+    product_not_wb = Product.objects.filter(Q(wb__isnull=True) & ~Q(category__id__in=[i.id for i in exclude_cat]))
+    # Обработка всех элементов в одном цикле
+    batch = []
+    for item in product_not_wb:
+        # Если пакет заполнен, отправляем его
+        if len(batch) >= 99:
+            wb_api.post_items(data=batch)
+            batch.clear()  # Очистка пакета после отправки
+        # Преобразование элемента в формат для API
+        item_data = WBItem(item).dataItemCard()
+        if item_data:
+            batch.append(item_data)
+
+    # Отправка оставшихся элементов, если они есть
+    if batch:
+        wb_api.post_items(data=batch)

@@ -128,3 +128,13 @@ def add_new_item_wb():
     # Отправка оставшихся элементов, если они есть
     if batch:
         wb_api.post_items(data=batch)
+
+def sent_img_wb():
+    wb_api = WBItemCard()
+    data = wb_api.get_items(param='withoutImg')
+    for i in data ['cards']:
+        try:
+            prod = Product.objects.get(article_1C=i['vendorCode'])
+            wb_api.post_img(prod, link = True)
+        except:
+            print(f"{i['vendorCode']}")

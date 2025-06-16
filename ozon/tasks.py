@@ -143,12 +143,12 @@ def add_new_item_ozon():
     )
     for product in products_not_ozon:
         if len(items) > 99:
-            ozon_api.post_items(data=items)
+            ozon_api.post_items(data=items, save_to_file=True)
             items.clear()
         ozon_item = OzonTape(product)
         items.append(ozon_item.item())
     if len(items) > 0:
-        ozon_api.post_items(data=items)
+        ozon_api.post_items(data=items, save_to_file=True)
 
 
 @shared_task

@@ -80,9 +80,9 @@ class WBItemCard(BaseMarketPlace):
     def post_img(self, item, link):
         url = self.BASE_URL + 'v3/media/file'
         header = self.headers.copy()
-        header['X-Nm-Id'] = str(item.id_wb)
-        print(f'WB {item.name} {item.id_wb} {item.items_id_wb} {item.barcode_wb}')
-        all_image = item.image.all().order_by('-main')
+        header['X-Nm-Id'] = str(item.wb.wb_id)
+        print(f'WB {item.name} {item.wb.wb_id} {item.wb.wb_item_id} {item.wb.wb_barcode}')
+        all_image = item.images.all().order_by('-main')
         photo_num = 1
         original_width, original_height = 700, 900
         photo_name = 0

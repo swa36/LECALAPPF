@@ -1,4 +1,7 @@
 from abc import abstractmethod
+
+from unicodedata import category
+
 from catalog.models import MarkUpItems
 from src.lekala_class.class_marketplace.ozon_dict import *
 
@@ -74,6 +77,42 @@ class OzonItem:
             self.build_attribute(self.TYPE_ID, "Пленка защитная для автомобиля", 971053255),
         ]
 
+    def create_coplex_attrib(self, mark):
+        complex_list = []
+        complex_list.append({
+            "id": self.MARK_ID['id'],
+            "complex_id": self.MARK_ID['complex_id'],
+            "values": [{
+                "dictionary_value_id": MARK_DICT.get(mark, 0),
+                "value": mark
+            }]
+        })
+        category = self.product.category
+        video = category.get_family().filter(video_instruction_url__isnull=False).first()
+        if video:
+            video_url = video.video_instruction_url
+            complex_list.append({
+                "complex_id": 100001,
+                "id": 21841,
+                "values": [
+                    {
+                        "value": video_url
+                    }
+                ]
+            })
+            complex_list.append(
+                {
+                    "complex_id": 100001,
+                    "id": 21837,
+                    "values": [
+                        {
+                            "value": category.name
+                        }
+                    ]
+                }
+            )
+
+
     def item(self):
         normal_price, _ = self.create_price()
         depth = float(self.attributes.get('length', 0)) * 10
@@ -99,22 +138,12 @@ class OzonItem:
 
         # Преобразуем вес к граммам
         weight_grams = weight_val * 1000
-
         mark = self.attributes.get("mark", "")
 
         return {
             "attributes": self.set_atribute(),
             "description_category_id": 17028755,
-            "complex_attributes": [
-                {
-                    "id": self.MARK_ID['id'],
-                    "complex_id": self.MARK_ID['complex_id'],
-                    "values": [{
-                        "dictionary_value_id": MARK_DICT.get(mark, 0),
-                        "value": mark
-                    }]
-                }
-            ],
+            "complex_attributes": self.create_coplex_attrib(mark),
             "currency_code": "RUB",
             "dimension_unit": "mm",
             "height": height,
@@ -164,7 +193,7 @@ class OzonTape(OzonItem):
         elif gross_weight_val == 0 and weight_val > 0:
             gross_weight = weight
 
-        attrs.extend(filter(None,[
+        attrs.extend(filter(None, [
             self.build_attribute(
                 self.INSTALLATION_PLACE_ID,
                 self.attributes.get("position_install", ""),

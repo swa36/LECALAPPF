@@ -12,6 +12,11 @@ class Category(MPTTModel):
     name = models.TextField(verbose_name='Название')
     parent = TreeForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, related_name='children',
                             db_index=True, verbose_name='Родительская категория')
+    video_instruction_url = models.URLField(
+        verbose_name='Ссылка на видеоинструкцию',
+        null=True,
+        blank=True
+    )
 
 
     class MPTTMeta:

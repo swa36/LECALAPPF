@@ -1,6 +1,6 @@
 from datetime import time
+import json
 from django.conf import settings
-
 from catalog.models import Product
 from src.lekala_class.class_marketplace.BaseMarketPlace import BaseMarketPlace
 from PIL import Image
@@ -18,12 +18,13 @@ class WBItemCard(BaseMarketPlace):
         }
         super().__init__(self.headers, self.BASE_URL,)
 
-    def post_items(self, data, save_to_file=True):
+    def post_items(self, data, save_to_file=False):
         endpoint = 'v2/cards/upload'
         if save_to_file:
             self._save_payload_to_file(data)
             return
         req = self._request("POST", endpoint, data)
+        print(req)
         return req
 
 
@@ -77,73 +78,31 @@ class WBItemCard(BaseMarketPlace):
             except:
                 print(i['vendorCode'])
 
-    def post_img(self, item, link):
+    def post_img(self, item):
         url = self.BASE_URL + 'v3/media/file'
-        header = self.headers.copy()
-        header['X-Nm-Id'] = str(item.id_wb)
-        print(f'WB {item.name} {item.id_wb} {item.items_id_wb} {item.barcode_wb}')
-        all_image = item.image.all().order_by('-main')
-        photo_num = 1
-        original_width, original_height = 700, 900
-        photo_name = 0
-        if link:
-            data_item_img = {
-                "nmId": int(header['X-Nm-Id']),
-                "data": []
-            }
+        print(f'WB {item.name} {item.wb.wb_id} {item.wb.wb_item_id} {item.wb.wb_barcode}')
+        all_image = item.images.all().order_by('-main')
+        # photo_num = 1
+        # original_width, original_height = 700, 900
+        # photo_name = 0
+        data_item_img = {
+            "nmId": item.wb.wb_id,
+            "data": []
+        }
         for img in all_image:
-            if img.main:
-                path_img = settings.BASE_DIR + url
-            else:
-                path_img = img.images.path
-            img_pil = Image.open(path_img)
-            width, height = img_pil.size
-            w, h = 0, 0
-            if width < original_width:
-                w = original_width - width
-            if height < original_height:
-                h = original_height - height
-            new_size = None
-            if w != 0 and h != 0:
-                new_size = (width + w, height + h)
-            elif w != 0:
-                new_size = (width + w, height + w)
-            elif h != 0:
-                new_size = (width + h, height + h)
-            if new_size:
-                new_img = img_pil.resize(new_size)
-                try:
-                    path = f"media/WB/{item.id}/"
-                    os.mkdir(path)
-                    os.chown(path, 0, 1001)
-                    os.chmod(path, 0o770)
-                except FileExistsError:
-                    path
-                path_img = f'{path}{photo_num}.jpg'
-                new_img.save(path_img)
-                photo_name += 1
-                header['X-Photo-Number'] = str(photo_num)
-                if link:
-                    url = 'http://lpff.ru'
-                    data_item_img['data'].append(f'{url}{path_img}')
-            else:
-                header['X-Photo-Number'] = str(photo_num)
-                if link:
-                    url = 'http://lpff.ru'
-                    data_item_img['data'].append(f'{url}{img.images.url}')
-            if not link:
-                req = requests.post(url=url, headers=header, files={'uploadfile': open(path_img, 'rb')})
-                print(req.json())
-                photo_num += 1
-                time.sleep(1)
-        if link:
-            self.post_img_link(data=data_item_img)
+            url = 'https://lpff.ru'
+            data_item_img['data'].append(f'{url}{img.image.url}')
+        self.post_img_link(data=json.dumps(data_item_img))
         return
+
 
     def post_img_link(self, data=None, params=None):
         endpoint = 'v3/media/save'
         print(data)
-        req = self._request("POST", endpoint, params, data)
+        req = requests.post(self.BASE_URL+endpoint, data=data, headers={
+            'Content-Type':'application/json',
+            'Authorization':settings.WB_KEY
+        })
         print(req)
         return req
 

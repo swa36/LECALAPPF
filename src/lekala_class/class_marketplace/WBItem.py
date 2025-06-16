@@ -3,8 +3,8 @@ from catalog.models import MarkUpItems
 
 
 class WBItem:
-    MAIN_CAT_ID = "8891"
-    SUB_CAT_ID = "6466"
+    MAIN_CAT_ID = 8891
+    SUB_CAT_ID = 6466
     def __init__(self, prod):
         self.prod = prod
         self.price = int(self.prod.prices.retail_price)

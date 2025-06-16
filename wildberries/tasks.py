@@ -129,12 +129,13 @@ def add_new_item_wb():
     if batch:
         wb_api.post_items(data=batch)
 
+
 def sent_img_wb():
     wb_api = WBItemCard()
     data = wb_api.get_items(param='withoutImg')
     for i in data ['cards']:
         try:
             prod = Product.objects.get(article_1C=i['vendorCode'])
-            wb_api.post_img(prod, link = True)
+            wb_api.post_img(prod)
         except:
-            print(f"{i['vendorCode']}")
+            print(i['vendorCode'])

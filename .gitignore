@@ -190,3 +190,5 @@ migrations/
 *.xlsx
 media/
 *.sh
+*.txt
+backup/

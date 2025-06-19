@@ -15,7 +15,8 @@ class OzonExchange(BaseMarketPlace):
     def __init__(self):
         self.headers = {
             'Client-Id': OZON_ID,
-            'Api-Key': OZON_KEY
+            'Api-Key': OZON_KEY,
+            'Content-Type': 'application/json'
         }
         self.base_url = 'https://api-seller.ozon.ru/'
         super().__init__(self.headers, self.base_url)
@@ -79,6 +80,25 @@ class OzonExchange(BaseMarketPlace):
         }
         return self._request('POST', endpoint, data=payload)
 
+    def post_update_attr(self, data=None, save_to_file=False):
+        endpoint = 'v1/product/attributes/update'
+        payload = {"items": data}
+        if save_to_file:
+            self._save_payload_to_file(payload)
+            return
+        return self._request('POST', endpoint, data=payload)
+
+
+    def post_new_img(self, data=None, save_to_file=False):
+        endpoint = 'v1/product/pictures/import'
+        if save_to_file:
+            self._save_payload_to_file(data)
+            return
+        req = self._request('POST', endpoint, data=data)
+        print(req)
+        return req
+
+
     def set_num_sku_id_ozon(self, info_ozon):
         for it in info_ozon['items']:
             if it['id']:
@@ -111,7 +131,7 @@ class OzonExchange(BaseMarketPlace):
 
         # Уникальное имя файла по времени
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
-        file_path = folder_path / f'{caller_name}_{timestamp}.json'
+        file_path = folder_path / f'{caller_name}_{timestamp}.txt'
 
         # Сохраняем только payload
         with file_path.open('w', encoding='utf-8') as f:

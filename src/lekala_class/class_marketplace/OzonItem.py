@@ -27,13 +27,44 @@ class OzonItem:
     MATERIAL_ID = 7199
     EQUIPMENT_ID = 4384
     MARK_ID = {'id': 22916, 'complex_id': 100003}
+    TYPE_DICT = {
+        971077309: "Пленка защитная для салона автомобиля",
+        970702708: "Стекло защитное для экрана авто",
+        971053255: "Пленка защитная для автомобиля"
+    }
+    DICT_MARK_LOWER = {k.lower(): v for k, v in MARK_DICT.items()}
 
-    def __init__(self, product):
+    def __init__(self, product, type_id_ozon, cat_id_ozon):
         self.product = product
         self.main_img = self._set_main_img()
         self.other_img = [f'https://lpff.ru{i.image.url}' for i in self.product.images.filter(main=False)[:14]]
         self.price = int(self.product.prices.retail_price)
         self.attributes = self._get_additional_attributes()
+        self.type_id_ozon = type_id_ozon
+        self.cat_id_ozon = cat_id_ozon
+        self.weight, self.gross_weight = self.set_weight()
+
+    def set_weight(self):
+        weight = self.attributes.get("weight_netto", "")
+        gross_weight = self.attributes.get("weight_brutto", "")
+
+        # Приводим к числу и сравниваем
+        try:
+            weight_val = float(weight)
+        except (ValueError, TypeError):
+            weight_val = 0
+
+        try:
+            gross_weight_val = float(gross_weight)
+        except (ValueError, TypeError):
+            gross_weight_val = 0
+
+        # Подмена если один из весов отсутствует или равен 0
+        if weight_val == 0 and gross_weight_val > 0:
+            weight = gross_weight
+        elif gross_weight_val == 0 and weight_val > 0:
+            gross_weight = weight
+        return weight, gross_weight
 
     def _get_additional_attributes(self):
         return {
@@ -50,9 +81,9 @@ class OzonItem:
         result_price = int(self.price + (mark_up.ozon_mark_up * self.price) / 100)
         return result_price, result_price
 
-    def generate_keywords(self):
+    def generate_keywords(self, temlate):
         brand = self.attributes.get("mark", "")
-        return f"lekalappf;LEKALAPPF бронепленка для {brand}; пленка для {brand}; защитная пленка {brand}"
+        return temlate.format(brand=brand)
 
     def build_attribute(self, attr_id, value, dict_id=None):
         if not value:
@@ -73,45 +104,50 @@ class OzonItem:
             self.build_attribute(self.CODE_ITEM_ID, self.product.article_1C),
             self.build_attribute(self.NAME_ITEM_ID, self.product.name),
             self.build_attribute(self.DESCRIPTION_ID, self.product.description),
-            self.build_attribute(self.KEYWORDS_ID, self.generate_keywords()),
-            self.build_attribute(self.TYPE_ID, "Пленка защитная для автомобиля", 971053255),
+            self.build_attribute(self.WEIGHT_ID, self.weight if self.weight else "300"),
+            self.build_attribute(self.GROSS_WEIGHT_ID, self.gross_weight if self.gross_weight else "300"),
         ]
 
     def create_coplex_attrib(self, mark):
         complex_list = []
-        complex_list.append({
-            "id": self.MARK_ID['id'],
-            "complex_id": self.MARK_ID['complex_id'],
-            "values": [{
-                "dictionary_value_id": MARK_DICT.get(mark, 0),
-                "value": mark
-            }]
-        })
+        mark = mark.strip().lower()
+        if self.DICT_MARK_LOWER.get(mark, None):
+            complex_list.append({"attributes": [
+                {
+                    "id": self.MARK_ID['id'],
+                    "complex_id": self.MARK_ID['complex_id'],
+                    "values": [{
+                        "dictionary_value_id": self.DICT_MARK_LOWER.get(mark),
+                        "value": mark
+                    }]}
+
+            ]})
         category = self.product.category
         video = category.get_family().filter(video_instruction_url__isnull=False).first()
         if video:
             video_url = video.video_instruction_url
-            complex_list.append({
-                "complex_id": 100001,
-                "id": 21841,
-                "values": [
-                    {
-                        "value": video_url
-                    }
-                ]
-            })
-            complex_list.append(
+            z = {"attributes": [
+                {
+                    "complex_id": 100001,
+                    "id": 21841,
+                    "values": [
+                        {
+                            "value": video_url
+                        }
+                    ]
+                },
                 {
                     "complex_id": 100001,
                     "id": 21837,
                     "values": [
                         {
-                            "value": category.name
+                            "value": f'Инструкция {video.name.lower()}'
                         }
                     ]
                 }
-            )
-
+            ]}
+            complex_list.append(z)
+        return complex_list
 
     def item(self):
         normal_price, _ = self.create_price()
@@ -142,7 +178,7 @@ class OzonItem:
 
         return {
             "attributes": self.set_atribute(),
-            "description_category_id": 17028755,
+            "description_category_id": self.cat_id_ozon,
             "complex_attributes": self.create_coplex_attrib(mark),
             "currency_code": "RUB",
             "dimension_unit": "mm",
@@ -158,7 +194,7 @@ class OzonItem:
             "primary_image": self.main_img,
             "weight": weight_grams if weight_val else 300,
             "weight_unit": "g",
-            "type_id": 971053255
+            "type_id": self.type_id_ozon
         }
 
     @abstractmethod
@@ -166,32 +202,12 @@ class OzonItem:
         pass
 
 
-class OzonTape(OzonItem):
-    def __init__(self, ozon_data):
-        super().__init__(ozon_data)
+class OzonTapeOutSaloon(OzonItem):
+    def __init__(self, ozon_data, type_id_ozon, cat_id_ozon):
+        super().__init__(ozon_data, type_id_ozon, cat_id_ozon)
 
     def set_atribute(self):
         attrs = self.base_attributes()
-
-        weight = self.attributes.get("weight_netto", "")
-        gross_weight = self.attributes.get("weight_brutto", "")
-
-        # Приводим к числу и сравниваем
-        try:
-            weight_val = float(weight)
-        except (ValueError, TypeError):
-            weight_val = 0
-
-        try:
-            gross_weight_val = float(gross_weight)
-        except (ValueError, TypeError):
-            gross_weight_val = 0
-
-        # Подмена если один из весов отсутствует или равен 0
-        if weight_val == 0 and gross_weight_val > 0:
-            weight = gross_weight
-        elif gross_weight_val == 0 and weight_val > 0:
-            gross_weight = weight
 
         attrs.extend(filter(None, [
             self.build_attribute(
@@ -213,7 +229,101 @@ class OzonTape(OzonItem):
             self.build_attribute(self.WARRANTY_ID, self.attributes.get("waranty", "")),
             self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
             self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("equipment", "")),
-            self.build_attribute(self.WEIGHT_ID, weight if weight else "300"),
-            self.build_attribute(self.GROSS_WEIGHT_ID, gross_weight if gross_weight else "300"),
+            self.build_attribute(self.KEYWORDS_ID, self.generate_keywords(
+                "lekalappf;LEKALAPPF бронепленка для {brand}; пленка для {brand}; защитная пленка {brand}")),
+            self.build_attribute(self.TYPE_ID, self.TYPE_DICT.get(self.type_id_ozon, ''), self.type_id_ozon),
         ]))
         return attrs
+
+
+class OzonTapeInSaloon(OzonItem):
+    def __init__(self, ozon_data, type_id_ozon, cat_id_ozon):
+        super().__init__(ozon_data, type_id_ozon, cat_id_ozon)
+
+    def set_atribute(self):
+        attrs = self.base_attributes()
+
+        attrs.extend(filter(None, [
+            self.build_attribute(
+                self.INSTALLATION_PLACE_ID,
+                self.attributes.get("position_install", ""),
+                INSTALLATION_PLACE_DICT.get(self.attributes.get("position_install", ""))
+            ),
+            self.build_attribute(
+                self.COLOR_ITEM_ID,
+                self.attributes.get("color", ""),
+                COLOR_DICT.get(self.attributes.get("color", "").lower())
+            ),
+            self.build_attribute(self.MATERIAL_ID, "Полиуретан", 62036),
+            self.build_attribute(self.WARRANTY_ID, self.attributes.get("waranty", "")),
+            self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
+            self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("equipment", "")),
+            self.build_attribute(self.KEYWORDS_ID, self.generate_keywords(
+                "lekalappf;LEKALAPPF защитная пленка салона для {brand}; пленка для салона {brand}; защитная пленка {brand}")),
+            self.build_attribute(self.TYPE_ID, self.TYPE_DICT.get(self.type_id_ozon, ''), self.type_id_ozon),
+            self.build_attribute(self.QUANTITY_ID, "1"),
+
+        ]))
+        return attrs
+
+
+class OzonProtectGlass(OzonItem):
+    def __init__(self, ozon_data, type_id_ozon, cat_id_ozon):
+        super().__init__(ozon_data, type_id_ozon, cat_id_ozon)
+
+    def set_atribute(self):
+        attrs = self.base_attributes()
+
+        attrs.extend(filter(None, [
+            self.build_attribute(
+                self.COLOR_ITEM_ID,
+                self.attributes.get("color", ""),
+                COLOR_DICT.get(self.attributes.get("color", "").lower())
+            ),
+            self.build_attribute(self.WARRANTY_ID, self.attributes.get("waranty", "")),
+            self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
+            self.build_attribute(self.KEYWORDS_ID, self.generate_keywords("lekalappf;LEKALAPPF защитная стекло "
+                                                                          "мультимедиа для {brand}; стекло для мультимедиа {brand};стекло для защиты мультимедиаа {brand}")),
+            self.build_attribute(self.TYPE_ID, self.TYPE_DICT.get(self.type_id_ozon, ''), self.type_id_ozon),
+            self.build_attribute(self.QUANTITY_ID, "1"),
+        ]))
+        return attrs
+
+
+class OzonItemFactory:
+    NAME_CAT_IN_SALOON = [
+        'Лекала для салона автомобиля',
+        'Лекала для экранов мультимедиа, приборных панелей, климат-контроля '
+    ]
+    NAME_CAT_PROTECT_GLASS = [
+        'Защитное стекло экранов мультимедиа, приборных панелей, климат-контроля'
+    ]
+
+    def __init__(self, product):
+        self.product = product
+        self.type_id_ozon = None
+        self.cat_id_ozon = None
+
+    def get_category_names(self):
+        return [cat.name.strip() for cat in self.product.category.get_family()]
+
+    def resolve_class(self):
+        category_names = self.get_category_names()
+
+        if any(name in category_names for name in self.NAME_CAT_IN_SALOON):
+            self.type_id_ozon = 971077309
+            self.cat_id_ozon = 17028749
+            return OzonTapeInSaloon
+
+        if any(name in category_names for name in self.NAME_CAT_PROTECT_GLASS):
+            self.type_id_ozon = 970702708
+            self.cat_id_ozon = 17028749
+            return OzonProtectGlass  # если есть такой класс
+
+        self.type_id_ozon = 971053255
+        self.cat_id_ozon = 17028755
+        return OzonTapeOutSaloon
+
+    def create(self):
+        klass = self.resolve_class()
+        return klass(self.product, self.type_id_ozon, self.cat_id_ozon)

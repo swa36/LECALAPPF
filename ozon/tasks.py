@@ -1,3 +1,5 @@
+import time
+
 from celery import shared_task
 import requests
 import lekala_ppf.settings as settings
@@ -7,7 +9,7 @@ from order.models import OrderOzon, ItemInOrderOzon
 from ozon.models import OzonData
 from src.lekala_class.class_marketplace.OzonExchange import OzonExchange
 from pathlib import Path
-from src.lekala_class.class_marketplace.OzonItem import OzonTape
+from src.lekala_class.class_marketplace.OzonItem import OzonTapeOutSaloon, OzonTapeInSaloon, OzonProtectGlass
 from django.db.models import Q, Count
 from django.core.files.base import ContentFile
 import pandas as pd
@@ -139,16 +141,19 @@ def add_new_item_ozon():
     ozon_api = OzonExchange()
     items = []
     products_not_ozon = Product.objects.annotate(image_count=Count('images')).filter(
-        Q(image_count__gt=0) & Q(ozon__isnull=True) & Q(prices__retail_price__gt=0)
+        Q(image_count__gt=0) & Q(ozon__isnull=False) & Q(prices__retail_price__gt=0)
     )
     for product in products_not_ozon:
         if len(items) > 99:
-            ozon_api.post_items(data=items, save_to_file=True)
+            ozon_api.post_items(data=items)
             items.clear()
-        ozon_item = OzonTape(product)
-        items.append(ozon_item.item())
+        try:
+            ozon_item = OzonItemFactory(product).create()
+            items.append(ozon_item.item())
+        except ValueError as e:
+            pass
     if len(items) > 0:
-        ozon_api.post_items(data=items, save_to_file=True)
+        ozon_api.post_items(data=items)
 
 
 @shared_task
@@ -273,6 +278,47 @@ def ozon_update_file_article():
     ozon_artile.to_excel("update_article_result.xlsx", index=False)
 
 
+def ozon_update_attr():
+    all_prod_in_ozon = Product.objects.filter(ozon__isnull=False)
+    ozon_api = OzonExchange()
+    data_update = []
+
+    for product in all_prod_in_ozon:
+        family = product.category.get_family()
+        video_category = family.filter(video_instruction_url__isnull=False).first()
+
+        if not video_category:
+            continue
+
+        video_url = video_category.video_instruction_url
+        category_name = video_category.name.lower().strip()
+
+        data_update.append({
+            "attributes": [
+                {
+                    "complex_id": 100001,
+                    "id": 21841,
+                    "value": [{"value": video_url}]
+                },
+                {
+                    "complex_id": 100001,
+                    "id": 21837,
+                    "values": [{"value": f'Инструкция {category_name}'}]
+                }
+            ],
+            "offer_id": product.code_1C
+        })
+
+        # Отправка каждые 100 товаров
+        if len(data_update) >= 100:
+            ozon_api.post_update_attr(data=data_update, save_to_file=True)
+            data_update.clear()
+
+    # Финальная отправка оставшихся
+    if data_update:
+        ozon_api.post_update_attr(data=data_update, save_to_file=True)
+
+
 def ozon_article():
     ozon_artile = pd.read_excel('update_article_result.xlsx')
 
@@ -283,5 +329,50 @@ def ozon_article():
                                               'offer_id':new_article
                                           }
                                           )
+
+
+
+def update_img_ozon():
+    ozon_api = OzonExchange()
+    url = 'https://lpff.ru'
+    products = Product.objects.filter(ozon__isnull=False)
+    for p in products:
+        all_images = [f'{url}{img.image.url}'for img in p.images.all().order_by('-main')]
+        payload = {
+            "images":all_images,
+            "product_id":p.ozon.ozon_id
+        }
+        print(json.dumps(payload, ensure_ascii=False))
+        ozon_api.post_new_img(data=payload)
+
+
+def ozon_update_to_exele():
+    OZON_CLASS_MAP = {
+        "Пленка защитная для автомобиля": [OzonTapeOutSaloon, 971053255,17028755],
+        "Пленка защитная для салона автомобиля": [OzonTapeInSaloon,971077309,17028749],
+        "Стекло защитное для экрана авто": [OzonProtectGlass,970702708,17028749],
+    }
+    ozon_exchange = OzonExchange()
+    df = pd.read_excel("DATA/InSaloon.xlsx")
+    data_sent = []
+    for _, row in df.iterrows():
+        code = row[0]  # например, AA-00006395
+        type_name = row[1]  # "Пленка защитная для автомобиля"
+        try:
+            product = Product.objects.get(code_1C=code)  # <-- тут логика поиска товара по коду
+        except:
+            pass
+        ozon_item = OZON_CLASS_MAP.get(type_name)
+        if not ozon_item:
+            print(f"❌ Неизвестный тип товара: {type_name}")
+            continue
+
+        item = ozon_item[0](product, ozon_item[1], ozon_item[2])
+        data_sent.append(item.item())
+        if len(data_sent) >= 100:
+            ozon_exchange.post_items(data_sent, save_to_file=True)
+            data_sent.clear()
+    if data_sent:
+        ozon_exchange.post_items(data_sent, save_to_file=True)
 
 

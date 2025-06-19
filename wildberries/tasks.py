@@ -139,3 +139,11 @@ def sent_img_wb():
             wb_api.post_img(prod)
         except:
             print(i['vendorCode'])
+
+def sent_img_video():
+    wb_api = WBItemCard()
+    products_wb = Product.objects.filter(wb__isnull=False).filter(article_1C='MBXcI17F')
+    for p in products_wb:
+        wb_api.post_img(p)
+
+

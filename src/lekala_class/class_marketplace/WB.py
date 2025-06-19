@@ -1,3 +1,4 @@
+import json
 from datetime import time
 from django.conf import settings
 
@@ -78,10 +79,11 @@ class WBItemCard(BaseMarketPlace):
             except:
                 print(i['vendorCode'])
 
-    def post_img(self, item, link):
-        url = self.BASE_URL + 'v3/media/file'
+    def post_img(self, item):
         print(f'WB {item.name} {item.wb.wb_id} {item.wb.wb_item_id} {item.wb.wb_barcode}')
         all_image = item.images.all().order_by('-main')
+        family = item.category.get_family()
+        video_category = family.filter(video_instruction_url__isnull=False).first()
         # photo_num = 1
         # original_width, original_height = 700, 900
         # photo_name = 0
@@ -92,13 +94,18 @@ class WBItemCard(BaseMarketPlace):
         for img in all_image:
             url = 'https://lpff.ru'
             data_item_img['data'].append(f'{url}{img.image.url}')
-        self.post_img_link(data=json.dumps(data_item_img))
+        if video_category:
+            data_item_img['data'].append(video_category.video_instruction_url)
+        self.post_img_link(data=json.dumps(data_item_img, ensure_ascii=False), save_to_file=True)
         return
 
 
-    def post_img_link(self, data=None, params=None):
+    def post_img_link(self, data=None, params=None, save_to_file=False):
         endpoint = 'v3/media/save'
         print(data)
+        if save_to_file:
+            self._save_payload_to_file(data)
+            return
         req = requests.post(self.BASE_URL+endpoint, data=data, headers={
             'Content-Type':'application/json',
             'Authorization':settings.WB_KEY

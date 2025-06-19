@@ -17,6 +17,8 @@ class Category(MPTTModel):
         null=True,
         blank=True
     )
+    file = models.FilePathField(max_length=255, path='media/video', null=True, blank=True,
+                                verbose_name='Видео инструкции')
 
 
     class MPTTMeta:

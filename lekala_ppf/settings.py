@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'mptt',
     'django_mptt_admin',
+    'dbbackup',
     
     'catalog.apps.CatalogConfig',
     'ozon.apps.OzonConfig',
@@ -237,3 +238,7 @@ LOGGING = {
         },
     }
 }
+
+# DBBACKUP
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/var/www/LECALAPPF/backup'}

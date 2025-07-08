@@ -20,7 +20,9 @@ class YaMarketApi(BaseMarketPlace):
         if save_to_file:
             self._save_payload_to_file(payload)
             return payload
-        return self._request('POST', endpoint, data=payload)
+        req = self._request('POST', endpoint, data=payload)
+        print(req)
+        return req
 
     def sent_stock(self, data, save_to_file=False):
         endpoint = f'campaigns/{self.campaign_id}/offers/stocks'

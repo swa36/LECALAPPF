@@ -1,3 +1,4 @@
+import time
 from django.db.models import Q, Count
 from src.lekala_class.class_marketplace.YaMarketApi import YaMarketApi
 from catalog.models import Product, MarkUpItems, Category
@@ -25,6 +26,7 @@ class YaMarket(YaMarketApi):
 
     def post_item_data(self):
         data = []
+        print(len(self.products))
         for product in self.products:
             attrib = {
                 attr.attribute_name.slug_name: attr.value_attribute
@@ -33,16 +35,16 @@ class YaMarket(YaMarketApi):
 
             price_with_markup = round(product.prices.retail_price + (self.mark_up * product.prices.retail_price) / 100, 2)
             weight = attrib.get("weight_netto") or attrib.get("weight_brutto", 0)
-            if weight:
-                weight = float(weight)
-            else:
-                weight = 0.3
+            # if weight:
+            #     weight = float(weight)
+            # else:
+            weight = 0.3
             offer = {
                 "offerId": product.code_1C,
                 "basicPrice": {"value": int(price_with_markup), "currencyId": "RUR"},
                 "cofinancePrice": {"value": int(price_with_markup), "currencyId": "RUR"},
                 "purchasePrice": {"value": int(price_with_markup), "currencyId": "RUR"},
-                "description": product.description,
+                "description": product.description + "      ",
                 "marketCategoryId": 71665598 if product.category.get_root().name in ['Готовые лекала для оклейки',
                                                                                    'Лекала для '
                                                                                                         'оклейки '
@@ -59,7 +61,13 @@ class YaMarket(YaMarketApi):
                     "height": attrib.get("height", 0),
                     "weight": weight,
                 },
+                "firstVideoAsCover":False
             }
+            category = product.category
+            video = category.get_family().filter(video_instruction_url__isnull=False).first()
+            if video:
+                video_url = video.video_instruction_url
+                offer['videos'] = [video_url]
             if len(data) > 30:
                 self.post_new_item(data)
                 data.clear()
@@ -89,12 +97,12 @@ class YaMarket(YaMarketApi):
 
         if root_category in {"Готовые лекала для оклейки", "Лекала для оклейки мотоциклов"}:
             param.extend([
-                {"parameterId": 21194330, "valueId": 32806010, "value": "пленка"},
+                # {"parameterId": 21194330, "valueId": 32806010, "value": "пленка"},
                 {"parameterId": 27142875, "valueId": 28659262, "value": "снаружи"},
             ])
         elif root_category == "Защитное стекло экранов мультимедиа, приборных панелей, климат-контроля":
             param.extend([
-                {"parameterId": 21194330, "valueId": 60512682, "value": "защитные пленки салона автомобиля"},
+                # {"parameterId": 21194330, "valueId": 60512682, "value": "защитные пленки салона автомобиля"},
                 {"parameterId": 17352854, "valueId": 17362364, "value": "полиуретановая"},
                 {"parameterId": 37729570, "valueId": 50450433, "value": "прозрачная"},
             ])
@@ -106,7 +114,7 @@ class YaMarket(YaMarketApi):
     def sent_stock_market(self):
         data = []
         for f in self.products:
-            if len(data) > 1999:
+            if len(data) > 999:
                 self.sent_stock(data)
                 data.clear()
             data.append(

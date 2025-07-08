@@ -2,7 +2,7 @@ import inspect
 import json
 from datetime import datetime
 from pathlib import Path
-
+from datetime import datetime, timedelta
 from catalog.models import Product
 from lekala_ppf.settings import OZON_ID, OZON_KEY
 from ozon.models import OzonData
@@ -99,6 +99,37 @@ class OzonExchange(BaseMarketPlace):
         return req
 
 
+
+    def get_all_order_ozon(self, save_to_file=False):
+        # Вычисление временных границ
+        now = datetime.utcnow()
+        cutoff_from = (now - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        cutoff_to = (now + timedelta(days=1)).replace(hour=23, minute=59, second=0, microsecond=0)
+
+        # Преобразование в строку ISO формата с 'Z'
+        cutoff_from_str = cutoff_from.isoformat() + 'Z'
+        cutoff_to_str = cutoff_to.isoformat() + 'Z'
+
+        endpoint = 'v3/posting/fbs/unfulfilled/list'
+        data = {
+            "filter": {
+                "cutoff_from": cutoff_from_str,
+                "cutoff_to": cutoff_to_str,
+                "status": "awaiting_packaging"
+            },
+            "limit": 100,
+            "offset": 0,
+        }
+
+        if save_to_file:
+            self._save_payload_to_file(data)
+            return
+
+        req = self._request('POST', endpoint, data=data)
+        # print(req)
+        return req
+
+
     def set_num_sku_id_ozon(self, info_ozon):
         for it in info_ozon['items']:
             if it['id']:
@@ -115,6 +146,8 @@ class OzonExchange(BaseMarketPlace):
                     print(f"{it['offer_id']} - {it['id']} - {num.name} - Ozon")
                 except Exception as ex:
                     print(it['offer_id'])
+    
+        
 
 
     def work_time_ozon(self):

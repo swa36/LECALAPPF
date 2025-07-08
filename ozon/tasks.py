@@ -9,7 +9,7 @@ from order.models import OrderOzon, ItemInOrderOzon
 from ozon.models import OzonData
 from src.lekala_class.class_marketplace.OzonExchange import OzonExchange
 from pathlib import Path
-from src.lekala_class.class_marketplace.OzonItem import OzonTapeOutSaloon, OzonTapeInSaloon, OzonProtectGlass
+from src.lekala_class.class_marketplace.OzonItem import OzonTapeOutSaloon, OzonTapeInSaloon, OzonProtectGlass, OzonItemFactory
 from django.db.models import Q, Count
 from django.core.files.base import ContentFile
 import pandas as pd
@@ -141,7 +141,7 @@ def add_new_item_ozon():
     ozon_api = OzonExchange()
     items = []
     products_not_ozon = Product.objects.annotate(image_count=Count('images')).filter(
-        Q(image_count__gt=0) & Q(ozon__isnull=False) & Q(prices__retail_price__gt=0)
+        Q(image_count__gt=0) & Q(ozon__isnull=True) & Q(prices__retail_price__gt=0)
     )
     for product in products_not_ozon:
         if len(items) > 99:
@@ -167,16 +167,16 @@ def update_price_ozon():
         base_price = int(item[2])
         raw_price = base_price + (mark_up.ozon_mark_up * base_price) / 100
         final_price = ozon_api.round_to_nearest_10_custom(raw_price)
-
+        print(f'{final_price} {base_price}')
         item_price_info = {
-            "auto_action_enabled": "DISABLED",
-            "auto_add_to_ozon_actions_list_enabled":"DISABLED",
+            "auto_action_enabled": "ENABLED ",
+            "auto_add_to_ozon_actions_list_enabled":"ENABLED",
             "currency_code": "RUB",
-            "price_strategy_enabled": "DISABLED",
-            "min_price": str(final_price),
+            "price_strategy_enabled": "ENABLED",
+            # "min_price": str(base_price),
             "offer_id": item[0],
-            "old_price": "0",
-            "price": str(final_price),
+            "old_price": str(final_price),
+            "price": str(base_price),
             "product_id": item[1],
             "vat": "0",
             "quant_size":"1"
@@ -374,5 +374,14 @@ def ozon_update_to_exele():
             data_sent.clear()
     if data_sent:
         ozon_exchange.post_items(data_sent, save_to_file=True)
+
+@shared_task
+def get_all_oder_ozon():
+    ozon_exchange = OzonExchange()
+    all_order = ozon_exchange.get_all_order_ozon()['result']['postings']
+    for num in all_order:
+        if not OrderOzon.objects.filter(number_ozon = num['posting_number']).exists():
+            ozon_create_order(num['posting_number'])
+    
 
 

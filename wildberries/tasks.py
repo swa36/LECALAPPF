@@ -1,8 +1,10 @@
+import time
 from typing import Optional, Dict
 import pandas as pd
 from celery import shared_task
 from django.db.models import Q
 
+from src.lekala_class.class_1C.ExChange1C import ExChange1C
 from order.models import OrderWB
 from src.lekala_class.class_marketplace.WB import WBItemCard, PriceItemWB, StockItemWB, GetOrderWB
 from catalog.models import Product, MarkUpItems, Category
@@ -132,18 +134,22 @@ def add_new_item_wb():
 
 def sent_img_wb():
     wb_api = WBItemCard()
+    c = ExChange1C()
     data = wb_api.get_items(param='withoutImg')
     for i in data ['cards']:
+        print(i['vendorCode'])
         try:
             prod = Product.objects.get(article_1C=i['vendorCode'])
+            # c.get_img(prod.uuid_1C)
             wb_api.post_img(prod)
-        except:
+        except Exception:
             print(i['vendorCode'])
 
 def sent_img_video():
     wb_api = WBItemCard()
-    products_wb = Product.objects.filter(wb__isnull=False).filter(article_1C='MBXcI17F')
+    products_wb = Product.objects.filter(wb__isnull=False)
     for p in products_wb:
+        print(p.wb.wb_id)
         wb_api.post_img(p)
 
 

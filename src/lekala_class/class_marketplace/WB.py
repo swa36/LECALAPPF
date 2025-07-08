@@ -19,7 +19,7 @@ class WBItemCard(BaseMarketPlace):
         }
         super().__init__(self.headers, self.BASE_URL,)
 
-    def post_items(self, data, save_to_file=True):
+    def post_items(self, data, save_to_file=False):
         endpoint = 'v2/cards/upload'
         if save_to_file:
             self._save_payload_to_file(data)
@@ -80,6 +80,7 @@ class WBItemCard(BaseMarketPlace):
                 print(i['vendorCode'])
 
     def post_img(self, item):
+        url = 'https://lpff.ru'
         print(f'WB {item.name} {item.wb.wb_id} {item.wb.wb_item_id} {item.wb.wb_barcode}')
         all_image = item.images.all().order_by('-main')
         family = item.category.get_family()
@@ -91,12 +92,14 @@ class WBItemCard(BaseMarketPlace):
             "nmId": item.wb.wb_id,
             "data": []
         }
-        for img in all_image:
-            url = 'https://lpff.ru'
-            data_item_img['data'].append(f'{url}{img.image.url}')
-        if video_category:
-            data_item_img['data'].append(video_category.video_instruction_url)
-        self.post_img_link(data=json.dumps(data_item_img, ensure_ascii=False), save_to_file=True)
+        if all_image:
+            for img in all_image:
+                data_item_img['data'].append(f'{url}{img.image.url}')
+                
+            if video_category:
+                data_item_img['data'].append(f'{url}/{video_category.file}')
+        self.post_img_link(data=json.dumps(data_item_img, ensure_ascii=False))
+        time.sleep(5)
         return
 
 
@@ -110,7 +113,7 @@ class WBItemCard(BaseMarketPlace):
             'Content-Type':'application/json',
             'Authorization':settings.WB_KEY
         })
-        print(req)
+        print(req.json())
         return req
 
 

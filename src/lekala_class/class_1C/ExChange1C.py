@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from pathlib import Path
 import shutil
@@ -167,14 +168,15 @@ class ExChange1C:
         if not file_records:
             print(f"⚠️ Нет изображений в 1С для товара {product.name}")
             return
-
+        
+        today = datetime.now().strftime("%d%m%y")
         pending_images = []
         sequence_number = 1
 
         for file_info in file_records:
             file_id = file_info.get('Ref_Key')
             is_main = (file_id == id_main_img)
-            filename = "main.jpg" if is_main else f"{sequence_number}.jpg"
+            filename = f"main_{today}.jpg" if is_main else f"{sequence_number}_{today}.jpg"
 
             base64_data = self._fetch_image_base64(file_id)
             if not base64_data:

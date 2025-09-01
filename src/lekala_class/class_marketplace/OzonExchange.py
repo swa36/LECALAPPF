@@ -86,7 +86,9 @@ class OzonExchange(BaseMarketPlace):
         if save_to_file:
             self._save_payload_to_file(payload)
             return
-        return self._request('POST', endpoint, data=payload)
+        req = self._request('POST', endpoint, data=payload)
+        print(req)
+        return req
 
 
     def post_new_img(self, data=None, save_to_file=False):

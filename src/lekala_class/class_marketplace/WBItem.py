@@ -41,7 +41,7 @@ class WBItem:
                         "vendorCode": self.prod.article_1C,
                         "title": self.prod.name[:59],
                         "description": self.prod.description,
-                        "brand": "LekalaPPF",
+                        "brand": "LEKALAPPF",
                         "dimensions": {
                             "length": int(self.attribs['length']),
                             "width": int(self.attribs['width']),

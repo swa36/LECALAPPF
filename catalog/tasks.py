@@ -62,6 +62,6 @@ def extract_number(filename):
 
 def get_img_1C():
     data_1c=ExChange1C()
-    product = Product.objects.all()
+    product = Product.objects.filter(wb__isnull=False, name__icontains='Бронеплёнка на камер')
     for i in product:
         data_1c.get_img(i.uuid_1C)

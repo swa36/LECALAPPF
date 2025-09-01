@@ -68,6 +68,7 @@ def update_price_wb():
             wb_api.set_price_club_wb(data=list_discount_wb)
             list_price.clear()
             list_discount_wb.clear()
+            time.sleep(10)
     if list_price:
         wb_api.update_price(data=list_price)
         wb_api.set_price_club_wb(data=list_discount_wb)
@@ -119,9 +120,10 @@ def add_new_item_wb():
     batch = []
     for item in product_not_wb:
         # Если пакет заполнен, отправляем его
-        if len(batch) >= 99:
+        if len(batch) >= 1:
             wb_api.post_items(data=batch)
             batch.clear()  # Очистка пакета после отправки
+            time.sleep(5)
         # Преобразование элемента в формат для API
         item_data = WBItem(item).dataItemCard()
         if item_data:
@@ -147,7 +149,7 @@ def sent_img_wb():
 
 def sent_img_video():
     wb_api = WBItemCard()
-    products_wb = Product.objects.filter(wb__isnull=False)
+    products_wb = Product.objects.filter(wb__isnull=False, name__icontains='Бронеплёнка на камер')
     for p in products_wb:
         print(p.wb.wb_id)
         wb_api.post_img(p)

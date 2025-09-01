@@ -143,6 +143,9 @@ def add_new_item_ozon():
     products_not_ozon = Product.objects.annotate(image_count=Count('images')).filter(
         Q(image_count__gt=0) & Q(ozon__isnull=True) & Q(prices__retail_price__gt=0)
     )
+    # products_not_ozon = Product.objects.annotate(image_count=Count('images')).filter(
+    #     Q(image_count__gt=0) & Q(name__icontains='Бронеплёнка на камер') & Q(prices__retail_price__gt=0)
+    # )
     for product in products_not_ozon:
         if len(items) > 99:
             ozon_api.post_items(data=items)
@@ -279,7 +282,8 @@ def ozon_update_file_article():
 
 
 def ozon_update_attr():
-    all_prod_in_ozon = Product.objects.filter(ozon__isnull=False)
+    # all_prod_in_ozon = Product.objects.filter(ozon__isnull=False)
+    all_prod_in_ozon = Product.objects.filter(code_1C='AA-00005696')
     ozon_api = OzonExchange()
     data_update = []
 
@@ -311,12 +315,12 @@ def ozon_update_attr():
 
         # Отправка каждые 100 товаров
         if len(data_update) >= 100:
-            ozon_api.post_update_attr(data=data_update, save_to_file=True)
+            ozon_api.post_update_attr(data=data_update)
             data_update.clear()
 
     # Финальная отправка оставшихся
     if data_update:
-        ozon_api.post_update_attr(data=data_update, save_to_file=True)
+        ozon_api.post_update_attr(data=data_update)
 
 
 def ozon_article():

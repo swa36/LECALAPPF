@@ -94,8 +94,6 @@ class Prices(models.Model):
 def image_upload_path(instance, filename):
     # Гарантированно получаем артикул — продукт обязателен
     code_1C = instance.product.code_1C
-    if instance.main:
-        filename = 'main.jpg'
     return f"img/{code_1C}/{filename}"  # например: img/ABC123/main.jpg или img/ABC123/1.jpg
 
 

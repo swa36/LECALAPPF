@@ -42,6 +42,7 @@ class BaseMarketPlace(ABC):
             response = requests.request(**request_kwargs)
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
+            print(data)
             print(f"❌ HTTP error for {method} {url}")
             print(f"Status code: {response.status_code}")
             print(f"Response text: {response.text}") # если нужно, можешь убрать или заменить на return None

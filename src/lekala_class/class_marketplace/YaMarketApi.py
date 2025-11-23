@@ -39,3 +39,8 @@ class YaMarketApi(BaseMarketPlace):
             self._save_payload_to_file(payload)
             return payload
         return self._request('POST', endpoint, data=payload)
+
+    def get_order_info(self, order_id, save_to_file=False):
+        endpoint = f'campaigns/{self.campaign_id}/orders/{order_id}'
+        return self._request('GET', endpoint)
+

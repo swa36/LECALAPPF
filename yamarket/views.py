@@ -5,6 +5,10 @@ import json, datetime
 from catalog.models import Product
 from order.models import OrderYM, ItemInOrderYM
 from src.lekala_class.class_marketplace.YaMarket import YaMarket
+from datetime import datetime, timezone
+from yamarket.tasks import get_order_info_ya
+
+
 # Create your views here.
 
 @csrf_exempt
@@ -23,14 +27,15 @@ def updateStock(request):
                 count = num.frame_in_article.quantity.remains
             stockForSent.append(
                 {
-                "sku": s,
-                "warehouseId": 103795,
-                "items": [{"count": count, "type": "FIT",}]
+                    "sku": s,
+                    "warehouseId": 103795,
+                    "items": [{"count": count, "type": "FIT", }]
                 }
             )
-        return JsonResponse({"skus":stockForSent}, safe=False, status = 500)
+        return JsonResponse({"skus": stockForSent}, safe=False, status=500)
         # headers = json.loads(request.headers.decode('utf-8'))
-    return JsonResponse({'error':'Error'}, safe=False, status = 500)
+    return JsonResponse({'error': 'Error'}, safe=False, status=500)
+
 
 @csrf_exempt
 def newOrder(request):
@@ -42,9 +47,9 @@ def newOrder(request):
         if not OrderYM.objects.filter(number_ym=orderData['id']).exists():
             number_1C = YaMarket().number_to_1c()
             order, created = OrderYM.objects.update_or_create(number_ym=orderData['id'],
-                                                     defaults={
-                                                         'price':orderData['itemsTotal']
-                                                     })
+                                                              defaults={
+                                                                  'price': orderData['itemsTotal']
+                                                              })
             if created:
                 order.number_1C = number_1C
                 order.save()
@@ -60,9 +65,10 @@ def newOrder(request):
                 itemsOrder.price = float(i['priceBeforeDiscount'])
                 itemsOrder.quantity = i['count']
                 itemsOrder.save()
-            
-            return JsonResponse({"order": {"id": number_1C}}, status = 201)
-        return JsonResponse({}, safe=False, status = 200)
+
+            return JsonResponse({"order": {"id": number_1C}}, status=201)
+        return JsonResponse({}, safe=False, status=200)
+
 
 @csrf_exempt
 def statusOrder(request):
@@ -71,6 +77,26 @@ def statusOrder(request):
         # log = open('logs/status_market.log', 'a+')
         # log.write(str(data) + '\n')
         orderData = data['order']
-        if OrderYM.objects.filter(number_1C=orderData['shopOrderId']).exists() or OrderYM.objects.filter(number_ym=orderData['shopOrderId']).exists():          
-            return JsonResponse({}, safe=False, status = 200)
-        return JsonResponse({'error':'Error'}, safe=False, status = 500)
+        if OrderYM.objects.filter(number_1C=orderData['shopOrderId']).exists() or OrderYM.objects.filter(
+                number_ym=orderData['shopOrderId']).exists():
+            return JsonResponse({}, safe=False, status=200)
+        return JsonResponse({'error': 'Error'}, safe=False, status=500)
+
+
+@csrf_exempt
+def getNotifyYaMarket(request):
+    if request.method == 'POST' and request.body:
+        response_data = {
+                "version": "1.0.0",
+                "name": "LPPFF",
+                "time": datetime.now(timezone.utc).isoformat(timespec="microseconds") + "Z"
+            }
+        data = json.loads(request.body.decode('utf-8'))
+        if data.get('notificationType') == "PING":
+            return JsonResponse(response_data, safe=False, status=200)
+        if data.get('notificationType') == "ORDER_CREATED":
+            orderId = data.get('orderId')
+            createdOrder = get_order_info_ya(orderId)
+            if createdOrder:
+                return JsonResponse(response_data, safe=False, status=200)
+        return JsonResponse({}, safe=False, status=404)

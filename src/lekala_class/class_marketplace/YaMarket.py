@@ -126,3 +126,4 @@ class YaMarket(YaMarketApi):
         if data:
             self.sent_stock(data)
         return
+

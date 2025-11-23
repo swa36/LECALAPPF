@@ -184,13 +184,16 @@ class CreatorFeed:
         limit_by_market = {'yandex': 20, 'ali': 5, 'avito': 9}
         all_img = all_img[:limit_by_market.get(self.name_market, 0)]
         for img in all_img:
-            url = self.url_site + img.image.url
-            tag = 'Image' if self.name_market == 'avito' else 'picture'
-            elem = ET.SubElement(offer, tag)
-            if tag == 'Image':
-                elem.set('url', url)
-            else:
-                elem.text = url
+            try:
+                url = self.url_site + img.image.url
+                tag = 'Image' if self.name_market == 'avito' else 'picture'
+                elem = ET.SubElement(offer, tag)
+                if tag == 'Image':
+                    elem.set('url', url)
+                else:
+                    elem.text = url
+            except ValueError as e:
+                print(e)
 
     def set_description(self, offer, data):
         desc = data['desc']

@@ -73,12 +73,12 @@ class CategoryAdmin(DjangoMpttAdmin):
 admin.site.register(Category, CategoryAdmin)
 
 
-# @admin.register(MarkUpItems)
-# class MarkUpItemsAdmin(admin.ModelAdmin):
-#     list_display = ['wildberries_mark_up', 'ozon_mark_up', 'yandex_mark_up', 'avito_mark_up', 'aliexpress_mark_up']
-#
-#     def has_add_permission(self, request):
-#         # Только одна запись допускается
-#         if MarkUpItems.objects.exists():
-#             return False
-#         return super().has_add_permission(request)
+@admin.register(MarkUpItems)
+class MarkUpItemsAdmin(admin.ModelAdmin):
+    list_display = ['wildberries_mark_up', 'ozon_mark_up', 'yandex_mark_up', 'avito_mark_up', 'aliexpress_mark_up']
+
+    def has_add_permission(self, request):
+        # Только одна запись допускается
+        if MarkUpItems.objects.exists():
+            return False
+        return super().has_add_permission(request)

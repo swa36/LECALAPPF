@@ -1,6 +1,6 @@
 from django.conf import settings
 from src.lekala_class.class_marketplace.BaseMarketPlace import BaseMarketPlace
-
+from datetime import datetime, timedelta
 
 class YaMarketApi(BaseMarketPlace):
     def __init__(self):
@@ -39,3 +39,25 @@ class YaMarketApi(BaseMarketPlace):
             self._save_payload_to_file(payload)
             return payload
         return self._request('POST', endpoint, data=payload)
+
+    def get_order_info(self, save_to_file=False):
+        # текущая дата
+        today = datetime.now()
+
+        # 2 дня назад
+        date_from = today - timedelta(days=2)
+
+        # 2 дня вперед
+        date_to = today + timedelta(days=2)
+
+        # форматирование в ДД-ММ-ГГГГ
+        date_from_str = date_from.strftime("%d-%m-%Y")
+        date_to_str = date_to.strftime("%d-%m-%Y")
+
+        params = {
+            "supplierShipmentDateFrom": date_from_str,
+            "supplierShipmentDateTo": date_to_str
+        }
+        endpoint = f'campaigns/{self.campaign_id}/orders'
+        return self._request('GET', endpoint, params=params)
+

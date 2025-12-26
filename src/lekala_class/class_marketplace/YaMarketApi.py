@@ -45,18 +45,17 @@ class YaMarketApi(BaseMarketPlace):
         today = datetime.now()
 
         # 2 дня назад
-        date_from = today - timedelta(days=2)
+        date_from = today - timedelta(days=10)
 
         # 2 дня вперед
-        date_to = today + timedelta(days=2)
+        date_to = today + timedelta(days=1)
 
         # форматирование в ДД-ММ-ГГГГ
         date_from_str = date_from.strftime("%d-%m-%Y")
         date_to_str = date_to.strftime("%d-%m-%Y")
 
         params = {
-            "supplierShipmentDateFrom": date_from_str,
-            "supplierShipmentDateTo": date_to_str
+            "fromDate": date_from_str,
         }
         endpoint = f'campaigns/{self.campaign_id}/orders'
         return self._request('GET', endpoint, params=params)

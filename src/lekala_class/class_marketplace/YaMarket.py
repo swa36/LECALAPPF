@@ -24,9 +24,11 @@ class YaMarket(YaMarketApi):
         except Category.DoesNotExist:
             return []
 
-    def post_item_data(self):
+    def post_item_data(self, id=None):
         data = []
         print(len(self.products))
+        if id:
+            self.products = self.products.filter(id=id)
         for product in self.products:
             attrib = {
                 attr.attribute_name.slug_name: attr.value_attribute
@@ -35,9 +37,6 @@ class YaMarket(YaMarketApi):
 
             price_with_markup = round(product.prices.retail_price + (self.mark_up * product.prices.retail_price) / 100, 2)
             weight = attrib.get("weight_netto") or attrib.get("weight_brutto", 0)
-            # if weight:
-            #     weight = float(weight)
-            # else:
             weight = 0.3
             offer = {
                 "offerId": product.code_1C,
@@ -68,9 +67,10 @@ class YaMarket(YaMarketApi):
             if video:
                 video_url = video.video_instruction_url
                 offer['videos'] = [video_url]
-            if len(data) > 30:
+            if len(data) > 19:
                 self.post_new_item(data)
                 data.clear()
+                time.sleep(60)
             data.append({
                 "offer": offer,
             })
@@ -120,7 +120,7 @@ class YaMarket(YaMarketApi):
             data.append(
                 {
                     'sku':f.code_1C,
-                    'items':[{'count':f.stock}]
+                    'items':[{'count':0}]
                 }
             )
         if data:

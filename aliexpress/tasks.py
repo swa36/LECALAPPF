@@ -61,7 +61,7 @@ def update_stock_ali():
         if len(list_stock) > 999:
             ali.update_stock(data=list_stock)
             list_stock.clear()
-            sleep(5)
+            sleep(50)
         article = str(item[1]).encode("ascii", "ignore").decode()
         dict_stock = {
             "product_id": '',
@@ -108,25 +108,17 @@ def get_order_ali():
                     new_order.price = sum([i.total_price for i in new_order.items.all()])
                     new_order.save()
 
-# def delete_item():
-#     catalog_stock = Catalog.objects.exclude(
-#         category__name__in=EXCLUDE_LIST).filter(Q(id_ali__isnull=False) | Q(id_ali_double__isnull=False), price__retail_price__gt=500).values_list('id_ali', 'id_ali_double')
-#     frame_stock = Frame.objects.filter(Q(id_ali__isnull=False) | Q(id_ali_double__isnull=False)).values_list('id_ali', 'id_ali_double')
-#     list_id = list(catalog_stock) + list(frame_stock)
-#     list_delete = []
-#     list_delete_double = []
-#     for i in list_id:
-#         if len(list_delete) > 499:
-#             ali.delete_ali(data=list_delete)
-#             list_delete.clear()
-#         if len(list_delete_double) > 499:
-#             ali_double.delete_ali(data=list_delete_double)
-#             list_delete_double.clear()
-#         if i[0]:
-#             list_delete.append(i[0])
-#         if i[1]:
-#             list_delete_double.append(i[1])
-#     if list_delete:
-#         ali.delete_ali(data=list_delete)
-#     if list_delete_double:
-#         ali_double.delete_ali(data=list_delete_double)
+def delete_item():
+    ali = AliExpress()
+    products = Product.objects.filter(ali__isnull=False)
+    list_delete = []
+    for i in products:
+        if len(list_delete) > 399:
+            print("Шлем")
+            ali.delete_ali(data=list_delete)
+            list_delete.clear()
+        if hasattr(i, 'ali'):
+            list_delete.append(i.ali.id_ali)
+    if list_delete:
+        print("Шлем")
+        ali.delete_ali(data=list_delete)

@@ -30,11 +30,13 @@ class OzonItem:
     TYPE_DICT = {
         971077309: "Пленка защитная для салона автомобиля",
         970702708: "Стекло защитное для экрана авто",
-        971053255: "Пленка защитная для автомобиля"
+        971053255: "Пленка защитная для автомобиля",
+        970702707: "Стекло защитное для элементов салона",
+        970943796: "Пленка автомобильная"
     }
     DICT_MARK_LOWER = {k.lower(): v for k, v in MARK_DICT.items()}
 
-    def __init__(self, product, type_id_ozon, cat_id_ozon):
+    def __init__(self, product, type_id_ozon, cat_id_ozon, update_item=False):
         self.product = product
         self.main_img = self._set_main_img()
         self.other_img = [f'https://lpff.ru{i.image.url}' for i in self.product.images.filter(main=False)[:14]]
@@ -43,6 +45,7 @@ class OzonItem:
         self.type_id_ozon = type_id_ozon
         self.cat_id_ozon = cat_id_ozon
         self.weight, self.gross_weight = self.set_weight()
+        self.update_item = update_item
 
     def set_weight(self):
         weight = self.attributes.get("weight_netto", "")
@@ -179,6 +182,7 @@ class OzonItem:
         return {
             "attributes": self.set_atribute(),
             "description_category_id": self.cat_id_ozon,
+            "new_description_category_id": 0 if self.update_item else self.cat_id_ozon,
             "complex_attributes": self.create_coplex_attrib(mark),
             "currency_code": "RUB",
             "dimension_unit": "mm",
@@ -226,7 +230,7 @@ class OzonTapeOutSaloon(OzonItem):
                 COLOR_DICT.get(self.attributes.get("color", "").lower())
             ),
             self.build_attribute(self.MATERIAL_ID, "Полиуретан", 62036),
-            self.build_attribute(self.WARRANTY_ID, self.attributes.get("waranty", "")),
+            self.build_attribute(self.WARRANTY_ID, "11"),
             self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
             self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("equipment", "")),
             self.build_attribute(self.KEYWORDS_ID, self.generate_keywords(
@@ -255,7 +259,7 @@ class OzonTapeInSaloon(OzonItem):
                 COLOR_DICT.get(self.attributes.get("color", "").lower())
             ),
             self.build_attribute(self.MATERIAL_ID, "Полиуретан", 62036),
-            self.build_attribute(self.WARRANTY_ID, self.attributes.get("waranty", "")),
+            self.build_attribute(self.WARRANTY_ID, "11"),
             self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
             self.build_attribute(self.EQUIPMENT_ID, self.attributes.get("equipment", "")),
             self.build_attribute(self.KEYWORDS_ID, self.generate_keywords(
@@ -280,10 +284,10 @@ class OzonProtectGlass(OzonItem):
                 self.attributes.get("color", ""),
                 COLOR_DICT.get(self.attributes.get("color", "").lower())
             ),
-            self.build_attribute(self.WARRANTY_ID, self.attributes.get("waranty", "")),
+            self.build_attribute(self.WARRANTY_ID, "11"),
             self.build_attribute(self.COUNTRY_OF_ORIGIN_ID, "Россия", 90295),
-            self.build_attribute(self.KEYWORDS_ID, self.generate_keywords("lekalappf;LEKALAPPF защитная стекло "
-                                                                          "мультимедиа для {brand}; стекло для мультимедиа {brand};стекло для защиты мультимедиаа {brand}")),
+            # self.build_attribute(self.KEYWORDS_ID, self.generate_keywords("lekalappf;LEKALAPPF защитная стекло "
+            #                                                               "мультимедиа для {brand}; стекло для мультимедиа {brand};стекло для защиты мультимедиаа {brand}")),
             self.build_attribute(self.TYPE_ID, self.TYPE_DICT.get(self.type_id_ozon, ''), self.type_id_ozon),
             self.build_attribute(self.QUANTITY_ID, "1"),
         ]))
@@ -299,10 +303,11 @@ class OzonItemFactory:
         'Защитное стекло экранов мультимедиа, приборных панелей, климат-контроля'
     ]
 
-    def __init__(self, product):
+    def __init__(self, product, update_item=False):
         self.product = product
         self.type_id_ozon = None
         self.cat_id_ozon = None
+        self.update_item = update_item
 
     def get_category_names(self):
         return [cat.name.strip() for cat in self.product.category.get_family()]
@@ -311,16 +316,16 @@ class OzonItemFactory:
         category_names = self.get_category_names()
 
         if any(name in category_names for name in self.NAME_CAT_IN_SALOON):
-            self.type_id_ozon = 971077309
-            self.cat_id_ozon = 17028749
+            self.type_id_ozon = 970943796
+            self.cat_id_ozon = 17028755
             return OzonTapeInSaloon
 
         if any(name in category_names for name in self.NAME_CAT_PROTECT_GLASS):
-            self.type_id_ozon = 970702708
+            self.type_id_ozon = 970702707
             self.cat_id_ozon = 17028749
             return OzonProtectGlass  # если есть такой класс
 
-        self.type_id_ozon = 971053255
+        self.type_id_ozon = 970943796
         self.cat_id_ozon = 17028755
         return OzonTapeOutSaloon
 

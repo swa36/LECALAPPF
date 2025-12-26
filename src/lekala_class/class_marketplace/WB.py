@@ -114,6 +114,9 @@ class WBItemCard(BaseMarketPlace):
             'Authorization':settings.WB_KEY
         })
         print(req.json())
+        if req.status_code == 429:
+            print('Шлем повтор')
+            self.post_img_link(self, data, params, save_to_file)
         return req
 
 

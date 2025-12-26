@@ -13,6 +13,7 @@ import requests
 
 
 
+
 class ExChange1C:
     BASE_URL = settings.BASE_URL_1C
 
@@ -169,7 +170,7 @@ class ExChange1C:
             print(f"⚠️ Нет изображений в 1С для товара {product.name}")
             return
         
-        today = datetime.now().strftime("%d%m%y")
+        today = datetime.now().strftime("%d%m%y_%H%M")
         pending_images = []
         sequence_number = 1
 
@@ -221,6 +222,17 @@ class ExChange1C:
             print(f"✅ Сохранено изображение: {image['filename']}")
 
         print(f"✅ Успешно обновлены изображения для товара {product.name}")
+        if hasattr(product, 'ozon'):
+            from ozon.tasks import update_img_ozon as sent_img_ozon
+            sent_img_ozon.delay(id=product.id)
+        if hasattr(product, 'wb'):
+            from wildberries.tasks import sent_img_video as sent_img_wb
+            sent_img_wb.delay(id=product.id)
+        # if hasattr(product, 'wb') and hasattr(product, 'wb'):
+        #     from yamarket.tasks import post_item_ya
+        #     print('Обновляем картинку Я.Маркет')
+        #     post_item_ya.delay(id=product.id)
+             
 
 
 

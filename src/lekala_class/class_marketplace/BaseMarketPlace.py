@@ -1,4 +1,4 @@
-import inspect
+import inspect, time
 import json
 from  abc import ABC
 from datetime import datetime
@@ -42,10 +42,12 @@ class BaseMarketPlace(ABC):
             response = requests.request(**request_kwargs)
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
-            print(data)
             print(f"❌ HTTP error for {method} {url}")
             print(f"Status code: {response.status_code}")
-            print(f"Response text: {response.text}") # если нужно, можешь убрать или заменить на return None
+            # if response.status_code == 429:
+            #     print("Через 10 секунд шлем повтор")
+            #     time.sleep(10)
+            #     self._request(method, endpoint, data, params, use_json, extra_headers)
         if response.status_code == 204:
             print(f"204 No Content: {url}")
             return None

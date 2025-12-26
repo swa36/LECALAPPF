@@ -97,9 +97,21 @@ class OzonExchange(BaseMarketPlace):
             self._save_payload_to_file(data)
             return
         req = self._request('POST', endpoint, data=data)
-        print(req)
         return req
 
+    def get_error_card(self, last_id):
+        total=100
+        visibility_param='STATE_FAILED'
+        endpoint='v3/product/list'
+        data = {
+            "filter": {
+                "visibility": "STATE_FAILED"
+                },
+            "last_id": last_id,
+            "limit": total
+            }
+        req = self._request("POST", endpoint, data=data)
+        return req
 
 
     def get_all_order_ozon(self, save_to_file=False):
@@ -148,8 +160,7 @@ class OzonExchange(BaseMarketPlace):
                     print(f"{it['offer_id']} - {it['id']} - {num.name} - Ozon")
                 except Exception as ex:
                     print(it['offer_id'])
-    
-        
+   
 
 
     def work_time_ozon(self):

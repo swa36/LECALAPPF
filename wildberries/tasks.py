@@ -36,9 +36,9 @@ def exele_wb():
 def set_id_wb(next_cursor:Optional[Dict]=None) -> None:
     wb_api = WBItemCard()
     if next_cursor:
-        data = wb_api.get_items(param='withoutImg',cursor=next_cursor)
+        data = wb_api.get_items(param='all',cursor=next_cursor)
     else:
-        data = wb_api.get_items(param='withoutImg')
+        data = wb_api.get_items(param='all')
     wb_api.set_id_wb_num(data)
     if 'nmID' in  data['cursor'] and 'updatedAt' in data['cursor']:
         next_cursor = {
@@ -85,7 +85,7 @@ def update_remains_wb():
         if len(list_stock) > 999:
             wb_api.update_remains(data=list_stock, save_to_file=False)
             list_stock.clear()
-        if i[0]:
+        if i[0] and i[0] != "2000000046747":
             list_stock.append({"sku": str(i[0]), "amount": int(i[1]) if wb_api.work_time_wb() else 0})
     if list_stock:
         wb_api.update_remains(data=list_stock, save_to_file=False)
@@ -114,14 +114,15 @@ def get_new_order_wb():
 
 def add_new_item_wb():
     wb_api = WBItemCard()
-    exclude_cat = Category.objects.get(name='Инструмент и оборудование для нанесения плёнок').get_family()
-    product_not_wb = Product.objects.filter(Q(wb__isnull=True) & ~Q(category__id__in=[i.id for i in exclude_cat]))
+    # exclude_cat = Category.objects.get(name='Инструмент и оборудование для нанесения плёнок').get_family()
+    # product_not_wb = Product.objects.filter(Q(wb__isnull=True) & ~Q(category__id__in=[i.id for i in exclude_cat]))
+    product_not_wb = Product.objects.filter(code_1C="AA-00004773")
     # Обработка всех элементов в одном цикле
     batch = []
     for item in product_not_wb:
         # Если пакет заполнен, отправляем его
         if len(batch) >= 1:
-            wb_api.post_items(data=batch)
+            wb_api.post_items(data=batch, save_to_file=True)
             batch.clear()  # Очистка пакета после отправки
             time.sleep(5)
         # Преобразование элемента в формат для API
@@ -131,7 +132,7 @@ def add_new_item_wb():
 
     # Отправка оставшихся элементов, если они есть
     if batch:
-        wb_api.post_items(data=batch)
+        wb_api.post_items(data=batch, save_to_file=True)
 
 
 def sent_img_wb():
@@ -147,9 +148,14 @@ def sent_img_wb():
         except Exception:
             print(i['vendorCode'])
 
-def sent_img_video():
+@shared_task
+def sent_img_video(id=None):
     wb_api = WBItemCard()
-    products_wb = Product.objects.filter(wb__isnull=False, name__icontains='Бронеплёнка на камер')
+    if id:
+        print('Обновялем фото на Wildberies')
+        products_wb = Product.objects.filter(id=id)
+    else:
+        products_wb = Product.objects.filter(wb__isnull=False)
     for p in products_wb:
         print(p.wb.wb_id)
         wb_api.post_img(p)

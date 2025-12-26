@@ -335,20 +335,111 @@ def ozon_article():
                                           )
 
 
-
-def update_img_ozon():
+@shared_task
+def update_img_ozon(id=None):
     ozon_api = OzonExchange()
     url = 'https://lpff.ru'
-    products = Product.objects.filter(ozon__isnull=False)
+    if id:
+        print('Обновляем фото на Ozon')
+        products = Product.objects.filter(id=id)
+    else:
+        products = Product.objects.filter(ozon__isnull=False)
+    count:int = 0
     for p in products:
+        if count == 100:
+            time.sleep(30)
+            count=0
         all_images = [f'{url}{img.image.url}'for img in p.images.all().order_by('-main')]
         payload = {
             "images":all_images,
             "product_id":p.ozon.ozon_id
         }
-        print(json.dumps(payload, ensure_ascii=False))
-        ozon_api.post_new_img(data=payload)
+        req = ozon_api.post_new_img(data=payload)
+        count+=1
+        time.sleep(3)
 
+
+def update_img_error_card_ozon(products):
+    ozon_api = OzonExchange()
+    items = []
+    for product in products:
+        if len(items) > 99:
+            ozon_api.post_items(data=items)
+            items.clear()
+        try:
+            ozon_item = OzonItemFactory(product, update_item=True).create()
+            items.append(ozon_item.item())
+        except ValueError as e:
+            pass
+    if len(items) > 0:
+        ozon_api.post_items(data=items)
+    # for p in products:
+    #     all_images = [f'{url}{img.image.url}'for img in p.images.all().order_by('-main')]
+    #     payload = {
+    #         "images":all_images,
+    #         "product_id":p.ozon.ozon_id
+    #     }
+    #     req = ozon_api.post_new_img(data=payload)
+    #     print(f'{p.code_1C} {p.name}')
+    #     count+=1
+    #     time.sleep(30)
+
+def get_error_card(id_lost=None):
+    ozon_api = OzonExchange()
+    last_id = "" if not id_lost else id_lost
+    list_data = [
+    "AA-00004648",
+    "AA-00004771",
+    "AA-00004746",
+    "AA-00004725",
+    "AA-00004712",
+    "AA-00004770",
+    "AA-00005825",
+    "AA-00004651",
+    "AA-00004656",
+    "AA-00005762",
+    "AA-00007286",
+    "AA-00004649",
+    "AA-00005760",
+    "AA-00000449",
+    "AA-00005767",
+    "AA-00005796",
+    "AA-00004757",
+    "AA-00004730",
+    "AA-00004922",
+    "AA-00004778",
+    "AA-00004779",
+    "AA-00004637",
+    "AA-00007289",
+    "AA-00005758",
+    "AA-00004952",
+    "AA-00005795",
+    "AA-00004948",
+    "AA-00004652",
+    "AA-00004718",
+    "AA-00004760",
+    "AA-00004946",
+    "AA-00004681",
+    "AA-00004923",
+    "AA-00005827",
+    "AA-00007322",
+    "AA-00004563",
+    "AA-00004395",
+    "AA-00001723",
+    "AA-00001267",
+    "AA-00003907",
+    "AA-00004810"
+    ]
+
+    products = Product.objects.filter(code_1C__in=list_data)
+    update_img_error_card_ozon(products)
+    # res = ozon_api.get_error_card(last_id)
+    # if res['result']['items']:
+    #     code_list = [i['offer_id'] for i in res['result']['items']]
+    #     products = Product.objects.filter(code_1C__in=code_list)
+    #     update_img_error_card_ozon(products)
+    # if res['result']['last_id']:
+    #     get_error_card(id_lost=res['result']['last_id'])
 
 def ozon_update_to_exele():
     OZON_CLASS_MAP = {

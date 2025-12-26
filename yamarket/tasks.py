@@ -4,10 +4,10 @@ from django.http import JsonResponse
 from catalog.models import Product
 from order.models import OrderYM, ItemInOrderYM
 from src.lekala_class.class_marketplace.YaMarket import YaMarket
-
-def post_item_ya():
+@shared_task
+def post_item_ya(id=None):
     market = YaMarket()
-    market.post_item_data()
+    market.post_item_data(id=id)
     return
 
 @shared_task

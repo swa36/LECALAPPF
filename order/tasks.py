@@ -3,6 +3,7 @@ from order.models import OrderOzon, OrderWB, OrderYM, OrderAli
 from src.lekala_class.class_1C.ExchangeOrder1CtoMarket import OrderMarketplaceTo1C
 from wildberries.tasks import get_new_order_wb
 from aliexpress.tasks import get_order_ali
+from yamarket.tasks import get_order_info_ya
 @shared_task
 def order_change():
     # order_avito = OrderAvito.objects.filter(change_1C=False)
@@ -20,4 +21,6 @@ def order_change():
 def get_all_new_order():
     get_new_order_wb.delay()
     get_order_ali.delay()
+    get_order_info_ya.delay()
+    
     

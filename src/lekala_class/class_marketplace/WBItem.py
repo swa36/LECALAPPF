@@ -1,10 +1,10 @@
 from catalog.models import MarkUpItems
 
 
-
 class WBItem:
     MAIN_CAT_ID = 8891
     SUB_CAT_ID = 6466
+
     def __init__(self, prod):
         self.prod = prod
         self.price = int(self.prod.prices.retail_price)
@@ -18,8 +18,7 @@ class WBItem:
 
     def _set_attrib(self):
         attribs = self.prod.additional_attributes.all()
-        return {i.attribute_name.slug_name:i.value_attribute for i in attribs}
-
+        return {i.attribute_name.slug_name: i.value_attribute for i in attribs}
 
     def characteristics(self):
         list_characteristics = [
@@ -31,7 +30,8 @@ class WBItem:
         return list_characteristics
 
     def dataItemCard(self):
-        if self.attribs.get('material') and self.attribs.get('width') and self.attribs.get('length') and self.attribs.get('equipment') and self.attribs.get('color'):
+        if self.attribs.get('material') and self.attribs.get('width') and self.attribs.get(
+                'length') and self.attribs.get('equipment') and self.attribs.get('color'):
             list_characteristics = self.characteristics()
             weight = self.attribs.get('weight_netto') or self.attribs.get('weight_brutto') or 0.3
             data = {
@@ -49,6 +49,36 @@ class WBItem:
                             "weightBrutto": float(weight)
                         },
                         "characteristics": list_characteristics,
+                    }
+                ]
+            }
+            return data
+        else:
+            return False
+
+    def dataForUpdateItemCard(self):
+        if self.attribs.get('material') and self.attribs.get('width') and self.attribs.get(
+                'length') and self.attribs.get('equipment') and self.attribs.get('color'):
+            list_characteristics = self.characteristics()
+            weight = self.attribs.get('weight_netto') or self.attribs.get('weight_brutto') or 0.3
+            data = {
+                "nmID": self.prod.wb.wb_id,
+                "vendorCode": self.prod.article_1C,
+                "brand": "LEKALAPPF",
+                "title": self.prod.name[:59],
+                "description": self.prod.description,
+                "dimensions": {
+                    "length": int(self.attribs['length']),
+                    "width": int(self.attribs['width']),
+                    "height": int(self.attribs['height']),
+                    "weightBrutto": float(weight)
+                },
+                "characteristics": list_characteristics,
+                "sizes": [
+                    {
+                        "skus": [
+                            str(self.prod.wb.wb_barcode)
+                        ]
                     }
                 ]
             }

@@ -114,9 +114,9 @@ def get_new_order_wb():
 
 def add_new_item_wb():
     wb_api = WBItemCard()
-    # exclude_cat = Category.objects.get(name='Инструмент и оборудование для нанесения плёнок').get_family()
-    # product_not_wb = Product.objects.filter(Q(wb__isnull=True) & ~Q(category__id__in=[i.id for i in exclude_cat]))
-    product_not_wb = Product.objects.filter(code_1C="AA-00004773")
+    exclude_cat = Category.objects.get(name='Инструмент и оборудование для нанесения плёнок').get_family()
+    product_not_wb = Product.objects.filter(Q(wb__isnull=True) & ~Q(category__id__in=[i.id for i in exclude_cat]))
+    # product_not_wb = Product.objects.filter(code_1C="AA-00004773")
     # Обработка всех элементов в одном цикле
     batch = []
     for item in product_not_wb:
@@ -133,6 +133,27 @@ def add_new_item_wb():
     # Отправка оставшихся элементов, если они есть
     if batch:
         wb_api.post_items(data=batch, save_to_file=True)
+
+def update_item_wb():
+    wb_api = WBItemCard()
+    product_wb_for_update = Product.objects.filter(wb__isnull=False)
+    # product_wb_for_update = Product.objects.filter(code_1C="AA-00004773")
+    # Обработка всех элементов в одном цикле
+    batch = []
+    for item in product_wb_for_update:
+        # Если пакет заполнен, отправляем его
+        if len(batch) >= 3000:
+            wb_api.update_item(data=batch, save_to_file=True)
+            batch.clear()  # Очистка пакета после отправки
+            time.sleep(5)
+        # Преобразование элемента в формат для API
+        item_data = WBItem(item).dataForUpdateItemCard()
+        if item_data:
+            batch.append(item_data)
+
+    # Отправка оставшихся элементов, если они есть
+    if batch:
+        wb_api.update_item(data=batch, save_to_file=True)
 
 
 def sent_img_wb():

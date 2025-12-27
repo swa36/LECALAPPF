@@ -28,6 +28,16 @@ class WBItemCard(BaseMarketPlace):
         print(req)
         return req
 
+    def update_item(self, data, save_to_file=False):
+        endpoint = 'v2/cards/update'
+        if save_to_file:
+            self._save_payload_to_file(data)
+            return
+        req = self._request("POST", endpoint, data)
+        print(req)
+        return req
+
+
 
     def del_item(self, data=None):
         endpoint = 'v2/cards/delete/trash'
@@ -95,7 +105,7 @@ class WBItemCard(BaseMarketPlace):
         if all_image:
             for img in all_image:
                 data_item_img['data'].append(f'{url}{img.image.url}')
-                
+
             if video_category:
                 data_item_img['data'].append(f'{url}/{video_category.file}')
         self.post_img_link(data=json.dumps(data_item_img, ensure_ascii=False))

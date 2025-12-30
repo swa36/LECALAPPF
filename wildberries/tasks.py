@@ -135,9 +135,20 @@ def add_new_item_wb():
         wb_api.post_items(data=batch, save_to_file=True)
 
 def update_item_wb(data):
+    batch = []
     wb_api = WBItemCard()
     for i in data.get("cards", None):
-        print(i)
+        try:
+            item = Product.objects.get(article_1C=i.get('vendorCode'))
+            item_data = WBItem(item).dataForUpdateItemCard(i)
+            if item_data:
+                batch.append(item_data)
+        except Exception as e:
+            print(i.get('vendorCode'))
+            continue
+    wb_api.update_item(data=batch)
+    time.sleep(10)
+
 
 def get_all_card(next_cursor:Optional[Dict]=None):
     wb_api = WBItemCard()

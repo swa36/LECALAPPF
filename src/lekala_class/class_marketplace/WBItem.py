@@ -56,32 +56,20 @@ class WBItem:
         else:
             return False
 
-    def dataForUpdateItemCard(self):
+    def dataForUpdateItemCard(self, data):
         if self.attribs.get('material') and self.attribs.get('width') and self.attribs.get(
                 'length') and self.attribs.get('equipment') and self.attribs.get('color'):
             list_characteristics = self.characteristics()
-            weight = self.attribs.get('weight_netto') or self.attribs.get('weight_brutto') or 0.3
-            data = {
+            data.update({
                 "nmID": self.prod.wb.wb_id,
                 "vendorCode": self.prod.article_1C,
                 "brand": "LEKALAPPF",
                 "title": self.prod.name[:59],
                 "description": self.prod.description,
-                "dimensions": {
-                    "length": int(self.attribs['length']),
-                    "width": int(self.attribs['width']),
-                    "height": int(self.attribs['height']),
-                    "weightBrutto": float(weight)
-                },
                 "characteristics": list_characteristics,
-                "sizes": [
-                    {
-                        "skus": [
-                            str(self.prod.wb.wb_barcode)
-                        ]
-                    }
-                ]
-            }
+            })
+            del data['createdAt']
+            del data['updatedAt']
             return data
         else:
             return False

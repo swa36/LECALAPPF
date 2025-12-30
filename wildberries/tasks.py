@@ -134,26 +134,27 @@ def add_new_item_wb():
     if batch:
         wb_api.post_items(data=batch, save_to_file=True)
 
-def update_item_wb():
+def update_item_wb(data):
     wb_api = WBItemCard()
-    product_wb_for_update = Product.objects.filter(wb__isnull=False)
-    # product_wb_for_update = Product.objects.filter(code_1C="AA-00004773")
-    # Обработка всех элементов в одном цикле
-    batch = []
-    for item in product_wb_for_update:
-        # Если пакет заполнен, отправляем его
-        if len(batch) >= 3000:
-            wb_api.update_item(data=batch, save_to_file=True)
-            batch.clear()  # Очистка пакета после отправки
-            time.sleep(5)
-        # Преобразование элемента в формат для API
-        item_data = WBItem(item).dataForUpdateItemCard()
-        if item_data:
-            batch.append(item_data)
+    for i in data.get("cards", None):
+        print(i)
 
-    # Отправка оставшихся элементов, если они есть
-    if batch:
-        wb_api.update_item(data=batch, save_to_file=True)
+def get_all_card(next_cursor:Optional[Dict]=None):
+    wb_api = WBItemCard()
+    if next_cursor:
+        data = wb_api.get_items(param='all',cursor=next_cursor)
+    else:
+        data = wb_api.get_items(param='all')
+    update_item_wb(data)
+    if 'nmID' in  data['cursor'] and 'updatedAt' in data['cursor']:
+        next_cursor = {
+            "updatedAt": data['cursor']['updatedAt'],
+            "nmID": data['cursor']['nmID'],
+            "limit": 100
+        }
+        get_all_card(next_cursor)
+
+
 
 
 def sent_img_wb():

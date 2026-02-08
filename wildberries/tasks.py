@@ -36,9 +36,9 @@ def exele_wb():
 def set_id_wb(next_cursor:Optional[Dict]=None) -> None:
     wb_api = WBItemCard()
     if next_cursor:
-        data = wb_api.get_items(param='all',cursor=next_cursor)
+        data = wb_api.get_items(param='withoutImg',cursor=next_cursor)
     else:
-        data = wb_api.get_items(param='all')
+        data = wb_api.get_items(param='withoutImg')
     wb_api.set_id_wb_num(data)
     if 'nmID' in  data['cursor'] and 'updatedAt' in data['cursor']:
         next_cursor = {
@@ -122,17 +122,16 @@ def add_new_item_wb():
     for item in product_not_wb:
         # Если пакет заполнен, отправляем его
         if len(batch) >= 1:
-            wb_api.post_items(data=batch, save_to_file=True)
+            wb_api.post_items(data=batch)
             batch.clear()  # Очистка пакета после отправки
             time.sleep(5)
         # Преобразование элемента в формат для API
         item_data = WBItem(item).dataItemCard()
         if item_data:
             batch.append(item_data)
-
     # Отправка оставшихся элементов, если они есть
     if batch:
-        wb_api.post_items(data=batch, save_to_file=True)
+        wb_api.post_items(data=batch)
 
 def update_item_wb(data):
     batch = []

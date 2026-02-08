@@ -64,12 +64,14 @@ class AliExpress(BaseMarketPlace):
         return self._request("POST", endpoint, data=body, params=params)
 
     def delete_ali(self, params=None, data=None, save_to_file=False):
-        endpoint = 'api/v1/product/delete'
+        endpoint = '/api/v1/product/offline'
         body = {"productIds": data}
         if save_to_file:
             self._save_payload_to_file(body)
             return body
-        return self._request("POST", endpoint, data=body, params=params)
+        req = self._request("POST", endpoint, data=body, params=params)
+        print(req)
+        return req
 
     def set_id_ali(self, article, id_ali):
         try:
@@ -77,3 +79,4 @@ class AliExpress(BaseMarketPlace):
             AliData.objects.update_or_create(product=product, id_ali=id_ali)
         except Exception as ex:
             print(f'❌ Ошибка для артикула {article}: {ex}')
+            return id_ali

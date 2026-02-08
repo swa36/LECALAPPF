@@ -32,13 +32,19 @@ def set_id_ali():
     ali = AliExpress()
     products = Product.objects.filter(ali__isnull=True).values_list('code_1C')
     list_article = []
+    delete_list = []
     for item in products:
+        if len(delete_list) > 19:
+            ali.delete_ali(data=delete_list)
+            delete_list.clear()
         if len(list_article) > 49:
             data = ali.get_item(data=list_article)['data']
             for i in data:
                 if i['sku']:
                     article, id_ali = i['sku'][0]['code'], i['id']
-                    ali.set_id_ali(article, id_ali)
+                    id_ali = ali.set_id_ali(article, id_ali)
+                    if id_ali:
+                        delete_list.append(id_ali)
             list_article.clear()
         if item[0]:
             list_article.append(item[0])
@@ -47,7 +53,12 @@ def set_id_ali():
         for i in data:
             if i['sku']:
                 article, id_ali = i['sku'][0]['code'], i['id']
-                ali.set_id_ali(article, id_ali)
+                id_ali = ali.set_id_ali(article, id_ali)
+                if id_ali:
+                    delete_list.append(id_ali)
+    if delete_list:
+        ali.delete_ali(data=delete_list)
+        delete_list.clear()
 
 
 

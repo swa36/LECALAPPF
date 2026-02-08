@@ -480,3 +480,119 @@ def get_all_oder_ozon():
     
 
 
+@shared_task
+def sync_ozon_product_names(dry_run=True, save_to_file=True):
+    """
+    Синхронизация названий товаров между локальной БД и Ozon.
+    1. Получает все товары с OzonData (ozon_id)
+    2. Запрашивает данные с Ozon через get_items (чанки по 1000)
+    3. Сравнивает названия по артикулу (offer_id)
+    4. Если название отличается — обновляет карточку на Ozon (если dry_run=False)
+    
+    Args:
+        dry_run: Если True — только показывает различия, не обновляет (по умолчанию True)
+        save_to_file: Если True — сохраняет различия в JSON файл (по умолчанию True)
+    """
+    from datetime import datetime
+    from pathlib import Path
+    import json
+    
+    ozon_api = OzonExchange()
+    
+    print(f"{'=' * 60}")
+    print(f"Режим: {'ПОИСК РАЗЛИЧИЙ (dry_run)' if dry_run else 'ОБНОВЛЕНИЕ КАРТОЧЕК'}")
+    print(f"{'=' * 60}\n")
+    
+    # Получаем все товары с ozon данными
+    ozon_products = OzonData.objects.select_related('product').all()
+    
+    # Создаем словарь локальных данных: offer_id -> Product
+    local_products_map = {
+        item.offer_id: item.product 
+        for item in ozon_products
+    }
+    
+    # Получаем список артикулов для запроса
+    offer_ids = list(local_products_map.keys())
+    print(f"Всего товаров с OzonData: {len(offer_ids)}\n")
+    
+    products_to_update = []
+    differences = []
+    
+    # Запрашиваем данные с Ozon чанками по 1000
+    for i in range(0, len(offer_ids), 1000):
+        chunk = offer_ids[i:i + 1000]
+        print(f"Запрос чанка {i // 1000 + 1}: {len(chunk)} артикулов...")
+        
+        try:
+            ozon_response = ozon_api.get_items(data=chunk)
+            # items лежит напрямую в ответе, не под result
+            ozon_items = ozon_response.get('items', [])
+        except Exception as e:
+            print(f"Ошибка при получении данных Ozon: {e}")
+            continue
+        
+        # Сравниваем названия
+        for ozon_item in ozon_items:
+            offer_id = ozon_item.get('offer_id')
+            ozon_name = ozon_item.get('name', '')
+            
+            local_product = local_products_map.get(offer_id)
+            if not local_product:
+                continue
+            
+            local_name = local_product.name
+            
+            # Если названия отличаются — добавляем в список
+            if ozon_name != local_name:
+                differences.append({
+                    'offer_id': offer_id,
+                    'ozon_name': ozon_name,
+                    'local_name': local_name
+                })
+                products_to_update.append(local_product)
+    
+    # Выводим найденные различия
+    print(f"\n{'=' * 60}")
+    print(f"НАЙДЕНО РАЗЛИЧИЙ: {len(products_to_update)}")
+    print(f"{'=' * 60}\n")
+    
+    for diff in differences:
+        print(f"[{diff['offer_id']}]")
+        print(f"  Ozon:  '{diff['ozon_name']}'")
+        print(f"  Local: '{diff['local_name']}'")
+        print()
+
+    
+    # Обновляем карточки на Ozon только если dry_run=False
+    if not dry_run and products_to_update:
+        print(f"\n{'=' * 60}")
+        print("ОБНОВЛЕНИЕ КАРТОЧЕК НА OZON")
+        print(f"{'=' * 60}\n")
+        
+        items_to_send = []
+        
+        for product in products_to_update:
+            try:
+                ozon_item = OzonItemFactory(product, update_item=True).create()
+                items_to_send.append(ozon_item.item())
+            except ValueError as e:
+                print(f"Ошибка создания OzonItem для {product.code_1C}: {e}")
+                continue
+            
+            # Отправляем пачками по 100
+            if len(items_to_send) >= 100:
+                ozon_api.post_items(data=items_to_send)
+                print(f"Отправлено {len(items_to_send)} товаров на обновление")
+                items_to_send.clear()
+        
+        # Отправляем оставшиеся
+        if items_to_send:
+            ozon_api.post_items(data=items_to_send)
+            print(f"Отправлено {len(items_to_send)} товаров на обновление")
+        
+        print("\nОбновление завершено!")
+    elif dry_run and products_to_update:
+        print(f"\nДля обновления запустите: sync_ozon_product_names(dry_run=False)")
+    
+    return differences

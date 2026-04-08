@@ -477,7 +477,10 @@ def get_all_oder_ozon():
     for num in all_order:
         if not OrderOzon.objects.filter(number_ozon = num['posting_number']).exists():
             ozon_create_order(num['posting_number'])
-    
+
+
+
+
 
 
 @shared_task

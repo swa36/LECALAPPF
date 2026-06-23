@@ -370,6 +370,20 @@ class GetData1CCatalogStockTest(TestCase):
         self.assertEqual(int(prices.retail_price), 1991)
         self.assertEqual(int(prices.cost_price), 0)
 
+    def test_bad_item_is_skipped_and_chunk_continues(self):
+        bad = self._item()
+        bad["ref_key"] = "abcdefab-1234-1234-1234-abcdefabcdef"
+        bad["parent_key"] = "fefefefe-fefe-fefe-fefe-fefefefefefe"
+        good = self._item()
+        with patch.object(self.data, "get_img"):
+            self.data.set_catalog_data_stock([bad, good])
+        self.assertTrue(
+            Product.objects.filter(uuid_1C=good["ref_key"]).exists()
+        )
+        self.assertFalse(
+            Product.objects.filter(uuid_1C=bad["ref_key"]).exists()
+        )
+
     def test_async_images_enqueues_task_not_inline(self):
         with patch.object(GetData1C, "get_img") as get_img, \
              patch("catalog.tasks.update_product_images", create=True) as upi:

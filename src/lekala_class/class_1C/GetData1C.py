@@ -134,62 +134,66 @@ class GetData1C(ExChange1C):
         type_prices = TypePrices.objects.all()
 
         for item in data_catalog:
-            stock = max(int(item.get("in_stock") or 0), 0)
-            product_before = Product.objects.filter(uuid_1C=item["ref_key"]).first()
-            should_refresh_details = (
-                product_before is None
-                or product_before.data_version != item.get("data_version")
-            )
-
-            product, created = Product.objects.update_or_create(
-                uuid_1C=item["ref_key"],
-                defaults={
-                    "article_1C": item["article"].strip(),
-                    "code_1C": item["code"],
-                    "data_version": item.get("data_version") or "",
-                    "name": item["description"].strip(),
-                    "description": item["description_text"],
-                    "stock": stock,
-                    "main_img_uuid": item.get("picture_file_key") or None,
-                    "category": Category.objects.get(uuid_1C=item["parent_key"]),
-                },
-            )
-
-            price_by_type = {
-                str(price["price_type_key"]): price.get("price", 0)
-                for price in item.get("prices", [])
-            }
-            price_dict = {
-                type_price.suffix: price_by_type.get(str(type_price.uuid_1C), 0)
-                for type_price in type_prices
-            }
-            Prices.objects.update_or_create(product=product, defaults=price_dict)
-
-            if should_refresh_details:
-                print(
-                    f"Создана/обновлена номенклатура "
-                    f"{product.name} {product.article_1C}"
+            try:
+                stock = max(int(item.get("in_stock") or 0), 0)
+                product_before = Product.objects.filter(uuid_1C=item["ref_key"]).first()
+                should_refresh_details = (
+                    product_before is None
+                    or product_before.data_version != item.get("data_version")
                 )
-                if created:
-                    os.makedirs("logs", exist_ok=True)
-                    with open("logs/new_item.log", "a", encoding="utf-8") as log_file:
-                        log_file.write(
-                            f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\t"
-                            f"{product.name}\t{product.article_1C}\t{product.code_1C}\n"
+
+                product, created = Product.objects.update_or_create(
+                    uuid_1C=item["ref_key"],
+                    defaults={
+                        "article_1C": item["article"].strip(),
+                        "code_1C": item["code"],
+                        "data_version": item.get("data_version") or "",
+                        "name": item["description"].strip(),
+                        "description": item["description_text"],
+                        "stock": stock,
+                        "main_img_uuid": item.get("picture_file_key") or None,
+                        "category": Category.objects.get(uuid_1C=item["parent_key"]),
+                    },
+                )
+
+                price_by_type = {
+                    str(price["price_type_key"]): price.get("price", 0)
+                    for price in item.get("prices", [])
+                }
+                price_dict = {
+                    type_price.suffix: price_by_type.get(str(type_price.uuid_1C), 0)
+                    for type_price in type_prices
+                }
+                Prices.objects.update_or_create(product=product, defaults=price_dict)
+
+                if should_refresh_details:
+                    print(
+                        f"Создана/обновлена номенклатура "
+                        f"{product.name} {product.article_1C}"
+                    )
+                    if created:
+                        os.makedirs("logs", exist_ok=True)
+                        with open("logs/new_item.log", "a", encoding="utf-8") as log_file:
+                            log_file.write(
+                                f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\t"
+                                f"{product.name}\t{product.article_1C}\t{product.code_1C}\n"
+                            )
+
+                    for attribute in item.get("additional_attributes", []):
+                        ValueAdditionalAttributes.objects.update_or_create(
+                            product=product,
+                            attribute_name=NameAdditionalAttributes.objects.get(
+                                uuid_1C=attribute["property_key"]
+                            ),
+                            defaults={"value_attribute": attribute["value"]},
                         )
 
-                for attribute in item.get("additional_attributes", []):
-                    ValueAdditionalAttributes.objects.update_or_create(
-                        product=product,
-                        attribute_name=NameAdditionalAttributes.objects.get(
-                            uuid_1C=attribute["property_key"]
-                        ),
-                        defaults={"value_attribute": attribute["value"]},
-                    )
+                    if async_images:
+                        from catalog.tasks import update_product_images
 
-                if async_images:
-                    from catalog.tasks import update_product_images
-
-                    update_product_images.delay(str(product.uuid_1C))
-                else:
-                    self.get_img(product.uuid_1C)
+                        update_product_images.delay(str(product.uuid_1C))
+                    else:
+                        self.get_img(product.uuid_1C)
+            except Exception as exc:
+                print(f"Пропущен товар {item.get('ref_key')}: {exc}")
+                continue

@@ -368,3 +368,13 @@ class GetData1CCatalogStockTest(TestCase):
         prices = Prices.objects.get(product__uuid_1C="7e019266-24a4-11ef-8009-00155d46f78d")
         self.assertEqual(int(prices.retail_price), 1991)
         self.assertEqual(int(prices.cost_price), 0)
+
+
+class ExChange1CRetryPolicyTest(TestCase):
+    def test_retry_covers_429_and_500_with_two_retries(self):
+        client = ExChange1C()
+        retry = client.session.get_adapter("https://x/").max_retries
+        self.assertIn(429, retry.status_forcelist)
+        self.assertIn(500, retry.status_forcelist)
+        self.assertEqual(retry.total, 2)
+        self.assertTrue(retry.respect_retry_after_header)

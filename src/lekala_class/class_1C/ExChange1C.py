@@ -19,10 +19,11 @@ class ExChange1C:
         self.auth = HTTPBasicAuth(settings.LOGIN_1C, settings.PASSWORD_1C)
 
         retry_strategy = Retry(
-            total=3,
+            total=2,
             backoff_factor=1,
-            status_forcelist=[500, 502, 503, 504],
+            status_forcelist=[429, 500, 502, 503, 504],
             allowed_methods=["GET"],
+            respect_retry_after_header=True,
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session = requests.Session()

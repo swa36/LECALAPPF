@@ -12,6 +12,11 @@ from yamarket.tasks import sent_stock_ya
 from aliexpress.tasks import update_stock_ali
 from django.core.files import File
 
+
+@shared_task
+def update_product_images(uuid):
+    ExChange1C().get_img(uuid)
+
 @shared_task
 def get_data_chunck(payload):
     data_catalog = payload['catalog']

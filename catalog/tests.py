@@ -405,3 +405,12 @@ class CeleryRoutingSettingsTest(TestCase):
         self.assertIsInstance(dj_settings.CATALOG_CHUNK_SIZE, int)
         self.assertTrue(dj_settings.CELERY_TASK_ACKS_LATE)
         self.assertEqual(dj_settings.CELERY_WORKER_PREFETCH_MULTIPLIER, 1)
+
+
+class CatalogImageTaskTest(TestCase):
+    @patch("catalog.tasks.ExChange1C")
+    def test_update_product_images_calls_get_img(self, exc):
+        from catalog.tasks import update_product_images
+
+        update_product_images("abc-uuid")
+        exc.return_value.get_img.assert_called_once_with("abc-uuid")

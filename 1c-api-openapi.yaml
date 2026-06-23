@@ -1,0 +1,596 @@
+openapi: 3.1.0
+
+info:
+  title: 1С ↔ Сайт — API обмена (HTTP-сервис prokopov)
+  description: |
+    API обмена сайта с 1С. Реализован как HTTP-сервис `wapi_Обмен`
+    (корневой URL `prokopov`) в расширении `WEB_API_Prokopov` поверх конфигурации УТ.
+
+    Особенности (важно для клиента):
+    - **Все ответы сжаты gzip.** Слать `Accept-Encoding: gzip` и распаковывать тело.
+    - **Авторизация — Basic Auth.**
+    - **Тело POST `/order` — строго UTF-8** (`Content-Type: application/json; charset=utf-8`),
+      ключи тела на кириллице. При иной кодировке — ответ 500.
+    - Ключи всех ответов — в `snake_case`.
+    - Цены и остаток встроены в `/products` (отдельных эндпоинтов цен/остатков нет).
+    - `POST /order` создаёт и СРАЗУ проводит документ ЗаказКлиента (отдельное проведение не нужно).
+  version: 1.0.0
+
+servers:
+  - url: http://localhost/YT_Prokopov/hs/prokopov
+    description: Тестовая публикация
+  - url: http://{host}/{base}/hs/prokopov
+    description: Произвольная публикация
+    variables:
+      host:
+        default: localhost
+        description: Хост веб-сервера 1С
+      base:
+        default: YT_Prokopov
+        description: Имя публикации информационной базы
+
+security:
+  - basicAuth: []
+
+tags:
+  - name: Каталог
+    description: Товары, категории, характеристики, виды цен
+  - name: Заказы
+    description: Заказы в процессе отгрузки и создание заказа
+  - name: Изображения
+    description: Изображения товара в base64
+
+paths:
+
+  /products:
+    get:
+      tags: [Каталог]
+      summary: Список товаров (с ценами и остатком)
+      description: |
+        Постраничный список товаров. В каждый товар встроены:
+        - `prices[]` — все виды цен (срез последних на текущую дату);
+        - `in_stock` — рассчитанный остаток «в наличии».
+
+        Заменяет три эндпоинта старого ТЗ: товары (2.1), цены (2.5), остатки (2.6).
+      operationId: getProducts
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы (с 1).
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: page_size
+          in: query
+          description: Размер страницы.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 500
+            default: 200
+      responses:
+        '200':
+          description: Страница товаров.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductsPage'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /categories:
+    get:
+      tags: [Каталог]
+      summary: Категории (папки номенклатуры)
+      description: Дерево категорий строится клиентом по `parent_key`. Заменяет ТЗ 2.2.
+      operationId: getCategories
+      responses:
+        '200':
+          description: Список категорий.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [value]
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /attributes:
+    get:
+      tags: [Каталог]
+      summary: Названия дополнительных реквизитов (характеристик)
+      description: Справочник названий характеристик товара. Заменяет ТЗ 2.3.
+      operationId: getAttributes
+      responses:
+        '200':
+          description: Список характеристик.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [value]
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RefDescription'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /pricetypes:
+    get:
+      tags: [Каталог]
+      summary: Виды цен
+      description: |
+        Справочник видов цен. Заменяет ТЗ 2.4.
+        Сопоставление полю цены на сайте — по наименованию:
+        Закупочная→cost_price, Оптовая→wholesale_price, Опт2→wholesale_price_2,
+        Опт3→wholesale_price_3, Розничная→retail_price.
+      operationId: getPriceTypes
+      responses:
+        '200':
+          description: Список видов цен.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [value]
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RefDescription'
+              examples:
+                default:
+                  value:
+                    value:
+                      - ref_key: e57af511-4c46-11ec-a9c8-f8cab8387a55
+                        description: Розничная
+                      - ref_key: e57af510-4c46-11ec-a9c8-f8cab8387a55
+                        description: Закупочная
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /orders-in-shipping:
+    get:
+      tags: [Заказы]
+      summary: Заказы клиентов в процессе отгрузки (с составом)
+      description: |
+        Заказы в статусе «в процессе отгрузки» вместе с составом товаров.
+        Фильтрацию по статусу выполняет 1С. Объединяет два запроса старого ТЗ (2.7 + 2.8).
+      operationId: getOrdersInShipping
+      responses:
+        '200':
+          description: Список заказов с составом.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [value]
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrderInShipping'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /product-images/{id}:
+    get:
+      tags: [Изображения]
+      summary: Изображения товара (base64)
+      description: |
+        Все изображения товара по его UUID, содержимое — в base64.
+        Объединяет три запроса старого ТЗ (2.9 список файлов + 2.10/2.11 base64 из двух хранилищ).
+      operationId: getProductImages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID товара (= `products[].ref_key`).
+          schema:
+            type: string
+            format: uuid
+          example: 7e019266-24a4-11ef-8009-00155d46f78d
+      responses:
+        '200':
+          description: Изображения товара.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductImages'
+        '400':
+          description: Некорректный UUID товара.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalid_uuid:
+                  value:
+                    error: Некорректный UUID товара
+                    code: INVALID_UUID
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /order:
+    post:
+      tags: [Заказы]
+      summary: Создать и провести заказ клиента
+      description: |
+        Создаёт документ ЗаказКлиента и СРАЗУ его проводит. Внутри одной транзакции:
+        ищет/создаёт партнёра и контрагента по имени покупателя, заполняет шапку
+        служебными константами 1С, добавляет строки товаров, проводит документ.
+
+        Объединяет четыре запроса старого ТЗ (3.1 партнёр + 3.2 контрагент + 3.3 заказ + 3.4 проведение).
+
+        ВНИМАНИЕ: ключи тела — на кириллице, тело слать в UTF-8
+        (`Content-Type: application/json; charset=utf-8`).
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+            examples:
+              ozon:
+                value:
+                  Покупатель: OZON 123456789
+                  Номер: OZ00-123456789
+                  Комментарий: "OZON\n123456789"
+                  СуммаДокумента: 1991
+                  Товары:
+                    - Номенклатура_Key: 7e019266-24a4-11ef-8009-00155d46f78d
+                      Количество: 1
+                      Цена: 1991
+      responses:
+        '200':
+          description: Заказ создан и проведён.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ref_key]
+                properties:
+                  ref_key:
+                    type: string
+                    format: uuid
+                    description: UUID созданного и проведённого заказа.
+              examples:
+                ok:
+                  value:
+                    ref_key: c4e6092a-6cd2-11f1-bbb7-08f97e612452
+        '400':
+          description: Ошибка валидации тела.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                missing_items:
+                  value:
+                    error: Не указаны товары заказа
+                    code: MISSING_ITEMS
+                missing_buyer:
+                  value:
+                    error: Не указан покупатель
+                    code: MISSING_BUYER
+        '404':
+          description: Товар заказа не найден по UUID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                item_not_found:
+                  value:
+                    error: "Строка 1: номенклатура не найдена: 00000000-0000-0000-0000-000000000000"
+                    code: ITEM_NOT_FOUND
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic Auth (логин/пароль пользователя 1С).
+
+  responses:
+    InternalError:
+      description: Внутренняя ошибка 1С.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            internal:
+              value:
+                error: Текст ошибки 1С
+                code: INTERNAL_ERROR
+
+  schemas:
+
+    Error:
+      type: object
+      description: Единый формат ошибки.
+      required: [error, code]
+      properties:
+        error:
+          type: string
+          description: Человекочитаемый текст ошибки.
+        code:
+          type: string
+          description: Машинный код ошибки.
+          enum:
+            - INVALID_UUID
+            - MISSING_ITEMS
+            - MISSING_BUYER
+            - ITEM_NOT_FOUND
+            - UNKNOWN_ENDPOINT
+            - INTERNAL_ERROR
+
+    RefDescription:
+      type: object
+      description: Универсальная пара UUID + наименование (характеристики, виды цен).
+      required: [ref_key, description]
+      properties:
+        ref_key:
+          type: string
+          format: uuid
+          description: UUID объекта (бывш. Ref_Key).
+        description:
+          type: string
+          description: Наименование (бывш. Description).
+
+    Category:
+      type: object
+      description: Категория (папка номенклатуры).
+      required: [ref_key, parent_key, description]
+      properties:
+        ref_key:
+          type: string
+          format: uuid
+          description: UUID категории (бывш. Ref_Key).
+        parent_key:
+          type: string
+          format: uuid
+          description: |
+            UUID родительской категории (бывш. Parent_Key).
+            Корень — 00000000-0000-0000-0000-000000000000.
+        description:
+          type: string
+          description: Название категории (бывш. Description).
+
+    ProductsPage:
+      type: object
+      description: Страница товаров (оболочка пагинации).
+      required: [total, page, page_size, pages, items]
+      properties:
+        total:
+          type: integer
+          description: Всего товаров.
+        page:
+          type: integer
+          description: Текущая страница.
+        page_size:
+          type: integer
+          description: Размер страницы.
+        pages:
+          type: integer
+          description: Всего страниц.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+
+    Product:
+      type: object
+      description: Товар (с встроенными ценами и остатком).
+      required:
+        - ref_key
+        - parent_key
+        - is_folder
+        - code
+        - article
+        - weight_numerator
+        - description
+        - description_text
+        - picture_file_key
+        - additional_attributes
+        - prices
+        - in_stock
+      properties:
+        ref_key:
+          type: string
+          format: uuid
+          description: UUID товара (бывш. Ref_Key).
+        data_version:
+          type: string
+          description: Версия объекта 1С (бывш. DataVersion). Для отслеживания изменений.
+        parent_key:
+          type: string
+          format: uuid
+          description: UUID категории (бывш. Parent_Key).
+        is_folder:
+          type: boolean
+          description: Признак папки (бывш. IsFolder). Для товаров всегда false.
+        code:
+          type: string
+          description: Код 1С (бывш. Code).
+        article:
+          type: string
+          description: Артикул (бывш. Артикул).
+        weight_numerator:
+          type: number
+          description: Вес (бывш. ВесЧислитель).
+        description:
+          type: string
+          description: Наименование (бывш. Description).
+        description_text:
+          type: string
+          description: Описание (бывш. Описание).
+        picture_file_key:
+          type: string
+          format: uuid
+          description: UUID главного изображения (бывш. ФайлКартинки_Key).
+        additional_attributes:
+          type: array
+          description: Дополнительные реквизиты / характеристики (бывш. ДополнительныеРеквизиты).
+          items:
+            $ref: '#/components/schemas/ProductAttribute'
+        prices:
+          type: array
+          description: Цены по всем видам цен (срез последних на текущую дату). Заменяет ТЗ 2.5.
+          items:
+            $ref: '#/components/schemas/ProductPrice'
+        in_stock:
+          type: number
+          description: Остаток «в наличии» на текущую дату (бывш. ВНаличии). Заменяет ТЗ 2.6.
+
+    ProductAttribute:
+      type: object
+      description: Значение дополнительного реквизита товара.
+      required: [property_key, value]
+      properties:
+        property_key:
+          type: string
+          format: uuid
+          description: UUID характеристики (бывш. Свойство_Key).
+        description:
+          type: string
+          description: Название характеристики (бонусное поле, можно игнорировать).
+        value:
+          type: string
+          description: Значение характеристики (бывш. Значение).
+
+    ProductPrice:
+      type: object
+      description: Цена товара по одному виду цены.
+      required: [price_type_key, price]
+      properties:
+        price_type_key:
+          type: string
+          format: uuid
+          description: UUID вида цены (бывш. ВидЦены_Key, = pricetypes.ref_key).
+        price_name:
+          type: string
+          description: Название вида цены (бонусное поле, можно игнорировать).
+        price:
+          type: number
+          description: Значение цены (бывш. Цена).
+
+    OrderInShipping:
+      type: object
+      description: Заказ клиента в процессе отгрузки с составом.
+      required: [order_key, items]
+      properties:
+        order_key:
+          type: string
+          format: uuid
+          description: UUID заказа (бывш. Заказ / Ref_Key документа).
+        items:
+          type: array
+          description: Состав заказа (бывш. табличная часть Товары).
+          items:
+            $ref: '#/components/schemas/OrderInShippingItem'
+
+    OrderInShippingItem:
+      type: object
+      description: Строка состава заказа в отгрузке.
+      required: [nomenclature_key, quantity]
+      properties:
+        nomenclature_key:
+          type: string
+          format: uuid
+          description: UUID товара (бывш. Номенклатура_Key).
+        quantity:
+          type: number
+          description: Количество (бывш. Количество).
+
+    ProductImages:
+      type: object
+      description: Изображения товара.
+      required: [nomenclature_key, images]
+      properties:
+        nomenclature_key:
+          type: string
+          format: uuid
+          description: UUID товара (эхо параметра пути).
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
+
+    ProductImage:
+      type: object
+      description: Одно изображение товара.
+      required: [file_uuid, is_main, data_base64]
+      properties:
+        file_uuid:
+          type: string
+          format: uuid
+          description: UUID файла (бывш. Ref_Key файла).
+        is_main:
+          type: boolean
+          description: Признак главного изображения (= picture_file_key товара).
+        data_base64:
+          type: string
+          format: byte
+          description: Содержимое файла в base64 (бывш. *_Base64Data).
+
+    OrderRequest:
+      type: object
+      description: |
+        Тело создания заказа. Ключи на кириллице (входной контракт сохранён).
+        Слать в UTF-8.
+      required: [Покупатель, Товары]
+      properties:
+        Покупатель:
+          type: string
+          description: Имя покупателя / строка маркетплейса. По нему ищется/создаётся партнёр и контрагент.
+          example: OZON 123456789
+        Номер:
+          type: string
+          description: Номер заказа в формате маркетплейса. Если пусто — 1С присвоит свой.
+          example: OZ00-123456789
+        Комментарий:
+          type: string
+          description: Комментарий к заказу.
+        СуммаДокумента:
+          type: number
+          description: Сумма заказа.
+          example: 1991
+        Товары:
+          type: array
+          minItems: 1
+          description: Строки заказа (непустой массив).
+          items:
+            $ref: '#/components/schemas/OrderRequestItem'
+
+    OrderRequestItem:
+      type: object
+      description: Строка заказа (входной контракт, ключи на кириллице).
+      required: [Номенклатура_Key, Количество, Цена]
+      properties:
+        Номенклатура_Key:
+          type: string
+          format: uuid
+          description: UUID товара в 1С.
+          example: 7e019266-24a4-11ef-8009-00155d46f78d
+        Количество:
+          type: number
+          example: 1
+        Цена:
+          type: number
+          example: 1991

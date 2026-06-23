@@ -23,6 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 BASE_URL_1C = env('BASE_URL_1C')
+BASE_URL_1C_HS = env(
+    'BASE_URL_1C_HS',
+    default=BASE_URL_1C.replace('/odata/standard.odata/', '/hs/prokopov/'),
+)
 LOGIN_1C = env('LOGIN_1C')
 PASSWORD_1C = env('PASSWORD_1C')
 # Quick-start development settings - unsuitable for production

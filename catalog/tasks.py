@@ -23,12 +23,12 @@ def get_data_chunck(payload):
 def get_data_1C():
     print("START UPDATE ALL")
     data1C = GetData1C()
-    data_catalog = data1C.get_catalog()['value']
-    data1C.get_price()
-    data1C.get_stock()
     data1C.set_name_attribute()
     data1C.set_type_price()
     data1C.set_category_catalog()
+    data_catalog = data1C.get_all_products()
+    if not data_catalog:
+        return
     chunk_size = len(data_catalog) // 5 + (1 if len(data_catalog) % 5 else 0)
     chunks_data_catalog = [data_catalog[i:i + chunk_size] for i in range(0, len(data_catalog), chunk_size)]
     for chunk in chunks_data_catalog:

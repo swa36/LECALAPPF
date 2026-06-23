@@ -414,3 +414,15 @@ class CatalogImageTaskTest(TestCase):
 
         update_product_images("abc-uuid")
         exc.return_value.get_img.assert_called_once_with("abc-uuid")
+
+
+class CatalogChunkTaskTest(TestCase):
+    @patch("catalog.tasks.GetData1C")
+    def test_process_catalog_chunk_uses_async_images(self, gd):
+        from catalog.tasks import process_catalog_chunk
+
+        chunk = [{"ref_key": "x"}]
+        process_catalog_chunk(chunk)
+        gd.return_value.set_catalog_data_stock.assert_called_once_with(
+            chunk, async_images=True
+        )

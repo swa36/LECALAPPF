@@ -18,10 +18,8 @@ def update_product_images(uuid):
     ExChange1C().get_img(uuid)
 
 @shared_task
-def get_data_chunck(payload):
-    data_catalog = payload['catalog']
-    data1C = GetData1C()
-    data1C.set_catalog_data_stock(data_catalog)
+def process_catalog_chunk(chunk):
+    GetData1C().set_catalog_data_stock(chunk, async_images=True)
 
 
 @shared_task

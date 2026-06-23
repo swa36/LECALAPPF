@@ -50,10 +50,10 @@
 
 ### 3.2. Воркер
 
-**Один** prefork-воркер на оба очереди, конкуренция = числу ядер:
+**Один** prefork-воркер на дефолтную и обе специализированные очереди, конкуренция = числу ядер:
 
 ```
-celery -A lekala_ppf worker -Q catalog,images -c 4 --prefetch-multiplier=1 -O fair
+celery -A lekala_ppf worker -Q celery,catalog,images -c 4 --prefetch-multiplier=1 -O fair
 ```
 
 - `-c 4` → максимум 4 задачи одновременно → **физически не более 4 запросов к 1С**
@@ -61,6 +61,9 @@ celery -A lekala_ppf worker -Q catalog,images -c 4 --prefetch-multiplier=1 -O fa
 - `--prefetch-multiplier=1 -O fair` → длинные задачи-картинки не захватывают префетч,
   слоты делятся честно между `catalog` и `images`.
 - 4 prefork-ребёнка × ~200–250 МБ (Django+requests) ≈ ~1 ГБ — в 6 ГБ с запасом.
+> ⚠️ Дефолтную очередь `celery` обязательно включать: туда идут `update_remains_*`,
+> `update_stock_ali`, пуш картинок и все прочие задачи проекта. Без неё каталог
+> обновится, но остатки/картинки на маркетплейсы не уедут.
 
 ### 3.3. Поток выполнения
 
@@ -169,7 +172,7 @@ Retry(
 ## 7. Раскатка
 
 1. Код + тесты (TDD), `manage.py test catalog order` зелёные.
-2. Перезапустить воркер новой командой с `-Q catalog,images`.
+2. Перезапустить воркер новой командой с `-Q celery,catalog,images`.
 3. Прогнать `c1_step4_full --script-args CONFIRM` (без push) — наблюдать заполнение
    очередей и нагрузку на 1С (≤4 в полёте).
 4. Затем штатный запуск по расписанию (`django_celery_beat`).
@@ -192,4 +195,4 @@ Retry(
 - [ ] Картинки вынесены в `update_product_images` на очередь `images`.
 - [ ] Роутинг очередей и `CATALOG_CHUNK_SIZE` в settings.
 - [ ] Новые тесты (раздел 6) + старые 25 зелёные.
-- [ ] Команда воркера задокументирована (`-Q catalog,images -c 4 ...`).
+- [ ] Команда воркера задокументирована (`-Q celery,catalog,images -c 4 ...`).

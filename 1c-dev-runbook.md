@@ -80,8 +80,11 @@
 
 > ⚠️ После параллелизации `get_data_1C` только СТАВИТ задачи в очереди и сразу
 > возвращается. Чтобы они реально выполнились, нужен запущенный воркер:
-> `celery -A lekala_ppf worker -Q catalog,images -c 4 --prefetch-multiplier=1 -O fair`
+> `celery -A lekala_ppf worker -Q celery,catalog,images -c 4 --prefetch-multiplier=1 -O fair`
 > (на Windows-dev — пул prefork; для боевого фона так же).
+> ⚠️ Дефолтную очередь `celery` обязательно включать: туда идут `update_remains_*`,
+> `update_stock_ali`, пуш картинок и все прочие задачи проекта. Без неё каталог
+> обновится, но остатки/картинки на маркетплейсы не уедут.
 
 ---
 

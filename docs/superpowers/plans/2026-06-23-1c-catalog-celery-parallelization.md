@@ -18,7 +18,10 @@ PostgreSQL. Тесты — `manage.py test` (`unittest.mock`).
 
 ## Global Constraints
 
-- Прод-воркер: **4 ядра / 6 ГБ ОЗУ**. Команда: `celery -A lekala_ppf worker -Q catalog,images -c 4 --prefetch-multiplier=1 -O fair`.
+- Прод-воркер: **4 ядра / 6 ГБ ОЗУ**. Команда: `celery -A lekala_ppf worker -Q celery,catalog,images -c 4 --prefetch-multiplier=1 -O fair`.
+- Дефолтную очередь `celery` обязательно включать: туда идут `update_remains_*`,
+  `update_stock_ali`, пуш картинок и все прочие задачи проекта. Без неё каталог
+  обновится, но остатки/картинки на маркетплейсы не уедут.
 - Потолок 1С: **≤4 параллельных запроса** (обеспечивается `-c 4`, доп. rate-limit не нужен).
 - Ретраи только по **GET**: `429, 500, 502, 503, 504`, `total=2` (1 запрос + 2 повтора), `respect_retry_after_header=True`. `POST /order` НЕ ретраить.
 - Интерпретатор/тесты: `.venv\Scripts\python.exe manage.py test catalog order --noinput`.
@@ -474,8 +477,11 @@ Expected: все тесты PASS (старые 25 + новые из задач 1
 # 1c-dev-runbook.md — в раздел «Шаг 4» добавить примечание:
 > ⚠️ После параллелизации `get_data_1C` только СТАВИТ задачи в очереди и сразу
 > возвращается. Чтобы они реально выполнились, нужен запущенный воркер:
-> `celery -A lekala_ppf worker -Q catalog,images -c 4 --prefetch-multiplier=1 -O fair`
+> `celery -A lekala_ppf worker -Q celery,catalog,images -c 4 --prefetch-multiplier=1 -O fair`
 > (на Windows-dev — пул prefork; для боевого фона так же).
+> ⚠️ Дефолтную очередь `celery` обязательно включать: туда идут `update_remains_*`,
+> `update_stock_ali`, пуш картинок и все прочие задачи проекта. Без неё каталог
+> обновится, но остатки/картинки на маркетплейсы не уедут.
 ```
 
 - [ ] **Step 3: Commit**
@@ -500,7 +506,7 @@ git commit -m "docs: запуск воркера с очередями catalog/i
 ## Последствия (важно для прод/dev)
 
 - `get_data_1C` больше **не синхронный**: он ставит задачи и возвращается. Реальная
-  обработка требует запущенного воркера на очередях `catalog,images`.
+  обработка требует запущенного воркера на очередях `celery,catalog,images`.
 - Скрипт `c1_step4_full` теперь только enqueue’ит — наблюдать выполнение в воркере.
 - Картинки докачиваются фоном независимо от обновления остатков маркетплейсов.
 

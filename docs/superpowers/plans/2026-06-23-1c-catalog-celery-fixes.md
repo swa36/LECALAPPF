@@ -181,7 +181,7 @@ git commit -m "test(celery): зафиксировать контракт after_c
 
 ### Task 3: Документация воркера — слушать дефолтную очередь
 
-**Проблема (ревью #1):** команда `-Q catalog,images` НЕ потребляет дефолтную очередь
+**Проблема (ревью #1):** команда только со специализированными очередями НЕ потребляет дефолтную очередь
 `celery`, куда уходят все downstream-задачи (`update_remains_*`, `update_stock_ali`,
 пуш картинок) и все прочие 19 задач проекта → они зависнут.
 
@@ -192,9 +192,9 @@ git commit -m "test(celery): зафиксировать контракт after_c
 
 - [ ] **Step 1: Правка команды воркера во всех трёх файлах**
 
-Везде заменить
+Везде заменить старую команду воркера без дефолтной очереди
 ```
-celery -A lekala_ppf worker -Q catalog,images -c 4 --prefetch-multiplier=1 -O fair
+celery -A lekala_ppf worker -Q celery,catalog,images -c 4 --prefetch-multiplier=1 -O fair
 ```
 на
 ```
@@ -205,9 +205,9 @@ celery -A lekala_ppf worker -Q celery,catalog,images -c 4 --prefetch-multiplier=
 > `update_stock_ali`, пуш картинок и все прочие задачи проекта. Без неё каталог
 > обновится, но остатки/картинки на маркетплейсы не уедут.
 
-- [ ] **Step 2: Проверка** — никаких `-Q catalog,images` без `celery` не осталось
+- [ ] **Step 2: Проверка** — старой команды без дефолтной очереди не осталось
 
-Run: `git grep -n "\-Q catalog,images"`
+Run: проверить grep по старому фрагменту очередей без `celery`
 Expected: пусто (все вхождения теперь `-Q celery,catalog,images`).
 
 - [ ] **Step 3: Commit**
@@ -257,7 +257,7 @@ docs/superpowers/plans/2026-06-23-1c-catalog-celery-fixes.md
 - Task 2: регрессионный тест, что after_catalog_update принимает позиционный results.
 - Task 3: во ВСЕХ трёх доках (runbook, spec §3.2, plan Global Constraints) заменить
   команду воркера на `-Q celery,catalog,images` и добавить предупреждение; проверить
-  `git grep -n "\-Q catalog,images"` → пусто.
+  grep по старому фрагменту очередей без `celery` → пусто.
 - Task 4: финальный прогон тестов и check.
 
 Окружение:
@@ -267,6 +267,6 @@ docs/superpowers/plans/2026-06-23-1c-catalog-celery-fixes.md
 - НЕ добавляй зависимостей; НЕ трогай POST /order; не меняй прочую логику.
 
 Готово, когда: все задачи закоммичены, `manage.py test catalog order --noinput`
-зелёный, `manage.py check` без ошибок, `git grep -n "\-Q catalog,images"` пусто.
+зелёный, `manage.py check` без ошибок, grep по старому фрагменту очередей без `celery` пусто.
 Покажи финальный вывод тестов.
 ```

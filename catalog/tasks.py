@@ -1,6 +1,6 @@
 from pathlib import Path
 import re, os, shutil
-from celery import shared_task
+from celery import chord, group, shared_task
 from django.conf import settings
 from django.db.models import Q
 from src.lekala_class.class_1C.ExChange1C import ExChange1C
@@ -37,19 +37,13 @@ def get_data_1C():
     data1C.set_name_attribute()
     data1C.set_type_price()
     data1C.set_category_catalog()
-    data_catalog = data1C.get_all_products()
-    if not data_catalog:
+    items = data1C.get_all_products()
+    if not items:
         return
-    chunk_size = len(data_catalog) // 5 + (1 if len(data_catalog) % 5 else 0)
-    chunks_data_catalog = [data_catalog[i:i + chunk_size] for i in range(0, len(data_catalog), chunk_size)]
-    for chunk in chunks_data_catalog:
-        get_data_chunck({
-            'catalog': chunk,
-        })
-    update_remains_ozon.delay()
-    update_remains_wb.delay()
-    # sent_stock_ya.delay()
-    update_stock_ali.delay()
+    size = settings.CATALOG_CHUNK_SIZE
+    chunks = [items[i:i + size] for i in range(0, len(items), size)]
+    header = [process_catalog_chunk.s(chunk) for chunk in chunks]
+    chord(group(header))(after_catalog_update.s())
     
 
 

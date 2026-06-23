@@ -439,3 +439,36 @@ class CatalogAfterUpdateTest(TestCase):
         ozon.delay.assert_called_once_with()
         wb.delay.assert_called_once_with()
         ali.delay.assert_called_once_with()
+
+
+class GetData1COrchestratorTest(TestCase):
+    @override_settings(CATALOG_CHUNK_SIZE=2)
+    @patch("catalog.tasks.after_catalog_update")
+    @patch("catalog.tasks.chord", create=True)
+    @patch("catalog.tasks.group", create=True)
+    @patch("catalog.tasks.process_catalog_chunk")
+    @patch("catalog.tasks.GetData1C")
+    def test_dispatches_chord_of_chunks(self, gd, pcc, group_mock, chord_mock, after):
+        inst = gd.return_value
+        inst.get_all_products.return_value = [
+            {"ref_key": "1"}, {"ref_key": "2"}, {"ref_key": "3"}
+        ]
+        from catalog.tasks import get_data_1C
+
+        get_data_1C()
+        inst.set_name_attribute.assert_called_once()
+        inst.set_type_price.assert_called_once()
+        inst.set_category_catalog.assert_called_once()
+        self.assertEqual(pcc.s.call_count, 2)
+        chord_mock.assert_called_once_with(group_mock.return_value)
+        chord_mock.return_value.assert_called_once_with(after.s.return_value)
+
+    @override_settings(CATALOG_CHUNK_SIZE=2)
+    @patch("catalog.tasks.chord", create=True)
+    @patch("catalog.tasks.GetData1C")
+    def test_empty_catalog_does_not_dispatch(self, gd, chord_mock):
+        gd.return_value.get_all_products.return_value = []
+        from catalog.tasks import get_data_1C
+
+        get_data_1C()
+        chord_mock.assert_not_called()

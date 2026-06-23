@@ -454,6 +454,17 @@ class CatalogAfterUpdateTest(TestCase):
         wb.delay.assert_called_once_with()
         ali.delay.assert_called_once_with()
 
+    def test_after_catalog_update_accepts_positional_results(self):
+        import catalog.tasks as t
+
+        with patch.object(t, "update_remains_ozon") as ozon, \
+             patch.object(t, "update_remains_wb") as wb, \
+             patch.object(t, "update_stock_ali") as ali:
+            t.after_catalog_update([1, 2, 3])
+        ozon.delay.assert_called_once_with()
+        wb.delay.assert_called_once_with()
+        ali.delay.assert_called_once_with()
+
 
 class GetData1COrchestratorTest(TestCase):
     @override_settings(CATALOG_CHUNK_SIZE=2)

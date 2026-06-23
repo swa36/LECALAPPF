@@ -160,7 +160,9 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'  # если Redis
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_TASK_ACKS_LATE = True
+# acks_late задаём per-task (см. catalog/tasks.py) только для идемпотентных
+# catalog/images-задач — НЕ глобально, чтобы не включить переотправку для
+# неидемпотентных задач (например, order_change → риск дублей заказов в 1С).
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 CATALOG_CHUNK_SIZE = 100
 CELERY_TASK_ROUTES = {

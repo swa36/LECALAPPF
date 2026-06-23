@@ -417,8 +417,13 @@ class CeleryRoutingSettingsTest(TestCase):
         self.assertEqual(routes["catalog.tasks.after_catalog_update"]["queue"], "catalog")
         self.assertEqual(routes["catalog.tasks.get_data_1C"]["queue"], "catalog")
         self.assertIsInstance(dj_settings.CATALOG_CHUNK_SIZE, int)
-        self.assertTrue(dj_settings.CELERY_TASK_ACKS_LATE)
         self.assertEqual(dj_settings.CELERY_WORKER_PREFETCH_MULTIPLIER, 1)
+        # acks_late — per-task на идемпотентных catalog/images-задачах, НЕ глобально
+        # (иначе риск переотправки order_change → дубли заказов в 1С).
+        self.assertFalse(getattr(dj_settings, "CELERY_TASK_ACKS_LATE", False))
+        from catalog.tasks import process_catalog_chunk, update_product_images
+        self.assertTrue(process_catalog_chunk.acks_late)
+        self.assertTrue(update_product_images.acks_late)
 
 
 class CatalogImageTaskTest(TestCase):

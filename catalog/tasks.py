@@ -13,11 +13,11 @@ from aliexpress.tasks import update_stock_ali
 from django.core.files import File
 
 
-@shared_task
+@shared_task(acks_late=True)
 def update_product_images(uuid):
     ExChange1C().get_img(uuid)
 
-@shared_task
+@shared_task(acks_late=True)
 def process_catalog_chunk(chunk):
     GetData1C().set_catalog_data_stock(chunk, async_images=True)
 

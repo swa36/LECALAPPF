@@ -23,6 +23,14 @@ def process_catalog_chunk(chunk):
 
 
 @shared_task
+def after_catalog_update(results=None):
+    update_remains_ozon.delay()
+    update_remains_wb.delay()
+    # sent_stock_ya.delay()
+    update_stock_ali.delay()
+
+
+@shared_task
 def get_data_1C():
     print("START UPDATE ALL")
     data1C = GetData1C()

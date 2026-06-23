@@ -27,6 +27,7 @@ class OzonItem:
     MATERIAL_ID = 7199
     EQUIPMENT_ID = 4384
     MARK_ID = {'id': 22916, 'complex_id': 100003}
+    TNVD_ID = 22232
     TYPE_DICT = {
         971077309: "Пленка защитная для салона автомобиля",
         970702708: "Стекло защитное для экрана авто",
@@ -103,6 +104,7 @@ class OzonItem:
     def base_attributes(self):
         return [
             self.build_attribute(self.BRAND_ID, "LEKALAPPF", 972205106),
+            self.build_attribute(self.TNVD_ID,'3909509008 - Полиуретаны прочие', 971972798),
             self.build_attribute(self.CODE_ARTICLE_ID, self.product.article_1C),
             self.build_attribute(self.CODE_ITEM_ID, self.product.article_1C),
             self.build_attribute(self.NAME_ITEM_ID, self.product.name),

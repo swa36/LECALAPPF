@@ -140,7 +140,7 @@ class StockItemWB(BaseMarketPlace):
         super().__init__(self.headers, self.BASE_URL,)
 
     def update_remains(self, data=None, save_to_file=False):
-        endpoint = 'v3/stocks/178002'
+        endpoint = 'v3/stocks/1739357'
         body = {"stocks": data}
         if save_to_file:
             return self._save_payload_to_file(body)
@@ -148,7 +148,7 @@ class StockItemWB(BaseMarketPlace):
         return req
 
     def del_stock_item(self, data=None):
-        endpoint = 'v3/stocks/178002'
+        endpoint = 'v3/stocks/1739357'
         body = {"skus": data}
         delete = requests.delete(self.BASE_URL + endpoint, json=body)
         print(delete.text)

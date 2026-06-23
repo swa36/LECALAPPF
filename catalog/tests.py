@@ -1,6 +1,7 @@
 import base64
 from unittest.mock import MagicMock, patch
 
+from django.conf import settings as dj_settings
 from django.test import TestCase, override_settings
 
 from catalog.models import (
@@ -378,3 +379,15 @@ class ExChange1CRetryPolicyTest(TestCase):
         self.assertIn(500, retry.status_forcelist)
         self.assertEqual(retry.total, 2)
         self.assertTrue(retry.respect_retry_after_header)
+
+
+class CeleryRoutingSettingsTest(TestCase):
+    def test_queues_and_chunk_configured(self):
+        routes = dj_settings.CELERY_TASK_ROUTES
+        self.assertEqual(routes["catalog.tasks.update_product_images"]["queue"], "images")
+        self.assertEqual(routes["catalog.tasks.process_catalog_chunk"]["queue"], "catalog")
+        self.assertEqual(routes["catalog.tasks.after_catalog_update"]["queue"], "catalog")
+        self.assertEqual(routes["catalog.tasks.get_data_1C"]["queue"], "catalog")
+        self.assertIsInstance(dj_settings.CATALOG_CHUNK_SIZE, int)
+        self.assertTrue(dj_settings.CELERY_TASK_ACKS_LATE)
+        self.assertEqual(dj_settings.CELERY_WORKER_PREFETCH_MULTIPLIER, 1)

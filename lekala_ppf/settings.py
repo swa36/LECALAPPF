@@ -160,6 +160,15 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'  # если Redis
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_TASK_ACKS_LATE = True
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+CATALOG_CHUNK_SIZE = 100
+CELERY_TASK_ROUTES = {
+    "catalog.tasks.get_data_1C": {"queue": "catalog"},
+    "catalog.tasks.process_catalog_chunk": {"queue": "catalog"},
+    "catalog.tasks.after_catalog_update": {"queue": "catalog"},
+    "catalog.tasks.update_product_images": {"queue": "images"},
+}
 
 
 CACHES = {

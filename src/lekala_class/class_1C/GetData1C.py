@@ -130,7 +130,7 @@ class GetData1C(ExChange1C):
 
         return quantities
 
-    def set_catalog_data_stock(self, data_catalog):
+    def set_catalog_data_stock(self, data_catalog, async_images=False):
         type_prices = TypePrices.objects.all()
 
         for item in data_catalog:
@@ -187,4 +187,9 @@ class GetData1C(ExChange1C):
                         defaults={"value_attribute": attribute["value"]},
                     )
 
-                self.get_img(product.uuid_1C)
+                if async_images:
+                    from catalog.tasks import update_product_images
+
+                    update_product_images.delay(str(product.uuid_1C))
+                else:
+                    self.get_img(product.uuid_1C)

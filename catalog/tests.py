@@ -370,6 +370,20 @@ class GetData1CCatalogStockTest(TestCase):
         self.assertEqual(int(prices.retail_price), 1991)
         self.assertEqual(int(prices.cost_price), 0)
 
+    def test_async_images_enqueues_task_not_inline(self):
+        with patch.object(GetData1C, "get_img") as get_img, \
+             patch("catalog.tasks.update_product_images", create=True) as upi:
+            self.data.set_catalog_data_stock([self._item()], async_images=True)
+        get_img.assert_not_called()
+        upi.delay.assert_called_once_with("7e019266-24a4-11ef-8009-00155d46f78d")
+
+    def test_sync_images_calls_get_img_inline(self):
+        with patch.object(GetData1C, "get_img") as get_img, \
+             patch("catalog.tasks.update_product_images", create=True) as upi:
+            self.data.set_catalog_data_stock([self._item()], async_images=False)
+        get_img.assert_called_once()
+        upi.delay.assert_not_called()
+
 
 class ExChange1CRetryPolicyTest(TestCase):
     def test_retry_covers_429_and_500_with_two_retries(self):

@@ -14,6 +14,8 @@ from django.db.models import Q, Count
 from django.core.files.base import ContentFile
 import pandas as pd
 
+OZON_WAREHOUSE_ID = 22865154657000
+
 def get_data_csv_ozon():
     filename = settings.BASE_DIR / 'src' / 'OzonData' / 'all_data_ozon.csv'
     # Оставляем только нужные столбцы
@@ -266,6 +268,65 @@ def update_remains_ozon():
     if len(stock) > 0:
         ozon_api.update_remains(data=stock)
     print("end update remains OZON")
+
+
+def _get_all_ozon_offer_ids(ozon_api):
+    """Все неархивные offer_id с Ozon (пагинация /v3/product/list)."""
+    offer_ids = set()
+    last_id = ""
+    while True:
+        response = ozon_api.get_product_list(last_id=last_id)
+        result = response.get('result', {})
+        items = result.get('items', [])
+        if not items:
+            break
+        for item in items:
+            if not item.get('archived'):
+                offer_ids.add(item['offer_id'])
+        last_id = result.get('last_id') or ""
+        if not last_id:
+            break
+    return offer_ids
+
+
+def close_unknown_ozon_stocks(dry_run=False):
+    """Обнуляет остаток на Ozon для карточек, которых нет в OzonData.
+
+    dry_run=True — только лог списка, без отправки (для dev и первого прогона в проде).
+    Возвращает список offer_id, которые были (были бы) обнулены.
+    """
+    ozon_api = OzonExchange()
+    try:
+        ozon_offer_ids = _get_all_ozon_offer_ids(ozon_api)
+    except Exception as e:
+        print(f"close_unknown_ozon_stocks: ошибка получения списка карточек: {e}")
+        return []
+    known = set(OzonData.objects.values_list('offer_id', flat=True))
+    unknown = sorted(ozon_offer_ids - known)
+    print(
+        f"close_unknown_ozon_stocks: на Ozon {len(ozon_offer_ids)}, "
+        f"в базе {len(known)}, к обнулению {len(unknown)}"
+    )
+    if dry_run:
+        print(f"close_unknown_ozon_stocks (dry_run): {unknown}")
+        return unknown
+    for i in range(0, len(unknown), 100):
+        chunk = unknown[i:i + 100]
+        stocks = [
+            {
+                "offer_id": offer_id,
+                "stock": 0,
+                "warehouse_id": OZON_WAREHOUSE_ID,
+                "quant_size": 1,
+            }
+            for offer_id in chunk
+        ]
+        response = ozon_api.update_remains(data=stocks)
+        for res in (response or {}).get('result', []):
+            if res.get('errors'):
+                print(f"close_unknown_ozon_stocks: {res.get('offer_id')} ошибки {res['errors']}")
+        time.sleep(1)  # страховка от лимита 80 req/min
+    return unknown
 
 
 def ozon_update_file_article():

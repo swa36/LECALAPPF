@@ -132,6 +132,19 @@ class CloseUnknownOzonStocksTest(TestCase):
         self.assertEqual(result, [])
         api.update_remains.assert_not_called()
 
+    @patch("ozon.tasks.OzonExchange")
+    def test_invalid_later_page_aborts_without_sending(self, mock_api_cls):
+        api = mock_api_cls.return_value
+        api.get_product_list.side_effect = [
+            page([{"offer_id": "UNKNOWN-1", "product_id": 1, "archived": False}], last_id="next"),
+            {"code": 7, "message": "ozon down"},
+        ]
+
+        result = self._run(mock_api_cls)
+
+        self.assertEqual(result, [])
+        api.update_remains.assert_not_called()
+
 
 class UpdateRemainsOzonIntegrationTest(TestCase):
     @patch("ozon.tasks.close_unknown_ozon_stocks")

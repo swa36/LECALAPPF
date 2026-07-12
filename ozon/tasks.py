@@ -280,8 +280,12 @@ def _get_all_ozon_offer_ids(ozon_api):
     last_id = ""
     while True:
         response = ozon_api.get_product_list(last_id=last_id)
-        result = response.get('result', {})
-        items = result.get('items', [])
+        if not isinstance(response, dict):
+            raise ValueError("Некорректный ответ списка карточек Ozon")
+        result = response.get('result')
+        if not isinstance(result, dict) or 'items' not in result:
+            raise ValueError("Некорректный ответ списка карточек Ozon")
+        items = result['items']
         if not items:
             break
         for item in items:

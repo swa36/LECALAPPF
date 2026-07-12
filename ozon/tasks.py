@@ -267,6 +267,10 @@ def update_remains_ozon():
         stock.append(item_stock_info)
     if len(stock) > 0:
         ozon_api.update_remains(data=stock)
+    try:
+        close_unknown_ozon_stocks()
+    except Exception as e:
+        print(f"update_remains_ozon: ошибка обнуления неизвестных карточек: {e}")
     print("end update remains OZON")
 
 

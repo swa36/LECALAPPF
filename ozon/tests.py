@@ -131,3 +131,23 @@ class CloseUnknownOzonStocksTest(TestCase):
 
         self.assertEqual(result, [])
         api.update_remains.assert_not_called()
+
+
+class UpdateRemainsOzonIntegrationTest(TestCase):
+    @patch("ozon.tasks.close_unknown_ozon_stocks")
+    @patch("ozon.tasks.OzonExchange")
+    def test_calls_close_unknown_after_own_stocks(self, mock_api_cls, mock_close):
+        from ozon.tasks import update_remains_ozon
+
+        update_remains_ozon()
+
+        mock_close.assert_called_once_with()
+
+    @patch("ozon.tasks.close_unknown_ozon_stocks", side_effect=Exception("boom"))
+    @patch("ozon.tasks.OzonExchange")
+    def test_close_unknown_error_does_not_break_task(self, mock_api_cls, mock_close):
+        from ozon.tasks import update_remains_ozon
+
+        update_remains_ozon()  # не должно выбросить исключение
+
+        mock_close.assert_called_once_with()

@@ -43,6 +43,16 @@ class OzonExchange(BaseMarketPlace):
         # print(res)
         return res
 
+    def get_product_list(self, last_id="", limit=1000):
+        """Одна страница списка всех карточек продавца (/v3/product/list)."""
+        endpoint = 'v3/product/list'
+        payload = {
+            "filter": {"visibility": "ALL"},
+            "last_id": last_id,
+            "limit": limit,
+        }
+        return self._request('POST', endpoint, data=payload)
+
     def update_remains(self, data=None, save_to_file=False):
         endpoint = 'v2/products/stocks'
         payload = {'stocks': data}

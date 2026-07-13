@@ -146,6 +146,64 @@ class CloseUnknownOzonStocksTest(TestCase):
         api.update_remains.assert_not_called()
 
 
+class CloseAllOzonSalesTest(TestCase):
+    def _run(self, mock_api_cls, dry_run=False):
+        from ozon.tasks import close_all_ozon_sales
+        with patch("ozon.tasks.time.sleep"):
+            return close_all_ozon_sales(dry_run=dry_run)
+
+    @patch("ozon.tasks.OzonExchange")
+    def test_zeroes_all_in_sale_including_known(self, mock_api_cls):
+        # даже карточка, которая есть в базе, обнуляется — цель остановить все продажи
+        make_ozon_product("KNOWN-1")
+        api = mock_api_cls.return_value
+        api.get_product_list.return_value = page([
+            {"offer_id": "KNOWN-1", "product_id": 1, "archived": False},
+            {"offer_id": "OTHER-1", "product_id": 2, "archived": False},
+        ])
+        api.update_remains.return_value = {"result": []}
+
+        result = self._run(mock_api_cls)
+
+        self.assertEqual(result, ["KNOWN-1", "OTHER-1"])
+        sent = api.update_remains.call_args.kwargs["data"]
+        self.assertEqual({d["offer_id"] for d in sent}, {"KNOWN-1", "OTHER-1"})
+        for d in sent:
+            self.assertEqual(d["stock"], 0)
+
+    @patch("ozon.tasks.OzonExchange")
+    def test_requests_in_sale_visibility(self, mock_api_cls):
+        api = mock_api_cls.return_value
+        api.get_product_list.return_value = page([])
+
+        self._run(mock_api_cls)
+
+        _, kwargs = api.get_product_list.call_args
+        self.assertEqual(kwargs["visibility"], "IN_SALE")
+
+    @patch("ozon.tasks.OzonExchange")
+    def test_dry_run_sends_nothing(self, mock_api_cls):
+        api = mock_api_cls.return_value
+        api.get_product_list.return_value = page(
+            [{"offer_id": "IN-SALE-1", "product_id": 1, "archived": False}]
+        )
+
+        result = self._run(mock_api_cls, dry_run=True)
+
+        self.assertEqual(result, ["IN-SALE-1"])
+        api.update_remains.assert_not_called()
+
+    @patch("ozon.tasks.OzonExchange")
+    def test_page_error_aborts_without_sending(self, mock_api_cls):
+        api = mock_api_cls.return_value
+        api.get_product_list.side_effect = Exception("ozon down")
+
+        result = self._run(mock_api_cls)
+
+        self.assertEqual(result, [])
+        api.update_remains.assert_not_called()
+
+
 class UpdateRemainsOzonIntegrationTest(TestCase):
     @patch("ozon.tasks.close_unknown_ozon_stocks")
     @patch("ozon.tasks.OzonExchange")

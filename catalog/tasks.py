@@ -24,7 +24,7 @@ def process_catalog_chunk(chunk):
 
 @shared_task
 def after_catalog_update(results=None):
-    update_remains_ozon.delay()
+    # update_remains_ozon.delay()
     update_remains_wb.delay()
     # sent_stock_ya.delay()
     update_stock_ali.delay()

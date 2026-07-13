@@ -274,12 +274,15 @@ def update_remains_ozon():
     print("end update remains OZON")
 
 
-def _get_all_ozon_offer_ids(ozon_api):
-    """Все неархивные offer_id с Ozon (пагинация /v3/product/list)."""
+def _get_all_ozon_offer_ids(ozon_api, visibility="ALL"):
+    """Все неархивные offer_id с Ozon (пагинация /v3/product/list).
+
+    visibility — фильтр видимости Ozon ("ALL", "IN_SALE" и т.п.).
+    """
     offer_ids = set()
     last_id = ""
     while True:
-        response = ozon_api.get_product_list(last_id=last_id)
+        response = ozon_api.get_product_list(last_id=last_id, visibility=visibility)
         if not isinstance(response, dict):
             raise ValueError("Некорректный ответ списка карточек Ozon")
         result = response.get('result')
@@ -318,8 +321,17 @@ def close_unknown_ozon_stocks(dry_run=False):
     if dry_run:
         print(f"close_unknown_ozon_stocks (dry_run): {unknown}")
         return unknown
-    for i in range(0, len(unknown), 100):
-        chunk = unknown[i:i + 100]
+    _zero_ozon_stocks(ozon_api, unknown, log_prefix="close_unknown_ozon_stocks")
+    return unknown
+
+
+def _zero_ozon_stocks(ozon_api, offer_ids, log_prefix="_zero_ozon_stocks"):
+    """Шлёт stock: 0 на Ozon по списку offer_id батчами по 100.
+
+    Ошибки по позициям (из result[].errors) логируются и не прерывают отправку.
+    """
+    for i in range(0, len(offer_ids), 100):
+        chunk = offer_ids[i:i + 100]
         stocks = [
             {
                 "offer_id": offer_id,
@@ -332,9 +344,38 @@ def close_unknown_ozon_stocks(dry_run=False):
         response = ozon_api.update_remains(data=stocks)
         for res in (response or {}).get('result', []):
             if res.get('errors'):
-                print(f"close_unknown_ozon_stocks: {res.get('offer_id')} ошибки {res['errors']}")
+                print(f"{log_prefix}: {res.get('offer_id')} ошибки {res['errors']}")
         time.sleep(1)  # страховка от лимита 80 req/min
-    return unknown
+
+
+def close_all_ozon_sales(dry_run=True):
+    """АВАРИЙНАЯ ОСТАНОВКА ПРОДАЖ: обнуляет остаток по ВСЕМ карточкам в продаже.
+
+    Тянет все offer_id с visibility="IN_SALE" (карточки, которые сейчас продаются)
+    и шлёт по ним stock: 0. Обратимо — следующий штатный прогон остатков из 1С
+    вернёт реальные остатки.
+
+    dry_run=True (по умолчанию) — только лог количества и списка, без отправки.
+    Боевой запуск — явно dry_run=False.
+    Ниоткуда автоматически НЕ вызывается: только вручную из shell.
+
+    Возвращает отсортированный список offer_id, которые были (при dry_run — были бы)
+    обнулены.
+    """
+    ozon_api = OzonExchange()
+    try:
+        in_sale = _get_all_ozon_offer_ids(ozon_api, visibility="IN_SALE")
+    except Exception as e:
+        print(f"close_all_ozon_sales: ошибка получения списка карточек: {e}")
+        return []
+    offer_ids = sorted(in_sale)
+    print(f"close_all_ozon_sales: в продаже {len(offer_ids)} карточек")
+    if dry_run:
+        print(f"close_all_ozon_sales (dry_run): {offer_ids}")
+        return offer_ids
+    _zero_ozon_stocks(ozon_api, offer_ids, log_prefix="close_all_ozon_sales")
+    print(f"close_all_ozon_sales: обнулено {len(offer_ids)} карточек")
+    return offer_ids
 
 
 def ozon_update_file_article():

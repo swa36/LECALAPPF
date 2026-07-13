@@ -43,11 +43,15 @@ class OzonExchange(BaseMarketPlace):
         # print(res)
         return res
 
-    def get_product_list(self, last_id="", limit=1000):
-        """Одна страница списка всех карточек продавца (/v3/product/list)."""
+    def get_product_list(self, last_id="", limit=1000, visibility="ALL"):
+        """Одна страница списка карточек продавца (/v3/product/list).
+
+        visibility — фильтр видимости Ozon: "ALL" (все), "IN_SALE" (только
+        продающиеся сейчас) и т.п. Пагинацию крутит вызывающий код.
+        """
         endpoint = 'v3/product/list'
         payload = {
-            "filter": {"visibility": "ALL"},
+            "filter": {"visibility": visibility},
             "last_id": last_id,
             "limit": limit,
         }

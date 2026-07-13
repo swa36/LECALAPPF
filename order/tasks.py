@@ -21,6 +21,6 @@ def order_change():
 def get_all_new_order():
     get_new_order_wb.delay()
     get_order_ali.delay()
-    get_order_info_ya.delay()
+    # get_order_info_ya.delay()
     
     

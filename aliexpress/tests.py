@@ -58,6 +58,16 @@ class AliExpressReconciliationTests(TestCase):
         self.assertFalse(client.set_online(['1']))
 
     @patch.object(AliExpress, '_request')
+    def test_product_mutations_require_data_in_response(self, request):
+        client = AliExpress()
+        for response in ({}, {'message': 'denied'}):
+            with self.subTest(response=response):
+                request.return_value = response
+                self.assertFalse(client.delete_products(['1']))
+                self.assertFalse(client.update_stock(data=[]))
+                self.assertFalse(client.set_online(['1']))
+
+    @patch.object(AliExpress, '_request')
     def test_delete_ali_forwards_params_and_returns_api_response(self, request):
         response = {'data': {'deleted': ['1']}}
         request.return_value = response

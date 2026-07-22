@@ -1,6 +1,12 @@
+import logging
+
 from django.core.cache import cache
 from src.lekala_class.class_marketplace.BaseMarketPlace import BaseMarketPlace
 from django.conf import settings
+
+
+logger = logging.getLogger(__name__)
+
 
 class AvitoExchange(BaseMarketPlace):
     REDIS_TOKEN_KEY = 'avito_access_token'
@@ -30,13 +36,18 @@ class AvitoExchange(BaseMarketPlace):
         return token
 
     def get_order(self, save_to_file=False):
-        token = self.get_token()
-        endpoint = '/order-management/1/orders'
-        headers = {'Authorization': f'Bearer {token}'}
-        params = {'statuses': 'on_confirmation'}
+        try:
+            token = self.get_token()
+            response = self._request(
+                'GET',
+                '/order-management/1/orders',
+                params={'statuses': 'on_confirmation'},
+                extra_headers={'Authorization': f'Bearer {token}'},
+            )
+        except Exception:
+            logger.exception('Avito orders request failed')
+            return {'orders': []}
 
-        response = self._request('GET', endpoint, params=params, extra_headers=headers)
-        print(response)
         if save_to_file:
             self._save_payload_to_file(response)
-        return response
+        return response or {'orders': []}

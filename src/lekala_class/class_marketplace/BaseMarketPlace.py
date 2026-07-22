@@ -38,10 +38,21 @@ class BaseMarketPlace(ABC):
             else:
                 request_kwargs['data'] = data
 
-        try:
+        for attempt in range(5):
             response = requests.request(**request_kwargs)
+            if response.status_code != 429:
+                break
+            if attempt == 4:
+                break
+            try:
+                delay = float(response.headers.get('Retry-After', ''))
+            except ValueError:
+                delay = float(2 ** attempt)
+            time.sleep(delay)
+
+        try:
             response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
+        except requests.exceptions.HTTPError:
             print(f"❌ HTTP error for {method} {url}")
             print(f"Status code: {response.status_code}")
             # if response.status_code == 429:

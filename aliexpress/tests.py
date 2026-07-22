@@ -1,6 +1,7 @@
 from io import StringIO
 from unittest.mock import patch
 
+import requests
 from django.core.management import call_command
 from django.test import TestCase
 
@@ -10,6 +11,24 @@ from src.lekala_class.class_marketplace.AliExpress import AliExpress
 
 
 class AliExpressReconciliationTests(TestCase):
+    @patch('src.lekala_class.class_marketplace.BaseMarketPlace.time.sleep')
+    @patch('src.lekala_class.class_marketplace.BaseMarketPlace.requests.request')
+    def test_update_stock_retries_rate_limit_response(self, request, sleep):
+        rate_limited = requests.Response()
+        rate_limited.status_code = 429
+        rate_limited.headers['Retry-After'] = '2'
+        rate_limited.url = 'https://openapi.aliexpress.ru/api/v1/product/update-sku-stock'
+
+        successful = requests.Response()
+        successful.status_code = 200
+        successful._content = b'{"data": {}}'
+        successful.headers['Content-Type'] = 'application/json'
+        request.side_effect = [rate_limited, successful]
+
+        self.assertTrue(AliExpress().update_stock(data=[]))
+        self.assertEqual(request.call_count, 2)
+        sleep.assert_called_once_with(2.0)
+
     @patch.object(AliExpress, '_request')
     def test_reads_all_ali_pages(self, request):
         request.side_effect = [{'data': [{'id': '1'}]}]

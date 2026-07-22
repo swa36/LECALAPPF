@@ -23,6 +23,7 @@ class OrderMarketplaceTo1C:
             "name": "Avito",
             "number_field": "number_avito",
             "name_template": lambda o: f"Avito {o.number_avito}",
+            "number_1C": lambda o: f"AV00-{o.number_avito}",
         },
         "orderozon": {
             "name": "OZON",

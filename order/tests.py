@@ -5,7 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
 from catalog.models import Category, Product, TypePrices
-from order.models import ItemInOrderOzon, OrderOzon
+from order.models import ItemInOrderOzon, OrderAvito, OrderOzon
+from order.tasks import get_all_new_order, order_change
 
 
 def fake_response(json_data, status=200):
@@ -146,3 +147,35 @@ class OrderMarketplaceTo1CTest(TestCase):
         urls = [call.args[0] for call in post.call_args_list]
         self.assertEqual(len(urls), 1)
         self.assertFalse(any("/Post()" in url for url in urls))
+
+    def test_avito_payload_uses_marketplace_order_number(self):
+        avito_order = OrderAvito.objects.create(
+            number_avito="AVITO-987654",
+            number_1C="AV00-000001",
+            price=100,
+        )
+
+        payload = self._client_class()(avito_order).prepare_order_data()
+
+        self.assertEqual(payload["Номер"], "AV00-AVITO-987654")
+
+
+class OrderTaskTest(TestCase):
+    @patch("order.tasks.get_order_info_ya.delay")
+    @patch("order.tasks.get_order_ali.delay")
+    @patch("order.tasks.get_new_order_wb.delay")
+    @patch("order.tasks.getOrderAvito.delay")
+    def test_get_all_new_order_queues_avito(
+        self, avito_delay, _wb_delay, _ali_delay, _ya_delay
+    ):
+        get_all_new_order.run()
+
+        avito_delay.assert_called_once()
+
+    @patch("order.tasks.OrderMarketplaceTo1C.send_to_1c", return_value=True)
+    def test_order_change_sends_unsent_avito(self, send):
+        OrderAvito.objects.create(number_avito="A-3", number_1C="AV00-000001")
+
+        order_change.run()
+
+        send.assert_called_once()

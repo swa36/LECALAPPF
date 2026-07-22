@@ -157,7 +157,7 @@ class OrderMarketplaceTo1CTest(TestCase):
 
         payload = self._client_class()(avito_order).prepare_order_data()
 
-        self.assertEqual(payload["Номер"], "AVITO-987654")
+        self.assertEqual(payload["Номер"], "AV00-AVITO-987654")
 
 
 class OrderTaskTest(TestCase):

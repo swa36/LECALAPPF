@@ -92,26 +92,27 @@ class Command(BaseCommand):
         self.stdout.write(f"planned deletions: {len(plan['delete_ids'])}")
         self.stdout.write(f"stock updates: {len(plan['stock_updates'])}")
         self.stdout.write(f"online restores: {len(plan['offline_ids'])}")
+        self.stdout.write('Failed stock batches: 0')
 
     def _apply_plan(self, client, plan):
         failed_batches = 0
-        if plan['delete_ids'] and not client.delete_products(plan['delete_ids']):
+        if plan['delete_ids'] and client.delete_products(plan['delete_ids']) is not True:
             failed_batches += 1
         elif plan['delete_ids']:
             AliData.objects.filter(id_ali__in=plan['delete_ids']).delete()
         for product, remote_id in plan['surviving_links']:
             AliData.objects.update_or_create(product=product, defaults={'id_ali': remote_id})
         for batch in self._batches(plan['stock_updates'], self.STOCK_BATCH_SIZE):
-            if client.update_stock(data=batch):
+            if client.update_stock(data=batch) is True:
                 offline_ids = [
                     update['product_id'] for update in batch
                     if update['product_id'] in plan['offline_ids']
                 ]
-                if offline_ids and not client.set_online(offline_ids):
+                if offline_ids and client.set_online(offline_ids) is not True:
                     failed_batches += 1
             else:
                 failed_batches += 1
-        self.stdout.write(f'failed batches: {failed_batches}')
+        self.stdout.write(f'Failed stock batches: {failed_batches}')
 
     @staticmethod
     def _batches(items, batch_size):

@@ -49,6 +49,14 @@ class AliExpressReconciliationTests(TestCase):
         self.assertEqual(request.call_args.kwargs['data'], {'productIds': ['1']})
         self.assertEqual(request.call_args.args[:2], ('POST', '/api/v1/product/online'))
 
+    @patch.object(AliExpress, '_request', return_value={'error': 'denied'})
+    def test_product_mutations_reject_error_payloads(self, request):
+        client = AliExpress()
+
+        self.assertFalse(client.delete_products(['1']))
+        self.assertFalse(client.update_stock(data=[]))
+        self.assertFalse(client.set_online(['1']))
+
     @patch.object(AliExpress, '_request')
     def test_delete_ali_forwards_params_and_returns_api_response(self, request):
         response = {'data': {'deleted': ['1']}}
@@ -91,6 +99,15 @@ class ReconcileAliCommandTests(TestCase):
         ali_cls.return_value.delete_products.assert_not_called()
 
     @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
+    def test_dry_run_prints_zero_failed_stock_batches(self, ali_cls):
+        ali_cls.return_value.get_all_products.return_value = []
+        output = StringIO()
+
+        call_command('reconcile_ali', stdout=output)
+
+        self.assertIn('Failed stock batches: 0', output.getvalue())
+
+    @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
     def test_execute_keeps_linked_duplicate(self, ali_cls):
         AliData.objects.create(product=self.product, id_ali=2)
         ali_cls.return_value.get_all_products.return_value = [
@@ -110,3 +127,30 @@ class ReconcileAliCommandTests(TestCase):
         call_command('reconcile_ali', '--execute')
 
         ali_cls.return_value.delete_products.assert_called_once_with(['1'])
+
+    @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
+    def test_delete_error_payload_keeps_ali_link(self, ali_cls):
+        AliData.objects.create(product=self.product, id_ali=100)
+        ali_cls.return_value.get_all_products.return_value = [
+            {'id': '100', 'sku': [{'code': 'MISSING'}]}
+        ]
+        ali_cls.return_value.delete_products.return_value = {'error': 'denied'}
+
+        call_command('reconcile_ali', '--execute')
+
+        self.assertTrue(AliData.objects.filter(product=self.product).exists())
+
+    @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
+    def test_stock_error_payload_does_not_restore_offline_card(self, ali_cls):
+        ali_cls.return_value.get_all_products.return_value = [
+            {
+                'id': '100',
+                'sku': [{'code': self.product.code_1C}],
+                'status': 'offline',
+            }
+        ]
+        ali_cls.return_value.update_stock.return_value = {'error': 'denied'}
+
+        call_command('reconcile_ali', '--execute')
+
+        ali_cls.return_value.set_online.assert_not_called()

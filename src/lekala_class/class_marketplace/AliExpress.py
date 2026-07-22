@@ -37,7 +37,7 @@ class AliExpress(BaseMarketPlace):
         if save_to_file:
             self._save_payload_to_file(body)
             return body
-        return self._request("POST", endpoint, data=body, params=params)
+        return self._is_success(self._request("POST", endpoint, data=body, params=params))
 
     def get_data_order(self, params=None, save_to_file=False):
         endpoint = 'seller-api/v1/order/get-order-list'
@@ -87,9 +87,20 @@ class AliExpress(BaseMarketPlace):
             response = self._request(
                 'POST', endpoint, data={'productIds': ids[start:start + 20]}
             )
-            if not response:
+            if not self._is_success(response):
                 return False
         return True
+
+    @staticmethod
+    def _is_success(response) -> bool:
+        if response is None:
+            return False
+        if not isinstance(response, dict):
+            return True
+        if response.get('error') or response.get('errors'):
+            return False
+        code = response.get('code')
+        return code is None or str(code) in {'0', '200'}
 
     def delete_products(self, ids: list[str]) -> bool:
         return self._execute_product_batches('/api/v1/product/delete', ids)

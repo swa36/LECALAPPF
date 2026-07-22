@@ -148,6 +148,17 @@ class OrderMarketplaceTo1CTest(TestCase):
         self.assertEqual(len(urls), 1)
         self.assertFalse(any("/Post()" in url for url in urls))
 
+    def test_avito_payload_uses_marketplace_order_number(self):
+        avito_order = OrderAvito.objects.create(
+            number_avito="AVITO-987654",
+            number_1C="AV00-000001",
+            price=100,
+        )
+
+        payload = self._client_class()(avito_order).prepare_order_data()
+
+        self.assertEqual(payload["Номер"], "AVITO-987654")
+
 
 class OrderTaskTest(TestCase):
     @patch("order.tasks.get_order_info_ya.delay")

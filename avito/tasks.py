@@ -1,52 +1,58 @@
+import logging
+
 from celery import shared_task
-from django.conf import settings
+from django.db import transaction
+
 from catalog.models import Product
 from order.models import ItemInOrderAvito, OrderAvito
 from src.lekala_class.class_feed import CreatorFeed
 from src.lekala_class.class_marketplace.Avito import AvitoExchange
 
+
+logger = logging.getLogger(__name__)
+
+
 @shared_task
 def create_feed():
-    avito_feed = CreatorFeed("avito")
+    avito_feed = CreatorFeed('avito')
     avito_feed.create_items()
     avito_feed.save()
 
 
 @shared_task
 def getOrderAvito():
-    avito = AvitoExchange()  # передай реальные значения или через settings
+    created = 0
+    avito = AvitoExchange()
     try:
         orders = avito.get_order().get('orders', [])
-    except Exception as e:
-        print(f'Ошибка при получении заказов с Avito: {e}')
-        return
+    except Exception:
+        logger.exception('Avito orders retrieval failed')
+        return {'created': created}
 
-    for order in orders:
-        num_avito = order['marketplaceId']
-        new_order, created = OrderAvito.objects.get_or_create(number_avito=num_avito, defaults={
-            'number_1C': avito.number_to_1c(),
-        })
+    for raw_order in orders:
+        try:
+            order_id = str(raw_order.get('marketplaceId') or '')
+            if not order_id or OrderAvito.objects.filter(number_avito=order_id).exists():
+                continue
 
-        if created:
-            for item in order['items']:
-                item_id = item.get('id')
-                name_advertisement = item.get('title', '')
-                price = item['prices']['price']
-                quantity = item.get('count', 1)
-                try:
-                    product = Product.objects.get(code_1C=item_id) if item_id else None
-                except:
-                    product = None
-
-                ItemInOrderAvito.objects.create(
-                    name_advertisement_item=name_advertisement,
-                    product=product,
-                    quantity=quantity,
-                    price=price,
-                    order_num=new_order,
+            with transaction.atomic():
+                order = OrderAvito.objects.create(
+                    number_avito=order_id,
+                    number_1C=avito.number_to_1c(),
                 )
+                for raw_item in raw_order.get('items', []):
+                    product = Product.objects.filter(code_1C=raw_item.get('id')).first()
+                    ItemInOrderAvito.objects.create(
+                        order_num=order,
+                        product=product,
+                        name_advertisement_item=raw_item.get('title', ''),
+                        price=raw_item.get('prices', {}).get('price', 0),
+                        quantity=raw_item.get('count', 1),
+                    )
+                order.price = sum(item.total_price for item in order.items.all())
+                order.save(update_fields=['price'])
+                created += 1
+        except Exception:
+            logger.exception('Avito order import failed', extra={'order': raw_order})
 
-            new_order.price = sum([float(i.total_price) for i in new_order.number_order.all()])
-            new_order.save()
-
-            print(f'✅ Новый заказ с Avito создан: {new_order.number_1C}')
+    return {'created': created}

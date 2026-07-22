@@ -63,15 +63,46 @@ class AliExpress(BaseMarketPlace):
             return
         return self._request("POST", endpoint, data=body, params=params)
 
+    def get_all_products(self) -> list[dict]:
+        result, last_product_id = [], None
+        while True:
+            body = {'limit': 50, 'filter': {}}
+            if last_product_id:
+                body['last_product_id'] = last_product_id
+            page = (
+                self._request(
+                    'POST',
+                    'api/v1/scroll-short-product-by-filter',
+                    data=body,
+                )
+                or {}
+            ).get('data', [])
+            result.extend(page)
+            if len(page) < 50:
+                return result
+            last_product_id = page[-1]['id']
+
+    def _execute_product_batches(self, endpoint: str, ids: list[str]) -> bool:
+        for start in range(0, len(ids), 20):
+            response = self._request(
+                'POST', endpoint, data={'productIds': ids[start:start + 20]}
+            )
+            if not response:
+                return False
+        return True
+
+    def delete_products(self, ids: list[str]) -> bool:
+        return self._execute_product_batches('/api/v1/product/offline', ids)
+
+    def set_online(self, ids: list[str]) -> bool:
+        return self._execute_product_batches('/api/v1/product/online', ids)
+
     def delete_ali(self, params=None, data=None, save_to_file=False):
-        endpoint = '/api/v1/product/offline'
-        body = {"productIds": data}
         if save_to_file:
+            body = {"productIds": data}
             self._save_payload_to_file(body)
             return body
-        req = self._request("POST", endpoint, data=body, params=params)
-        print(req)
-        return req
+        return self.delete_products(data or [])
 
     def set_id_ali(self, article, id_ali):
         try:

@@ -92,17 +92,18 @@ class AliExpress(BaseMarketPlace):
         return True
 
     def delete_products(self, ids: list[str]) -> bool:
-        return self._execute_product_batches('/api/v1/product/offline', ids)
+        return self._execute_product_batches('/api/v1/product/delete', ids)
 
     def set_online(self, ids: list[str]) -> bool:
         return self._execute_product_batches('/api/v1/product/online', ids)
 
     def delete_ali(self, params=None, data=None, save_to_file=False):
+        endpoint = '/api/v1/product/offline'
+        body = {"productIds": data}
         if save_to_file:
-            body = {"productIds": data}
             self._save_payload_to_file(body)
             return body
-        return self.delete_products(data or [])
+        return self._request("POST", endpoint, data=body, params=params)
 
     def set_id_ali(self, article, id_ali):
         try:

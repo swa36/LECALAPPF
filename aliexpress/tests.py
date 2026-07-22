@@ -34,6 +34,7 @@ class AliExpressReconciliationTests(TestCase):
 
         self.assertTrue(AliExpress().delete_products(ids))
         self.assertEqual(request.call_count, 2)
+        self.assertEqual(request.call_args_list[0].args[:2], ('POST', '/api/v1/product/delete'))
         self.assertEqual(request.call_args_list[0].kwargs['data'], {'productIds': ids[:20]})
         self.assertEqual(request.call_args_list[1].kwargs['data'], {'productIds': ids[20:]})
 
@@ -42,3 +43,16 @@ class AliExpressReconciliationTests(TestCase):
         self.assertTrue(AliExpress().set_online(['1']))
         self.assertEqual(request.call_args.kwargs['data'], {'productIds': ['1']})
         self.assertEqual(request.call_args.args[:2], ('POST', '/api/v1/product/online'))
+
+    @patch.object(AliExpress, '_request')
+    def test_delete_ali_forwards_params_and_returns_api_response(self, request):
+        response = {'data': {'deleted': ['1']}}
+        request.return_value = response
+
+        self.assertEqual(AliExpress().delete_ali(data=['1'], params={'x': 'y'}), response)
+        request.assert_called_once_with(
+            'POST',
+            '/api/v1/product/offline',
+            data={'productIds': ['1']},
+            params={'x': 'y'},
+        )

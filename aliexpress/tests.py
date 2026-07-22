@@ -16,7 +16,6 @@ class AliExpressReconciliationTests(TestCase):
     def test_update_stock_retries_rate_limit_response(self, request, sleep):
         rate_limited = requests.Response()
         rate_limited.status_code = 429
-        rate_limited.headers['Retry-After'] = '2'
         rate_limited.url = 'https://openapi.aliexpress.ru/api/v1/product/update-sku-stock'
 
         successful = requests.Response()
@@ -27,7 +26,7 @@ class AliExpressReconciliationTests(TestCase):
 
         self.assertTrue(AliExpress().update_stock(data=[]))
         self.assertEqual(request.call_count, 2)
-        sleep.assert_called_once_with(2.0)
+        sleep.assert_called_once_with(60.0)
 
     @patch.object(AliExpress, '_request')
     def test_reads_all_ali_pages(self, request):

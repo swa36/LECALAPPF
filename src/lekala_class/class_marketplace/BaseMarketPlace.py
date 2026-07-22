@@ -44,11 +44,7 @@ class BaseMarketPlace(ABC):
                 break
             if attempt == 4:
                 break
-            try:
-                delay = float(response.headers.get('Retry-After', ''))
-            except ValueError:
-                delay = float(2 ** attempt)
-            time.sleep(delay)
+            time.sleep(60)
 
         try:
             response.raise_for_status()

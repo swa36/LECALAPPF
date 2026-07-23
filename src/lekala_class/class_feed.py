@@ -114,7 +114,7 @@ class CreatorFeed:
                                 sub3_elem.text = sub3.name
 
     def _feed_ali(self, offer, data):
-        ET.SubElement(offer, 'price').text = str(data['price_items'] + (self.mark_up * data['price_items']) / 100)
+        ET.SubElement(offer, 'price').text = str(int(data['price_items'] + (self.mark_up * data['price_items']) / 100))
         ET.SubElement(offer, 'brand').text = data['producer_items']
         ET.SubElement(offer, 'article').text = data['id']
         ET.SubElement(offer, 'name').text = data['name']

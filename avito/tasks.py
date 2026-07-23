@@ -36,20 +36,29 @@ def getOrderAvito():
                 continue
 
             with transaction.atomic():
+                raw_items = raw_order.get('items', [])
                 order = OrderAvito.objects.create(
                     number_avito=order_id,
                     number_1C=avito.number_to_1c(),
+                    name_advertisement=raw_items[0].get('title', '') if raw_items else '',
                 )
-                for raw_item in raw_order.get('items', []):
+                for raw_item in raw_items:
                     product = Product.objects.filter(code_1C=raw_item.get('id')).first()
+                    quantity = raw_item.get('count', 1)
+                    total = raw_item.get('prices', {}).get('total', 0)
                     ItemInOrderAvito.objects.create(
                         order_num=order,
                         product=product,
                         name_advertisement_item=raw_item.get('title', ''),
-                        price=raw_item.get('prices', {}).get('price', 0),
-                        quantity=raw_item.get('count', 1),
+                        price=total,
+                        quantity=quantity,
                     )
-                order.price = sum(item.total_price for item in order.items.all())
+                order_total = raw_order.get('prices', {}).get('total')
+                order.price = (
+                    order_total
+                    if order_total is not None
+                    else sum(item.total_price for item in order.items.all())
+                )
                 order.save(update_fields=['price'])
                 created += 1
         except Exception:

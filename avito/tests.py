@@ -36,9 +36,9 @@ class AvitoOrderImportTests(TestCase):
         )
 
     @patch('avito.tasks.AvitoExchange.get_order')
-    def test_import_creates_order_lines_total_and_1c_number(self, get_order):
-        get_order.return_value = {'orders': [{'marketplaceId': 'A-1', 'items': [
-            {'id': self.product.code_1C, 'title': 'Ad', 'count': 2, 'prices': {'price': 500}},
+    def test_import_saves_avito_item_total_as_price(self, get_order):
+        get_order.return_value = {'orders': [{'marketplaceId': 'A-1', 'prices': {'total': 900}, 'items': [
+            {'id': self.product.code_1C, 'title': 'Ad', 'count': 2, 'prices': {'total': 1000}},
         ]}]}
 
         result = getOrderAvito()
@@ -46,8 +46,24 @@ class AvitoOrderImportTests(TestCase):
         order = OrderAvito.objects.get(number_avito='A-1')
         self.assertEqual(result, {'created': 1})
         self.assertEqual(order.number_1C, 'AV00-000001')
-        self.assertEqual(order.price, 1000)
-        self.assertEqual(order.items.get().product, self.product)
+        self.assertEqual(order.price, 900)
+        item = order.items.get()
+        self.assertEqual(item.product, self.product)
+        self.assertEqual(item.price, 1000)
+        self.assertEqual(item.total_price, 1000)
+
+    @patch('avito.tasks.AvitoExchange.get_order')
+    def test_import_saves_advertisement_title_on_order(self, get_order):
+        get_order.return_value = {'orders': [{'marketplaceId': 'A-title', 'items': [
+            {'id': self.product.code_1C, 'title': 'Название из Avito', 'prices': {'total': 1000}},
+        ]}]}
+
+        getOrderAvito()
+
+        self.assertEqual(
+            OrderAvito.objects.get(number_avito='A-title').name_advertisement,
+            'Название из Avito',
+        )
 
     @patch('avito.tasks.AvitoExchange.get_order')
     def test_import_keeps_unknown_item_and_skips_duplicate(self, get_order):

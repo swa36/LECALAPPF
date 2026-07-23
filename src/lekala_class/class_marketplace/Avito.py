@@ -41,7 +41,7 @@ class AvitoExchange(BaseMarketPlace):
             response = self._request(
                 'GET',
                 '/order-management/1/orders',
-                params={'statuses': 'on_confirmation'},
+                params={'statuses': 'ready_to_ship'},
                 extra_headers={'Authorization': f'Bearer {token}'},
             )
         except Exception:

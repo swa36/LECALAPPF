@@ -1,11 +1,13 @@
 import json
 from unittest.mock import MagicMock, patch
 
+from django.contrib.admin.sites import AdminSite
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
 from catalog.models import Category, Product, TypePrices
-from order.models import ItemInOrderOzon, OrderAvito, OrderOzon
+from order.admin import ItemInOrderAvitoInline, OrderAvitoAdmin
+from order.models import ItemInOrderAvito, ItemInOrderOzon, OrderAvito, OrderOzon
 from order.tasks import get_all_new_order, order_change
 
 
@@ -158,6 +160,54 @@ class OrderMarketplaceTo1CTest(TestCase):
         payload = self._client_class()(avito_order).prepare_order_data()
 
         self.assertEqual(payload["Номер"], "AV00-AVITO-987654")
+
+    def test_avito_payload_converts_item_total_to_unit_price_for_1c(self):
+        avito_order = OrderAvito.objects.create(number_avito="AVITO-1", price=1000)
+        ItemInOrderAvito.objects.create(
+            order_num=avito_order,
+            product=self.product,
+            quantity=2,
+            price=1000,
+            name_advertisement_item="Объявление Avito",
+        )
+
+        item_data = self._client_class()(avito_order).prepare_order_data()["Товары"][0]
+
+        self.assertEqual(item_data["Номенклатура_Key"], str(self.product.uuid_1C))
+        self.assertEqual(item_data["Количество"], 2)
+        self.assertEqual(item_data["Цена"], 500)
+
+
+class OrderAvitoAdminTest(TestCase):
+    def test_item_inline_shows_linked_product_name_code_and_article(self):
+        category = Category.objects.create(
+            uuid_1C="11111111-1111-1111-1111-111111111111",
+            name="Категория",
+        )
+        product = Product.objects.create(
+            uuid_1C="7e019266-24a4-11ef-8009-00155d46f78d",
+            main_img_uuid="f5a159fc-a7fb-11ef-8a72-00155d46f78d",
+            article_1C="ART-AVITO",
+            code_1C="CODE-AVITO",
+            data_version="v1",
+            name="Защитная плёнка",
+            description="Описание",
+            stock=1,
+            category=category,
+        )
+        order = OrderAvito.objects.create(number_avito="AVITO-2")
+        item = ItemInOrderAvito.objects.create(order_num=order, product=product)
+
+        rendered = str(ItemInOrderAvitoInline(OrderAvito, AdminSite()).linked_product(item))
+
+        self.assertIn("Защитная плёнка", rendered)
+        self.assertIn("CODE-AVITO", rendered)
+        self.assertIn("ART-AVITO", rendered)
+
+        order_rendered = str(OrderAvitoAdmin(OrderAvito, AdminSite()).linked_products(order))
+
+        self.assertIn("Защитная плёнка", order_rendered)
+        self.assertIn("CODE-AVITO", order_rendered)
 
 
 class OrderTaskTest(TestCase):

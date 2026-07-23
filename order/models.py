@@ -20,6 +20,7 @@ class AbstractOrder(models.Model):
 
 
 class AbstractOrderItem(models.Model):
+    price_is_total = False
     object_id = models.CharField(max_length=128, null=True)
     content_type = models.ForeignKey(ContentType, null=True, on_delete=models.RESTRICT)
     product = GenericForeignKey(ct_field='content_type', fk_field='object_id')
@@ -29,7 +30,7 @@ class AbstractOrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1, verbose_name='Количество товара')
 
     def save(self, *args, **kwargs):
-        self.total_price = self.price * self.quantity
+        self.total_price = self.price if self.price_is_total else self.price * self.quantity
         super().save(*args, **kwargs)
 
     class Meta:
@@ -50,6 +51,7 @@ class OrderAvito(AbstractOrder):
 
 
 class ItemInOrderAvito(AbstractOrderItem):
+    price_is_total = True
     order_num = models.ForeignKey(OrderAvito, on_delete=models.CASCADE, related_name='items', verbose_name='Номер заказа')
     name_advertisement_item = models.CharField(max_length=200, blank=True, null=True, verbose_name='Название объявления')
 

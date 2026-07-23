@@ -71,7 +71,7 @@ class OrderMarketplaceTo1C:
             adv_names = [
                 item.name_advertisement_item
                 for item in order_items
-                if hasattr(item, "name_advertisement_item")
+                if getattr(item, "name_advertisement_item", None)
             ]
             return f"{self.platform_info['name']}\n" + "\n".join(adv_names)
         number = getattr(self.order, self.platform_info["number_field"], "")
@@ -88,6 +88,8 @@ class OrderMarketplaceTo1C:
         product = item.product
         quantity = getattr(item, "quantity", 1)
         price = getattr(item, "price", self.order.price)
+        if self.platform_info["name"] == "Avito" and quantity:
+            price = price / quantity
         return {
             "Номенклатура_Key": str(product.uuid_1C)
             if product

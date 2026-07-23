@@ -56,6 +56,20 @@ class AliExpressReconciliationTests(TestCase):
     def test_delete_reports_api_failure(self, request):
         self.assertFalse(AliExpress().delete_products(['1']))
 
+    @patch.object(AliExpress, '_request', return_value={'success': True})
+    def test_delete_accepts_success_response_without_data(self, request):
+        self.assertTrue(AliExpress().delete_products(['1']))
+
+    @patch.object(AliExpress, '_request', return_value={'message': 'denied'})
+    def test_delete_logs_rejected_api_response(self, request):
+        output = StringIO()
+
+        with redirect_stdout(output):
+            self.assertFalse(AliExpress().delete_products(['1']))
+
+        self.assertIn('AliExpress request rejected', output.getvalue())
+        self.assertIn("'message': 'denied'", output.getvalue())
+
     @patch.object(AliExpress, '_request')
     def test_reads_following_ali_page_after_full_page(self, request):
         first_page = [{'id': str(index)} for index in range(50)]

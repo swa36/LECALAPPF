@@ -90,17 +90,24 @@ class AliExpress(BaseMarketPlace):
                 'POST', endpoint, data={'productIds': ids[start:start + 20]}
             )
             if not self._is_success_response(response):
+                print(
+                    f'AliExpress request rejected for {endpoint}: '
+                    f'{response!r}'
+                )
                 return False
         return True
 
     @staticmethod
     def _is_success_response(response) -> bool:
-        return (
-            isinstance(response, dict)
-            and 'data' in response
-            and 'error' not in response
-            and 'errors' not in response
-            and 'code' not in response
+        if not isinstance(response, dict):
+            return False
+        if any(key in response for key in ('error', 'errors', 'code')):
+            return False
+        if 'data' in response or response.get('success') is True:
+            return True
+        result = response.get('result')
+        return result is True or (
+            isinstance(result, dict) and result.get('success') is True
         )
 
     def delete_products(self, ids: list[str]) -> bool:

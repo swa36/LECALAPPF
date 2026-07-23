@@ -34,6 +34,7 @@ class WBItem:
                 'length') and self.attribs.get('equipment') and self.attribs.get('color'):
             list_characteristics = self.characteristics()
             weight = self.attribs.get('weight_netto') or self.attribs.get('weight_brutto') or 0.3
+            weight_brutto = float(str(weight).strip().replace(',', '.'))
             data = {
                 "subjectID": self.SUB_CAT_ID,
                 "variants": [
@@ -46,7 +47,7 @@ class WBItem:
                             "length": int(self.attribs['length']),
                             "width": int(self.attribs['width']),
                             "height": int(self.attribs['height']),
-                            "weightBrutto": float(weight)
+                            "weightBrutto": weight_brutto,
                         },
                         "characteristics": list_characteristics,
                     }

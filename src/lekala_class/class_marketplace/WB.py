@@ -46,8 +46,8 @@ class WBItemCard(BaseMarketPlace):
 
     def get_items(self, param='all', cursor=None):
         parameters = {
-            'all': -1,
-            'withoutImg': 0,
+            'all': 0,
+            'withoutImg': 2,
             'withImg': 1
         }
         endpoint = 'v2/get/cards/list'

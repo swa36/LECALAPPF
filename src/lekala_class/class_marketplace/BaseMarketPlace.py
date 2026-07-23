@@ -8,6 +8,8 @@ from order.models import *
 import requests
 
 class BaseMarketPlace(ABC):
+    REQUEST_TIMEOUT_SECONDS = 30
+
     def __init__(self, headers, base_url):
         self.headers = headers
         self.base_url = base_url
@@ -30,7 +32,8 @@ class BaseMarketPlace(ABC):
             'method': method,
             'url': url,
             'headers': headers,
-            'params': params
+            'params': params,
+            'timeout': self.REQUEST_TIMEOUT_SECONDS,
         }
         if data:
             if use_json:
@@ -39,11 +42,22 @@ class BaseMarketPlace(ABC):
                 request_kwargs['data'] = data
 
         for attempt in range(5):
-            response = requests.request(**request_kwargs)
+            try:
+                response = requests.request(**request_kwargs)
+            except requests.RequestException as error:
+                print(
+                    f'HTTP request failed for {method} {url}: '
+                    f'{error.__class__.__name__}: {error}'
+                )
+                return None
             if response.status_code != 429:
                 break
             if attempt == 4:
                 break
+            print(
+                f'HTTP 429 for {method} {url}; retrying in 60 seconds '
+                f'(attempt {attempt + 1}/5)'
+            )
             time.sleep(60)
 
         try:

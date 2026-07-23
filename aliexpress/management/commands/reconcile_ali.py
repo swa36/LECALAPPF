@@ -9,7 +9,9 @@ from src.lekala_class.class_marketplace.AliExpress import AliExpress
 
 class Command(BaseCommand):
     help = 'Reconcile AliExpress product cards with the local catalog.'
-    STOCK_BATCH_SIZE = 1000
+    DELETE_BATCH_SIZE = 20
+    LINK_BATCH_SIZE = 1000
+    STOCK_BATCH_SIZE = 400
 
     def add_arguments(self, parser):
         parser.add_argument('--execute', action='store_true')
@@ -17,7 +19,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         client = AliExpress()
         plan = self._build_plan(client.get_all_products())
-        self._write_plan(plan)
+        self._write_plan(plan, execute=options['execute'])
         if options['execute']:
             self._apply_plan(client, plan)
 
@@ -84,35 +86,89 @@ class Command(BaseCommand):
         status = str(card.get('status', '')).lower()
         return status == 'offline' or card.get('is_online') is False or card.get('online') is False
 
-    def _write_plan(self, plan):
-        self.stdout.write('AliExpress reconciliation plan (dry-run by default):')
+    def _write_plan(self, plan, execute):
+        mode = 'execution' if execute else 'dry-run'
+        self.stdout.write(f'AliExpress reconciliation plan ({mode}):')
         self.stdout.write(f"missing SKU: {len(plan['missing_sku_ids'])}")
         self.stdout.write(f"missing local products: {len(plan['missing_local_ids'])}")
         self.stdout.write(f"duplicates: {len(plan['duplicate_ids'])}")
         self.stdout.write(f"planned deletions: {len(plan['delete_ids'])}")
         self.stdout.write(f"stock updates: {len(plan['stock_updates'])}")
         self.stdout.write(f"online restores: {len(plan['offline_ids'])}")
-        self.stdout.write('Failed stock batches: 0')
+        if not execute:
+            self.stdout.write('Dry-run complete: no remote or local changes made.')
 
     def _apply_plan(self, client, plan):
-        failed_batches = 0
-        if plan['delete_ids'] and client.delete_products(plan['delete_ids']) is not True:
-            failed_batches += 1
-        elif plan['delete_ids']:
-            AliData.objects.filter(id_ali__in=plan['delete_ids']).delete()
-        for product, remote_id in plan['surviving_links']:
-            AliData.objects.update_or_create(product=product, defaults={'id_ali': remote_id})
-        for batch in self._batches(plan['stock_updates'], self.STOCK_BATCH_SIZE):
+        deleted_cards = 0
+        deleted_links = 0
+        failed_delete_batches = 0
+        failed_stock_batches = 0
+        failed_online_batches = 0
+
+        self.stdout.write('Starting execution. Press Ctrl+C to stop safely between requests.')
+        delete_batches = list(self._batches(plan['delete_ids'], self.DELETE_BATCH_SIZE))
+        for number, batch in enumerate(delete_batches, start=1):
+            self.stdout.write(
+                f'Delete batch {number}/{len(delete_batches)}: {len(batch)} cards'
+            )
+            if client.delete_products(batch) is True:
+                deleted_cards += len(batch)
+                deleted_links += AliData.objects.filter(id_ali__in=batch).delete()[0]
+                self.stdout.write(f'Delete batch {number}/{len(delete_batches)} succeeded')
+            else:
+                failed_delete_batches += 1
+                self.stdout.write(self.style.ERROR(
+                    f'Delete batch {number}/{len(delete_batches)} failed'
+                ))
+
+        link_batches = list(self._batches(plan['surviving_links'], self.LINK_BATCH_SIZE))
+        for number, batch in enumerate(link_batches, start=1):
+            self.stdout.write(
+                f'Link batch {number}/{len(link_batches)}: {len(batch)} cards'
+            )
+            for product, remote_id in batch:
+                AliData.objects.update_or_create(
+                    product=product, defaults={'id_ali': remote_id}
+                )
+            self.stdout.write(f'Link batch {number}/{len(link_batches)} succeeded')
+
+        stock_batches = list(self._batches(plan['stock_updates'], self.STOCK_BATCH_SIZE))
+        for number, batch in enumerate(stock_batches, start=1):
+            self.stdout.write(
+                f'Stock batch {number}/{len(stock_batches)}: {len(batch)} products'
+            )
             if client.update_stock(data=batch) is True:
+                self.stdout.write(f'Stock batch {number}/{len(stock_batches)} succeeded')
                 offline_ids = [
                     update['product_id'] for update in batch
                     if update['product_id'] in plan['offline_ids']
                 ]
-                if offline_ids and client.set_online(offline_ids) is not True:
-                    failed_batches += 1
+                if offline_ids:
+                    self.stdout.write(
+                        f'Online batch {number}/{len(stock_batches)}: '
+                        f'{len(offline_ids)} cards'
+                    )
+                    if client.set_online(offline_ids) is True:
+                        self.stdout.write(
+                            f'Online batch {number}/{len(stock_batches)} succeeded'
+                        )
+                    else:
+                        failed_online_batches += 1
+                        self.stdout.write(self.style.ERROR(
+                            f'Online batch {number}/{len(stock_batches)} failed'
+                        ))
             else:
-                failed_batches += 1
-        self.stdout.write(f'Failed stock batches: {failed_batches}')
+                failed_stock_batches += 1
+                self.stdout.write(self.style.ERROR(
+                    f'Stock batch {number}/{len(stock_batches)} failed'
+                ))
+
+        self.stdout.write('Execution summary:')
+        self.stdout.write(f'Deleted AliExpress cards: {deleted_cards}')
+        self.stdout.write(f'Deleted local AliData links: {deleted_links}')
+        self.stdout.write(f'Failed delete batches: {failed_delete_batches}')
+        self.stdout.write(f'Failed stock batches: {failed_stock_batches}')
+        self.stdout.write(f'Failed online batches: {failed_online_batches}')
 
     @staticmethod
     def _batches(items, batch_size):

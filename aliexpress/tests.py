@@ -1,3 +1,4 @@
+from contextlib import redirect_stdout
 from io import StringIO
 from unittest.mock import patch
 
@@ -6,11 +7,24 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from aliexpress.models import AliData
+from aliexpress.management.commands.reconcile_ali import Command
 from catalog.models import Category, Product
 from src.lekala_class.class_marketplace.AliExpress import AliExpress
 
 
 class AliExpressReconciliationTests(TestCase):
+    @patch('src.lekala_class.class_marketplace.BaseMarketPlace.requests.request')
+    def test_request_timeout_is_reported_and_returns_failure(self, request):
+        request.side_effect = requests.exceptions.Timeout('timed out')
+        output = StringIO()
+
+        with redirect_stdout(output):
+            self.assertFalse(AliExpress().update_stock(data=[]))
+
+        self.assertEqual(request.call_args.kwargs['timeout'], 30)
+        self.assertIn('HTTP request failed', output.getvalue())
+        self.assertIn('Timeout', output.getvalue())
+
     @patch('src.lekala_class.class_marketplace.BaseMarketPlace.time.sleep')
     @patch('src.lekala_class.class_marketplace.BaseMarketPlace.requests.request')
     def test_update_stock_retries_rate_limit_response(self, request, sleep):
@@ -24,9 +38,13 @@ class AliExpressReconciliationTests(TestCase):
         successful.headers['Content-Type'] = 'application/json'
         request.side_effect = [rate_limited, successful]
 
-        self.assertTrue(AliExpress().update_stock(data=[]))
+        output = StringIO()
+        with redirect_stdout(output):
+            self.assertTrue(AliExpress().update_stock(data=[]))
+
         self.assertEqual(request.call_count, 2)
         sleep.assert_called_once_with(60.0)
+        self.assertIn('HTTP 429', output.getvalue())
 
     @patch.object(AliExpress, '_request')
     def test_reads_all_ali_pages(self, request):
@@ -100,6 +118,9 @@ class AliExpressReconciliationTests(TestCase):
 
 
 class ReconcileAliCommandTests(TestCase):
+    def test_stock_updates_use_four_hundred_card_batches(self):
+        self.assertEqual(Command.STOCK_BATCH_SIZE, 400)
+
     def setUp(self):
         category = Category.objects.create(
             uuid_1C='11111111-1111-1111-1111-111111111111', name='Category'
@@ -127,13 +148,13 @@ class ReconcileAliCommandTests(TestCase):
         ali_cls.return_value.delete_products.assert_not_called()
 
     @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
-    def test_dry_run_prints_zero_failed_stock_batches(self, ali_cls):
+    def test_dry_run_reports_that_no_changes_were_made(self, ali_cls):
         ali_cls.return_value.get_all_products.return_value = []
         output = StringIO()
 
         call_command('reconcile_ali', stdout=output)
 
-        self.assertIn('Failed stock batches: 0', output.getvalue())
+        self.assertIn('Dry-run complete: no remote or local changes made.', output.getvalue())
 
     @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
     def test_execute_keeps_linked_duplicate(self, ali_cls):
@@ -155,6 +176,33 @@ class ReconcileAliCommandTests(TestCase):
         call_command('reconcile_ali', '--execute')
 
         ali_cls.return_value.delete_products.assert_called_once_with(['1'])
+
+    @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
+    def test_execute_reports_successful_deletion(self, ali_cls):
+        ali_cls.return_value.get_all_products.return_value = [
+            {'id': '100', 'sku': [{'code': 'MISSING'}]}
+        ]
+        ali_cls.return_value.delete_products.return_value = True
+        output = StringIO()
+
+        call_command('reconcile_ali', '--execute', stdout=output)
+
+        self.assertIn('Starting execution', output.getvalue())
+        self.assertIn('Delete batch 1/1 succeeded', output.getvalue())
+        self.assertIn('Deleted AliExpress cards: 1', output.getvalue())
+
+    @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
+    def test_execute_reports_failed_deletion(self, ali_cls):
+        ali_cls.return_value.get_all_products.return_value = [
+            {'id': '100', 'sku': [{'code': 'MISSING'}]}
+        ]
+        ali_cls.return_value.delete_products.return_value = False
+        output = StringIO()
+
+        call_command('reconcile_ali', '--execute', stdout=output)
+
+        self.assertIn('Delete batch 1/1 failed', output.getvalue())
+        self.assertIn('Failed delete batches: 1', output.getvalue())
 
     @patch('aliexpress.management.commands.reconcile_ali.AliExpress')
     def test_delete_error_payload_keeps_ali_link(self, ali_cls):

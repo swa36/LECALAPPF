@@ -63,7 +63,7 @@ class BaseMarketPlace(ABC):
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError:
-            print(f"❌ HTTP error for {method} {url}")
+            print(f"❌ HTTP error for {method}\n{url}\n{data}")
             print(f"Status code: {response.status_code}")
             # if response.status_code == 429:
             #     print("Через 10 секунд шлем повтор")

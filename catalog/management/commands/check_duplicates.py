@@ -30,9 +30,26 @@ class Command(BaseCommand):
             default=0,
             help="Показать не больше N групп (0 — все)",
         )
+        parser.add_argument(
+            "--check-1c",
+            action="store_true",
+            help="Сверить каждый товар с выгрузкой 1С (качает весь каталог)",
+        )
 
     def handle(self, *args, **options):
         field = FIELDS[options["by"]]
+
+        api_uuids = None
+        if options["check_1c"]:
+            from src.lekala_class.class_1C.GetData1C import GetData1C
+
+            self.stdout.write("Качаю каталог из 1С для сверки...")
+            items = GetData1C().get_all_products()
+            if not items:
+                self.stderr.write(self.style.ERROR("1С не вернула товары — сверка невозможна"))
+                return
+            api_uuids = {i["ref_key"] for i in items}
+            self.stdout.write(f"Товаров в выгрузке 1С: {len(api_uuids)}\n")
 
         groups = (
             Product.objects.exclude(**{field: ""})
@@ -57,6 +74,7 @@ class Command(BaseCommand):
         shown = groups[:limit] if limit else groups
 
         blocking = 0
+        ghosts = 0
         for group in shown:
             value = group[field]
             self.stdout.write(f"{value}  ×{group['total']}")
@@ -73,8 +91,16 @@ class Command(BaseCommand):
                 if hasattr(product, "ali"):
                     marketplaces.append("ALI")
 
+                if api_uuids is None:
+                    in_1c = ""
+                elif str(product.uuid_1C) in api_uuids:
+                    in_1c = "есть в 1С    "
+                else:
+                    in_1c = "НЕТ В 1С     "
+                    ghosts += 1
+
                 self.stdout.write(
-                    f"    {product.uuid_1C}  stock={product.stock:<5} "
+                    f"    {product.uuid_1C}  stock={product.stock:<5} {in_1c}"
                     f"кат: {str(product.category)[:20]:<20} "
                     f"{'/'.join(marketplaces) or '—':<18} {product.name[:45]}"
                 )
@@ -91,7 +117,16 @@ class Command(BaseCommand):
         if limit and count > limit:
             self.stdout.write(f"\n... показано {limit} из {count}, весь список — без --limit")
 
+        self.stdout.write(f"\nГрупп с привязкой к WB: {blocking}.")
+        if ghosts:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"Товаров, которых нет в выгрузке 1С: {ghosts}. "
+                    "Это остатки от удалённой или пересозданной номенклатуры — "
+                    "синхронизация их не трогает и не удаляет."
+                )
+            )
         self.stdout.write(
-            f"\nГрупп с привязкой к WB: {blocking}. "
-            "Дубли артикулов правятся в 1С — на стороне сайта их чинить нечем."
+            "Дубли артикулов у живых товаров правятся в 1С — "
+            "на стороне сайта их чинить нечем."
         )

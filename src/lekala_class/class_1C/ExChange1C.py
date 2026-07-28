@@ -138,11 +138,11 @@ class ExChange1C:
             )
             img_obj.image.save(image["filename"], ContentFile(image["bytes"]), save=True)
 
-        if hasattr(product, "ozon"):
-            from ozon.tasks import update_img_ozon as sent_img_ozon
-
-            sent_img_ozon.delay(id=product.id)
-        if hasattr(product, "wb"):
-            from wildberries.tasks import sent_img_video as sent_img_wb
-
-            sent_img_wb.delay(id=product.id)
+        # if hasattr(product, "ozon"):
+        #     from ozon.tasks import update_img_ozon as sent_img_ozon
+        #
+        #     sent_img_ozon.delay(id=product.id)
+        # if hasattr(product, "wb"):
+        #     from wildberries.tasks import sent_img_video as sent_img_wb
+        #
+        #     sent_img_wb.delay(id=product.id)

@@ -27,46 +27,51 @@ class GetData1C(ExChange1C):
                 defaults={"name_attribute": item["description"]},
             )
 
+    ROOT_UUID_1C = "00000000-0000-0000-0000-000000000000"
+
     def set_category_catalog(self):
         data_category = self.get_category()["value"]
-        dict_cat = {
-            "main_cat": [],
-            "sub_cat": [],
-            "sub_sub_cat": [],
-            "sub_sub_sub_cat": [],
-        }
+        if not data_category:
+            print(
+                "1С не вернула ни одной категории — дерево категорий не обновлено. "
+                "Проверь доступность /categories (см. ошибку запроса выше)."
+            )
+            return
 
+        by_ref = {item["ref_key"]: item for item in data_category}
+        children = {}
         for item in data_category:
-            if item["parent_key"] == "00000000-0000-0000-0000-000000000000":
-                dict_cat["main_cat"].append(item)
-
-        list_id_main_cat = [item["ref_key"] for item in dict_cat["main_cat"]]
-
-        for item in data_category:
-            if item["parent_key"] in list_id_main_cat:
-                dict_cat["sub_cat"].append(item)
-
-        list_id_sub_cat = [item["ref_key"] for item in dict_cat["sub_cat"]]
-
-        for item in data_category:
-            if item["parent_key"] in list_id_sub_cat:
-                dict_cat["sub_sub_cat"].append(item)
-
-        list_id_sub_sub_cat = [item["ref_key"] for item in dict_cat["sub_sub_cat"]]
-
-        for item in data_category:
-            if item["parent_key"] in list_id_sub_sub_cat:
-                dict_cat["sub_sub_sub_cat"].append(item)
-
-        for group, values in dict_cat.items():
-            for item in values:
-                defaults = {"name": item["description"]}
-                if group != "main_cat":
-                    defaults["parent"] = Category.objects.get(uuid_1C=item["parent_key"])
-                Category.objects.update_or_create(
-                    uuid_1C=item["ref_key"],
-                    defaults=defaults,
+            parent_key = item["parent_key"]
+            if parent_key != self.ROOT_UUID_1C and parent_key not in by_ref:
+                print(
+                    f"Категория {item['description']} ({item['ref_key']}) ссылается на "
+                    f"отсутствующего родителя {parent_key} — поднята в корень"
                 )
+                parent_key = self.ROOT_UUID_1C
+            children.setdefault(parent_key, []).append(item)
+
+        # Обход в ширину от корня: родитель всегда сохранён раньше потомка,
+        # поэтому глубина дерева ничем не ограничена (MPTT тоже требует
+        # такого порядка вставки).
+        queue = [(item, None) for item in children.get(self.ROOT_UUID_1C, [])]
+        processed = 0
+        while queue:
+            item, parent = queue.pop(0)
+            category, _ = Category.objects.update_or_create(
+                uuid_1C=item["ref_key"],
+                defaults={"name": item["description"], "parent": parent},
+            )
+            processed += 1
+            for child in children.get(item["ref_key"], []):
+                queue.append((child, category))
+
+        if processed != len(data_category):
+            print(
+                f"Из 1С получено категорий: {len(data_category)}, сохранено: {processed}. "
+                "Недостающие недостижимы от корня (циклическая ссылка parent_key)."
+            )
+        else:
+            print(f"Категории обновлены: {processed}")
 
     def set_type_price(self):
         suffix_type_price = {
@@ -142,18 +147,39 @@ class GetData1C(ExChange1C):
                     or product_before.data_version != item.get("data_version")
                 )
 
+                defaults = {
+                    "article_1C": item["article"].strip(),
+                    "code_1C": item["code"],
+                    "data_version": item.get("data_version") or "",
+                    "name": item["description"].strip(),
+                    "description": item["description_text"],
+                    "stock": stock,
+                    "main_img_uuid": item.get("picture_file_key") or None,
+                }
+
+                # Категории может не быть в дереве сайта: в 1С её перенесли в
+                # «Удалено(архив)», и /categories её больше не отдаёт. Тогда
+                # обновляем товару всё остальное, а категорию оставляем прежней.
+                category = Category.objects.filter(uuid_1C=item["parent_key"]).first()
+                if category is not None:
+                    defaults["category"] = category
+                elif product_before is None:
+                    print(
+                        f"Пропущен новый товар {item['description'].strip()} "
+                        f"({item['article'].strip()}): категория {item['parent_key']} "
+                        f"отсутствует в дереве сайта"
+                    )
+                    continue
+                else:
+                    print(
+                        f"Товар {item['description'].strip()} ({item['article'].strip()}): "
+                        f"категория {item['parent_key']} не найдена (архив в 1С) — "
+                        f"оставлена прежняя «{product_before.category}»"
+                    )
+
                 product, created = Product.objects.update_or_create(
                     uuid_1C=item["ref_key"],
-                    defaults={
-                        "article_1C": item["article"].strip(),
-                        "code_1C": item["code"],
-                        "data_version": item.get("data_version") or "",
-                        "name": item["description"].strip(),
-                        "description": item["description_text"],
-                        "stock": stock,
-                        "main_img_uuid": item.get("picture_file_key") or None,
-                        "category": Category.objects.get(uuid_1C=item["parent_key"]),
-                    },
+                    defaults=defaults,
                 )
 
                 price_by_type = {

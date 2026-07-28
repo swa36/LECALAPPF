@@ -33,6 +33,15 @@ class Command(BaseCommand):
             default=0,
             help="Сколько строк показать в каждой группе (0 — все)",
         )
+        parser.add_argument(
+            "--cutoff",
+            type=float,
+            default=NAME_RATIO,
+            help=(
+                "Порог совпадения названий, 0..1 (по умолчанию 0.75). "
+                "0.9 и выше оставляет почти только настоящие пары"
+            ),
+        )
 
     def handle(self, *args, **options):
         api = WBItemCard()
@@ -73,15 +82,21 @@ class Command(BaseCommand):
                     continue
 
                 product_id = name_index.get(title.lower())
+                ratio = 1.0 if product_id else 0.0
                 if product_id is None and title:
                     close = difflib.get_close_matches(
-                        title.lower(), name_index.keys(), n=1, cutoff=NAME_RATIO
+                        title.lower(), name_index.keys(), n=1, cutoff=options["cutoff"]
                     )
                     if close:
                         product_id = name_index[close[0]]
+                        ratio = difflib.SequenceMatcher(
+                            None, title.lower(), close[0]
+                        ).ratio()
 
                 if product_id:
-                    by_name_hits.append((code, title, names.get(product_id), "название"))
+                    by_name_hits.append(
+                        (code, title, names.get(product_id), f"название {ratio:.0%}")
+                    )
                 else:
                     no_match.append((code, title))
 
@@ -97,9 +112,11 @@ class Command(BaseCommand):
             "поправить артикул через update_vendor_code_wb.",
             by_barcode_hits, show, with_candidate=True,
         )
+        by_name_hits.sort(key=lambda row: row[3], reverse=True)
         self._dump(
             f"=== Кандидат найден по названию: {len(by_name_hits)} ===\n"
-            "    Похоже на тот же товар. Проверить глазами перед решением.",
+            "    Отсортировано по совпадению. Ниже 90% пары обычно ложные:\n"
+            "    difflib подберёт «Belgee X70» к «Belgee X50+». Проверять глазами.",
             by_name_hits, show, with_candidate=True,
         )
         self._dump(

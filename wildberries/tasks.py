@@ -125,14 +125,64 @@ def candidates_for_wb():
     )
 
 
+def existing_vendor_codes_wb(wb_api=None):
+    """vendorCode всех карточек на WB — актуальных и в корзине.
+
+    WB отвергает создание карточки с занятым артикулом ошибкой
+    "the specified card's vendor code is used in other cards". Так бывает, когда
+    карточка на WB есть, а связки WBData в базе нет: тогда товар выглядит как
+    «без карточки». Собранные коды позволяют не отправлять заведомо отбойные.
+    """
+    wb_api = wb_api or WBItemCard()
+    codes = set()
+
+    cursor = None
+    while True:
+        data = wb_api.get_items(param='all', cursor=cursor)
+        cards = data.get('cards')
+        if cards is None:
+            return None
+        codes.update(card['vendorCode'] for card in cards if card.get('vendorCode'))
+        cursor_data = data.get('cursor') or {}
+        if len(cards) < 100 or 'nmID' not in cursor_data or 'updatedAt' not in cursor_data:
+            break
+        cursor = {
+            'updatedAt': cursor_data['updatedAt'],
+            'nmID': cursor_data['nmID'],
+            'limit': 100,
+        }
+
+    cursor = None
+    while True:
+        data = wb_api.get_trash(cursor=cursor)
+        cards = data.get('cards') or []
+        codes.update(card['vendorCode'] for card in cards if card.get('vendorCode'))
+        cursor_data = data.get('cursor') or {}
+        if len(cards) < 100 or 'nmID' not in cursor_data or 'trashedAt' not in cursor_data:
+            break
+        cursor = {
+            'trashedAt': cursor_data['trashedAt'],
+            'nmID': cursor_data['nmID'],
+            'limit': 100,
+        }
+
+    return codes
+
+
 def add_new_item_wb(dry_run=False, limit=None, report=None):
     """Заводит карточки на WB для товаров, которых там ещё нет.
 
     Товар пропускается, если у него не заполнены атрибуты, обязательные для
-    карточки (material, width, length, equipment, color) или нет розничной цены.
-    Такие собираются в report, если он передан.
+    карточки (material, width, length, equipment, color), нет розничной цены
+    или его артикул уже занят карточкой на WB. Такие собираются в report,
+    если он передан.
     """
     wb_api = WBItemCard()
+    taken_codes = existing_vendor_codes_wb(wb_api)
+    if taken_codes is None:
+        print('WB не вернул список карточек — заведение отменено, иначе полезли бы дубли')
+        return 0
+
     product_not_wb = candidates_for_wb()
     if limit:
         product_not_wb = product_not_wb[:limit]
@@ -140,6 +190,10 @@ def add_new_item_wb(dry_run=False, limit=None, report=None):
     sent = 0
     batch = []
     for item in product_not_wb:
+        if item.article_1C in taken_codes:
+            if report is not None:
+                report.setdefault('taken', []).append(item)
+            continue
         # Если пакет заполнен, отправляем его
         if len(batch) >= 1:
             if not dry_run:

@@ -43,8 +43,27 @@ class Command(BaseCommand):
         report = {}
         sent = add_new_item_wb(dry_run=not options["apply"], limit=limit, report=report)
         skipped = report.get("skipped", [])
+        taken = report.get("taken", [])
 
         show = options["show"]
+        if taken:
+            self.stdout.write(
+                f"\n=== Артикул уже занят карточкой на WB: {len(taken)} ==="
+            )
+            self.stdout.write(
+                "    Карточка на WB есть, а связки WBData нет. Заводить нельзя — "
+                "WB ответит «vendor code is used in other cards».\n"
+                "    Подтяни связки: manage.py shell -c "
+                '"from wildberries.tasks import set_id_wb; set_id_wb()"'
+            )
+            rows = taken if show == 0 else taken[:show]
+            for product in rows:
+                self.stdout.write(
+                    f"    {product.article_1C[:24]:<24} {product.name[:45]}"
+                )
+            if show and len(taken) > show:
+                self.stdout.write(f"    ... ещё {len(taken) - show}, весь список — с --show 0")
+
         if skipped:
             self.stdout.write(f"\n=== Пропущены: {len(skipped)} ===")
             rows = skipped if show == 0 else skipped[:show]

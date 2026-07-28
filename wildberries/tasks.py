@@ -2,12 +2,13 @@ import time
 from typing import Optional, Dict
 import pandas as pd
 from celery import shared_task
-from django.db.models import Q
+from django.db.models import Q, F
 
 from src.lekala_class.class_1C.ExChange1C import ExChange1C
 from order.models import OrderWB
 from src.lekala_class.class_marketplace.WB import WBItemCard, PriceItemWB, StockItemWB, GetOrderWB
 from catalog.models import Product, MarkUpItems, Category
+from wildberries.models import WBData
 from src.lekala_class.class_marketplace.WBItem import WBItem
 
 
@@ -147,6 +148,89 @@ def update_item_wb(data):
             continue
     wb_api.update_item(data=batch)
     time.sleep(10)
+
+
+@shared_task
+def update_vendor_code_wb(dry_run=False):
+    """Приводит vendorCode на WB к article_1C из 1С.
+
+    Карточка ищется по nmID (он неизменен), поэтому связка не рвётся, даже
+    когда артикул уже разъехался. v2/cards/update перезаписывает карточку
+    целиком, поэтому берём её из v2/get/cards/list как есть и правим только
+    vendorCode.
+    """
+    mismatched = {
+        wb_id: article
+        for wb_id, article in Product.objects.filter(wb__isnull=False)
+        .exclude(article_1C=F('wb__offer_id'))
+        .values_list('wb__wb_id', 'article_1C')
+        if wb_id
+    }
+    if not mismatched:
+        print('Расхождений article_1C и offer_id нет')
+        return
+
+    print(f'Артикулов к обновлению: {len(mismatched)}')
+
+    wb_api = WBItemCard()
+    batch = []
+    cursor = None
+    while True:
+        data = wb_api.get_items(param='all', cursor=cursor)
+        cards = data.get('cards') or []
+        for card in cards:
+            new_code = mismatched.get(card.get('nmID'))
+            if not new_code:
+                continue
+            print(
+                f"nmID {card['nmID']}: {card['vendorCode']} -> {new_code}\n"
+                f"    карточка WB: {card.get('title')}\n"
+                f"    товар в БД : {Product.objects.get(wb__wb_id=card['nmID']).name}"
+            )
+            payload = {
+                key: value
+                for key, value in card.items()
+                if key not in ('createdAt', 'updatedAt')
+            }
+            payload['vendorCode'] = new_code
+            batch.append(payload)
+
+        cursor_data = data.get('cursor') or {}
+        if len(cards) < 100 or 'nmID' not in cursor_data or 'updatedAt' not in cursor_data:
+            break
+        cursor = {
+            'updatedAt': cursor_data['updatedAt'],
+            'nmID': cursor_data['nmID'],
+            'limit': 100,
+        }
+
+    not_found = set(mismatched) - {card['nmID'] for card in batch}
+    if not_found:
+        print(f'Карточки не найдены на WB, nmID: {sorted(not_found)}')
+
+    if not batch:
+        print('Нечего отправлять')
+        return
+
+    if dry_run:
+        print(f'dry_run: на WB ничего не отправлено, в батче карточек {len(batch)}')
+        return
+
+    for start in range(0, len(batch), 100):
+        chunk = batch[start:start + 100]
+        response = wb_api.update_item(data=chunk)
+        if isinstance(response, dict) and response.get('error'):
+            print(f"WB вернул ошибку: {response.get('errorText')}")
+            continue
+        for card in chunk:
+            WBData.objects.filter(wb_id=card['nmID']).update(offer_id=card['vendorCode'])
+        # лимит метода — 10 запросов в минуту
+        time.sleep(7)
+
+    print(
+        'Готово. Изменения на WB применяются до 30 минут; '
+        'непрошедшие карточки смотри в v2/cards/error/list'
+    )
 
 
 def get_all_card(next_cursor:Optional[Dict]=None):

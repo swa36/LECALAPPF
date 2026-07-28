@@ -85,20 +85,32 @@ class WBItemCard(BaseMarketPlace):
 
     def set_id_wb_num(self, data):
         for i in data['cards']:
+            code = i.get('vendorCode')
             try:
-                prod = Product.objects.get(article_1C=i['vendorCode'])
-                print(f'WB {i["imtID"]} {i["sizes"][0]["skus"][0]} {prod.name}')
-                WBData.objects.update_or_create(
-                    product=prod,
-                    defaults={
-                        'offer_id':i['vendorCode'],
-                        'wb_id':i['nmID'],
-                        'wb_barcode':i['sizes'][0]['skus'][0],
-                        'wb_item_id':i['imtID']
-                    }
-                )
-            except:
-                print(i['vendorCode'])
+                prod = Product.objects.get(article_1C=code)
+            except Product.DoesNotExist:
+                print(f'{code}: товара с таким артикулом нет в базе')
+                continue
+            except Product.MultipleObjectsReturned:
+                print(f'{code}: артикул задублирован в 1С — привязать нельзя')
+                continue
+
+            sizes = i.get('sizes') or []
+            skus = (sizes[0].get('skus') if sizes else None) or []
+            if not skus:
+                print(f'{code}: у карточки нет баркода ({prod.name})')
+                continue
+
+            print(f'WB {i["imtID"]} {skus[0]} {prod.name}')
+            WBData.objects.update_or_create(
+                product=prod,
+                defaults={
+                    'offer_id': code,
+                    'wb_id': i['nmID'],
+                    'wb_barcode': skus[0],
+                    'wb_item_id': i['imtID']
+                }
+            )
 
     def post_img(self, item):
         url = 'https://lpff.ru'

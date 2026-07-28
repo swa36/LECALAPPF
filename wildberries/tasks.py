@@ -36,10 +36,12 @@ def exele_wb():
 
 def set_id_wb(next_cursor:Optional[Dict]=None) -> None:
     wb_api = WBItemCard()
+    # param='all': раньше обход шёл с 'withoutImg' и карточки, не попавшие под
+    # этот фильтр, не привязывались никогда, сколько ни запускай.
     if next_cursor:
-        data = wb_api.get_items(param='withoutImg',cursor=next_cursor)
+        data = wb_api.get_items(param='all',cursor=next_cursor)
     else:
-        data = wb_api.get_items(param='withoutImg')
+        data = wb_api.get_items(param='all')
     wb_api.set_id_wb_num(data)
     if 'nmID' in  data['cursor'] and 'updatedAt' in data['cursor']:
         next_cursor = {

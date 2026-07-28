@@ -26,7 +26,7 @@ class Command(BaseCommand):
     def _build_plan(self, cards):
         products = {
             product.code_1C: product
-            for product in Product.objects.only('id', 'code_1C', 'stock')
+            for product in Product.objects.only('id', 'code_1C', 'stock', 'is_archive')
         }
         linked_ids = set(
             AliData.objects.exclude(id_ali__isnull=True).values_list('id_ali', flat=True)
@@ -34,8 +34,8 @@ class Command(BaseCommand):
         cards_by_code = defaultdict(list)
         plan = {
             'missing_sku_ids': [], 'missing_local_ids': [], 'duplicate_ids': [],
-            'delete_ids': [], 'surviving_links': [], 'stock_updates': [],
-            'offline_ids': [],
+            'archived_ids': [], 'delete_ids': [], 'surviving_links': [],
+            'stock_updates': [], 'offline_ids': [],
         }
         for card in cards:
             card_id = str(card.get('id', ''))
@@ -49,8 +49,13 @@ class Command(BaseCommand):
         plan['delete_ids'].extend(plan['missing_sku_ids'])
         plan['delete_ids'].extend(plan['missing_local_ids'])
         for code, matching_cards in cards_by_code.items():
-            kept_card = self._card_to_keep(matching_cards, linked_ids)
             product = products[code]
+            # Товар уехал в 1С в «Удалено(архив)»: карточку на Ali держать
+            # незачем, связку тоже. Дубли такого товара уйдут вместе с ней.
+            if product.is_archive:
+                plan['archived_ids'].extend(str(card['id']) for card in matching_cards)
+                continue
+            kept_card = self._card_to_keep(matching_cards, linked_ids)
             kept_id = str(kept_card['id'])
             plan['surviving_links'].append((product, kept_id))
             if product.stock > 0:
@@ -62,6 +67,7 @@ class Command(BaseCommand):
                 if card_id != kept_id:
                     plan['duplicate_ids'].append(card_id)
         plan['delete_ids'].extend(plan['duplicate_ids'])
+        plan['delete_ids'].extend(plan['archived_ids'])
         return plan
 
     @staticmethod
@@ -92,6 +98,7 @@ class Command(BaseCommand):
         self.stdout.write(f"missing SKU: {len(plan['missing_sku_ids'])}")
         self.stdout.write(f"missing local products: {len(plan['missing_local_ids'])}")
         self.stdout.write(f"duplicates: {len(plan['duplicate_ids'])}")
+        self.stdout.write(f"archived products: {len(plan['archived_ids'])}")
         self.stdout.write(f"planned deletions: {len(plan['delete_ids'])}")
         self.stdout.write(f"stock updates: {len(plan['stock_updates'])}")
         self.stdout.write(f"online restores: {len(plan['offline_ids'])}")

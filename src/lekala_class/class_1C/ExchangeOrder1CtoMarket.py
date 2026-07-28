@@ -7,6 +7,11 @@ from django.conf import settings
 from requests.auth import HTTPBasicAuth
 
 
+# POST /order создаёт и сразу проводит документ ЗаказКлиента, поэтому ждём
+# заметно дольше, чем на чтении справочников.
+ORDER_TIMEOUT_SECONDS = 60
+
+
 class OrderMarketplaceTo1C:
     """Унифицированный класс для передачи заказов маркетплейсов в 1С."""
 
@@ -90,6 +95,15 @@ class OrderMarketplaceTo1C:
         price = getattr(item, "price", self.order.price)
         if self.platform_info["name"] == "Avito" and quantity:
             price = price / quantity
+        if product is None:
+            # Позиции заказа ссылаются на товар через GenericForeignKey, который
+            # Django не защищает от удаления. Заказ уедет с пустой номенклатурой,
+            # поэтому хотя бы говорим об этом вслух.
+            print(
+                f"Заказ {getattr(self.order, 'number_1C', '')}: позиция без товара "
+                f"(object_id={getattr(item, 'object_id', '?')}) — "
+                "в 1С уйдёт пустая номенклатура"
+            )
         return {
             "Номенклатура_Key": str(product.uuid_1C)
             if product
@@ -121,12 +135,15 @@ class OrderMarketplaceTo1C:
         body = json.dumps(order_data, ensure_ascii=False).encode("utf-8")
 
         try:
+            # 1С создаёт и сразу проводит документ, это дольше обычного чтения.
+            # На таймауте заказ помечен не будет и уедет повторно — а в 1С уже
+            # может лежать созданный. Поэтому ждём долго.
             response = requests.post(
                 url,
                 auth=self.auth,
                 data=body,
                 headers=headers,
-                timeout=10,
+                timeout=ORDER_TIMEOUT_SECONDS,
             )
             try:
                 response_data = response.json()

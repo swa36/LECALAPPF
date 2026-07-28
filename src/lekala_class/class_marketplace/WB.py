@@ -72,6 +72,17 @@ class WBItemCard(BaseMarketPlace):
         req = self._request("POST", endpoint, data)
         return req
 
+    def get_trash(self, cursor=None):
+        """Карточки в корзине. Лежат там 30 дней, потом удаляются насовсем."""
+        endpoint = 'v2/get/cards/trash'
+        data = {
+            "settings": {
+                "sort": {"ascending": False},
+                "cursor": cursor or {"limit": 100},
+            }
+        }
+        return self._request("POST", endpoint, data)
+
     def set_id_wb_num(self, data):
         for i in data['cards']:
             try:

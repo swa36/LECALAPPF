@@ -4,7 +4,7 @@ from src.lekala_class.class_1C.ExchangeOrder1CtoMarket import OrderMarketplaceTo
 from avito.tasks import getOrderAvito
 from wildberries.tasks import get_new_order_wb
 from aliexpress.tasks import get_order_ali
-from yamarket.tasks import get_order_info_ya
+# from yamarket.tasks import get_order_info_ya
 @shared_task
 def order_change():
     order_avito = OrderAvito.objects.filter(exchange_1c=False)
@@ -23,4 +23,7 @@ def get_all_new_order():
     getOrderAvito.delay()
     get_new_order_wb.delay()
     get_order_ali.delay()
-    get_order_info_ya.delay()
+    # С Яндекс.Маркетом больше не работаем: его API отвечает 403 на каждый
+    # запрос, а задача крутилась в расписании каждые 5 минут. Сама задача и
+    # модель OrderYM оставлены — в них лежит история заказов.
+    # get_order_info_ya.delay()

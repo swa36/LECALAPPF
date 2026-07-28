@@ -211,12 +211,11 @@ class OrderAvitoAdminTest(TestCase):
 
 
 class OrderTaskTest(TestCase):
-    @patch("order.tasks.get_order_info_ya.delay")
     @patch("order.tasks.get_order_ali.delay")
     @patch("order.tasks.get_new_order_wb.delay")
     @patch("order.tasks.getOrderAvito.delay")
     def test_get_all_new_order_queues_avito(
-        self, avito_delay, _wb_delay, _ali_delay, _ya_delay
+        self, avito_delay, _wb_delay, _ali_delay
     ):
         get_all_new_order.run()
 

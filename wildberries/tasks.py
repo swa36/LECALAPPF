@@ -113,29 +113,60 @@ def get_new_order_wb():
             print('New order create WB')
     return
 
-def add_new_item_wb():
-    wb_api = WBItemCard()
-    exclude_cat = Category.objects.get(name='Инструмент и оборудование для нанесения плёнок').get_family()
-    product_not_wb = Product.objects.filter(
+def candidates_for_wb():
+    """Товары без карточки WB, которых можно туда завести."""
+    exclude_cat = Category.objects.filter(
+        name='Инструмент и оборудование для нанесения плёнок'
+    ).first()
+    exclude_ids = [i.id for i in exclude_cat.get_family()] if exclude_cat else []
+    return Product.objects.filter(
         Q(wb__isnull=True) & Q(is_archive=False)
-        & ~Q(category__id__in=[i.id for i in exclude_cat])
+        & ~Q(category__id__in=exclude_ids)
     )
-    # product_not_wb = Product.objects.filter(code_1C="AA-00004773")
-    # Обработка всех элементов в одном цикле
+
+
+def add_new_item_wb(dry_run=False, limit=None, report=None):
+    """Заводит карточки на WB для товаров, которых там ещё нет.
+
+    Товар пропускается, если у него не заполнены атрибуты, обязательные для
+    карточки (material, width, length, equipment, color) или нет розничной цены.
+    Такие собираются в report, если он передан.
+    """
+    wb_api = WBItemCard()
+    product_not_wb = candidates_for_wb()
+    if limit:
+        product_not_wb = product_not_wb[:limit]
+
+    sent = 0
     batch = []
     for item in product_not_wb:
         # Если пакет заполнен, отправляем его
         if len(batch) >= 1:
-            wb_api.post_items(data=batch)
+            if not dry_run:
+                wb_api.post_items(data=batch)
+                time.sleep(5)
+            sent += len(batch)
             batch.clear()  # Очистка пакета после отправки
-            time.sleep(5)
         # Преобразование элемента в формат для API
-        item_data = WBItem(item).dataItemCard()
+        try:
+            item_data = WBItem(item).dataItemCard()
+        except Exception as exc:
+            if report is not None:
+                report.setdefault('skipped', []).append((item, str(exc)))
+            continue
         if item_data:
             batch.append(item_data)
+        elif report is not None:
+            report.setdefault('skipped', []).append((item, 'не хватает атрибутов'))
     # Отправка оставшихся элементов, если они есть
     if batch:
-        wb_api.post_items(data=batch)
+        if not dry_run:
+            wb_api.post_items(data=batch)
+        sent += len(batch)
+
+    if report is not None:
+        report['sent'] = sent
+    return sent
 
 def update_item_wb(data):
     batch = []

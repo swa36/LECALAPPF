@@ -34,22 +34,35 @@ def exele_wb():
 
 
 
-def set_id_wb(next_cursor:Optional[Dict]=None) -> None:
-    wb_api = WBItemCard()
-    # param='all': раньше обход шёл с 'withoutImg' и карточки, не попавшие под
-    # этот фильтр, не привязывались никогда, сколько ни запускай.
-    if next_cursor:
-        data = wb_api.get_items(param='all',cursor=next_cursor)
-    else:
-        data = wb_api.get_items(param='all')
-    wb_api.set_id_wb_num(data)
-    if 'nmID' in  data['cursor'] and 'updatedAt' in data['cursor']:
-        next_cursor = {
-            "updatedAt": data['cursor']['updatedAt'],
-            "nmID": data['cursor']['nmID'],
+def iter_wb_cards(wb_api, param):
+    """Все карточки WB под фильтром param, постранично по курсору."""
+    cursor = None
+    while True:
+        data = wb_api.get_items(param=param, cursor=cursor)
+        cards = data.get('cards')
+        if cards is None:
+            return
+        yield data
+        cursor_data = data.get('cursor') or {}
+        if len(cards) < 100 or 'nmID' not in cursor_data or 'updatedAt' not in cursor_data:
+            return
+        cursor = {
+            "updatedAt": cursor_data['updatedAt'],
+            "nmID": cursor_data['nmID'],
             "limit": 100
         }
-        set_id_wb(next_cursor)
+
+
+def set_id_wb(param='all') -> None:
+    """Привязывает карточки WB к товарам.
+
+    param задаёт, какие карточки обходить: 'all', 'withoutImg' или 'withImg'.
+    Раньше обход был жёстко зашит на 'withoutImg', и карточки, не попавшие под
+    этот фильтр, не привязывались никогда, сколько ни запускай.
+    """
+    wb_api = WBItemCard()
+    for page in iter_wb_cards(wb_api, param):
+        wb_api.set_id_wb_num(page)
 
 
 @shared_task
@@ -341,18 +354,47 @@ def get_all_card(next_cursor:Optional[Dict]=None):
 
 
 
-def sent_img_wb():
+def sent_img_wb(param='withoutImg', dry_run=False, report=None):
+    """Заливает изображения на карточки WB.
+
+    param задаёт, какие карточки обходить: 'withoutImg' (по умолчанию — им
+    картинки и нужны), 'all' или 'withImg'. Раньше бралась только первая
+    страница выдачи, то есть максимум 100 карточек.
+    """
     wb_api = WBItemCard()
-    c = ExChange1C()
-    data = wb_api.get_items(param='withoutImg')
-    for i in data ['cards']:
-        print(i['vendorCode'])
-        try:
-            prod = Product.objects.get(article_1C=i['vendorCode'])
-            # c.get_img(prod.uuid_1C)
-            wb_api.post_img(prod)
-        except Exception:
-            print(i['vendorCode'])
+    sent = 0
+    for page in iter_wb_cards(wb_api, param):
+        for i in page['cards']:
+            code = i.get('vendorCode')
+            try:
+                prod = Product.objects.get(article_1C=code)
+            except Product.DoesNotExist:
+                if report is not None:
+                    report.setdefault('skipped', []).append((code, 'товара нет в базе'))
+                continue
+            except Product.MultipleObjectsReturned:
+                if report is not None:
+                    report.setdefault('skipped', []).append((code, 'артикул задублирован в 1С'))
+                continue
+
+            if not prod.images.exists():
+                if report is not None:
+                    report.setdefault('skipped', []).append((code, 'нет изображений на сайте'))
+                continue
+
+            print(f'{code} {prod.name[:45]}')
+            if not dry_run:
+                try:
+                    wb_api.post_img(prod)
+                except Exception as exc:
+                    if report is not None:
+                        report.setdefault('skipped', []).append((code, f'ошибка отправки: {exc}'))
+                    continue
+            sent += 1
+
+    if report is not None:
+        report['sent'] = sent
+    return sent
 
 @shared_task
 def sent_img_video(id=None):

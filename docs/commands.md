@@ -165,7 +165,7 @@ python manage.py add_new_wb --show 0           # весь список проп�
 группе:
 
 ```bash
-python manage.py shell -c "from wildberries.tasks import set_id_wb; set_id_wb()"
+python manage.py set_id_wb
 ```
 
 ⚠️ **Отправка идёт по одной карточке с паузой 5 секунд.** На тысяче товаров это
@@ -173,14 +173,40 @@ python manage.py shell -c "from wildberries.tasks import set_id_wb; set_id_wb()"
 уже создастся. Начинай с `--limit 5 --apply`, проверь результат в личном
 кабинете, только потом запускай всё.
 
-После создания карточек подтяни их идентификаторы в базу, иначе связки `WBData`
-не появится:
-
-```bash
-python manage.py shell -c "from wildberries.tasks import set_id_wb; set_id_wb()"
-```
+После создания карточек подтяни их идентификаторы в базу командой `set_id_wb`,
+иначе связки `WBData` не появится.
 
 Непрошедшие карточки — в `v2/cards/error/list`.
+
+### `set_id_wb` — привязать карточки WB к товарам
+
+```bash
+python manage.py set_id_wb                     # все карточки
+python manage.py set_id_wb --param withoutImg  # только без фото
+python manage.py set_id_wb --param withImg     # только с фото
+```
+
+Заполняет `WBData` по совпадению `article_1C` и `vendorCode`. Печатает, на
+сколько прибавилось связок.
+
+Карточки, которые привязать не вышло, выводятся с причиной:
+
+| Причина | Что делать |
+|---|---|
+| `товара с таким артикулом нет в базе` | товар удалён из 1С либо артикул разошёлся — смотри `update_vendor_code_wb` |
+| `артикул задублирован в 1С` | развести артикулы в 1С, на сайте не лечится |
+| `у карточки нет баркода` | завести баркод в личном кабинете WB |
+
+### `sent_img_wb` — залить изображения на карточки
+
+```bash
+python manage.py sent_img_wb                   # отчёт по карточкам без фото
+python manage.py sent_img_wb --apply           # отправить
+python manage.py sent_img_wb --param all --apply
+```
+
+По умолчанию берёт карточки без фото — им изображения и нужны. Товары без
+картинок на сайте пропускает и показывает отдельно.
 
 ### `prune_wbdata` — связки с несуществующими карточками
 

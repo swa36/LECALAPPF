@@ -1,3 +1,4 @@
+import time
 from collections import defaultdict
 
 from django.core.management.base import BaseCommand
@@ -11,7 +12,10 @@ class Command(BaseCommand):
     help = 'Reconcile AliExpress product cards with the local catalog.'
     DELETE_BATCH_SIZE = 20
     LINK_BATCH_SIZE = 1000
-    STOCK_BATCH_SIZE = 400
+    STOCK_BATCH_SIZE = 100
+    # Ali отвечает 429, если слать пачки вплотную. _request сам ретраит по
+    # минуте, но проще не упираться в лимит, чем разгребать отказы.
+    BATCH_PAUSE_SECONDS = 5
 
     def add_arguments(self, parser):
         parser.add_argument('--execute', action='store_true')
@@ -169,6 +173,8 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(
                     f'Stock batch {number}/{len(stock_batches)} failed'
                 ))
+            if number < len(stock_batches):
+                time.sleep(self.BATCH_PAUSE_SECONDS)
 
         self.stdout.write('Execution summary:')
         self.stdout.write(f'Deleted AliExpress cards: {deleted_cards}')

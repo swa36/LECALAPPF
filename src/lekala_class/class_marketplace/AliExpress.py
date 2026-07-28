@@ -37,9 +37,11 @@ class AliExpress(BaseMarketPlace):
         if save_to_file:
             self._save_payload_to_file(body)
             return body
-        return self._is_success_response(
-            self._request("POST", endpoint, data=body, params=params)
-        )
+        response = self._request("POST", endpoint, data=body, params=params)
+        if not self._is_success_response(response):
+            print(f'AliExpress отклонил обновление остатков: {response!r}')
+            return False
+        return True
 
     def get_data_order(self, params=None, save_to_file=False):
         endpoint = 'seller-api/v1/order/get-order-list'

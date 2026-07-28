@@ -208,6 +208,46 @@ python manage.py shell -c "from wildberries.tasks import update_vendor_code_wb; 
 
 ---
 
+## AliExpress
+
+### `reconcile_ali` — сверка карточек с каталогом
+
+```bash
+python manage.py reconcile_ali              # dry-run, ничего не меняет
+python manage.py reconcile_ali --execute    # выполнить
+```
+
+Тянет все карточки с Ali и строит план. Под удаление попадают:
+
+- карточки без SKU (`missing SKU`);
+- карточки, чьего `code_1C` нет в каталоге (`missing local products`);
+- дубли по одному `code_1C` (`duplicates`) — остаётся самая старая из уже
+  связанных, остальные удаляются.
+
+Дополнительно обновляет остатки по товарам с `stock > 0` и возвращает в онлайн
+карточки со статусом `offline`.
+
+Удаление идёт пачками по 20, обновление остатков — по 400, связки — по 1000.
+Между запросами можно прервать по Ctrl+C — команда останавливается безопасно.
+
+Удалённые карточки чистятся и локально: соответствующие `AliData` удаляются.
+
+### Задачи Ali
+
+```bash
+# сопоставить карточки Ali с товарами и удалить лишние
+python manage.py shell -c "from aliexpress.tasks import set_id_ali; set_id_ali.delay()"
+
+# остатки
+python manage.py shell -c "from aliexpress.tasks import update_stock_ali; update_stock_ali.delay()"
+
+# заказы
+python manage.py shell -c "from aliexpress.tasks import get_order_ali; get_order_ali.delay()"
+```
+
+`update_stock_ali` вызывается автоматически в конце полной синхронизации
+(`after_catalog_update`).
+
 ## Фиды
 
 ```bash
@@ -217,6 +257,26 @@ python manage.py shell -c "from aliexpress.tasks import create_feed_ALI; create_
 
 Фиды фильтруют `stock > 0` и `is_archive = False`, поэтому архивные товары
 выпадают автоматически.
+
+## Ozon
+
+```bash
+# остатки
+python manage.py shell -c "from ozon.tasks import update_remains_ozon; update_remains_ozon.delay()"
+
+# цены
+python manage.py shell -c "from ozon.tasks import update_price_ozon; update_price_ozon.delay()"
+
+# завести новые карточки
+python manage.py shell -c "from ozon.tasks import add_new_item_ozon; add_new_item_ozon()"
+
+# обнулить остатки карточек, которых нет в OzonData
+python manage.py shell -c "from ozon.tasks import close_unknown_ozon_stocks; close_unknown_ozon_stocks(dry_run=True)"
+```
+
+⚠️ В `ozon/tasks.py` есть `close_all_ozon_sales` — **аварийная остановка продаж**,
+обнуляет остаток по всем карточкам. По умолчанию `dry_run=True`; запускать
+только осознанно.
 
 ---
 
@@ -279,14 +339,14 @@ python manage.py trash_archived_wb --apply
 Метка `Product.is_archive` — единая точка. Товар, пропавший из выгрузки 1С,
 получает метку и нулевой остаток, дальше всё расходится само:
 
-| Куда | Что происходит | Механизм |
-|---|---|---|
-| WB | остаток 0 | `update_remains_wb` берёт `stock` из базы |
-| Ozon | остаток 0 | `update_remains_ozon` |
-| Ali | остаток 0 | `update_stock_ali` |
-| Фиды Ali, Avito | товар исчезает | фильтр `is_archive=False` |
-| Новые карточки | не заводятся | `add_new_item_wb`, `add_new_item_ozon` |
-| Карточки WB | в корзину | `trash_archived_wb`, вручную |
+| Куда             | Что происходит  | Механизм                                  |
+| ---------------- | --------------- | ----------------------------------------- |
+| WB               | остаток 0       | `update_remains_wb` берёт `stock` из базы |
+| Ozon             | остаток 0       | `update_remains_ozon`                     |
+| Ali              | остаток 0       | `update_stock_ali`                        |
+| Фиды Ali, Avito  | товар исчезает  | фильтр `is_archive=False`                 |
+| Новые карточки   | не заводятся    | `add_new_item_wb`, `add_new_item_ozon`    |
+| Карточки WB      | в корзину       | `trash_archived_wb`, вручную              |
 
 Вернут товар из архива в 1С — метка снимется, остаток приедет из выгрузки,
 товар вернётся в продажу сам.

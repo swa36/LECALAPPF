@@ -144,6 +144,7 @@ def add_new_item_ozon():
     items = []
     products_not_ozon = Product.objects.annotate(image_count=Count('images')).filter(
         Q(image_count__gt=0) & Q(ozon__isnull=True) & Q(prices__retail_price__gt=0)
+        & Q(is_archive=False)
     )
     # products_not_ozon = Product.objects.annotate(image_count=Count('images')).filter(
     #     Q(image_count__gt=0) & Q(name__icontains='Бронеплёнка на камер') & Q(prices__retail_price__gt=0)

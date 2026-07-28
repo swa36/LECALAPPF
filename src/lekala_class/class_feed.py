@@ -56,7 +56,8 @@ class CreatorFeed:
 
     def create_items(self):
         products = Product.objects.annotate(image_count=Count('images')).filter(
-            Q(image_count__gt=0) & Q(stock__gt=0) & Q(prices__retail_price__gt=0) & Q(ozon__isnull=False)
+            Q(image_count__gt=0) & Q(stock__gt=0) & Q(prices__retail_price__gt=0)
+            & Q(ozon__isnull=False) & Q(is_archive=False)
         )
         self.create_data_category()
         for c in products:

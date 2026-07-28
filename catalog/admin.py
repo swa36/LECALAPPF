@@ -39,11 +39,13 @@ class ImagesInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
-        'name', 'code_1C', 'article_1C', 'stock',
+        'name', 'code_1C', 'article_1C', 'stock', 'is_archive',
         'cost_price', 'wholesale_price', 'wholesale_price_2', 'wholesale_price_3', 'retail_price'
     ]
+    list_filter = ['is_archive']
     search_fields = ['name', 'code_1C', 'article_1C']
-    fields = ['uuid_1C', 'name', 'category', ('code_1C', 'article_1C', 'stock'), 'description']
+    fields = ['uuid_1C', 'name', 'category', ('code_1C', 'article_1C', 'stock'),
+              'is_archive', 'description']
     inlines = [ValueAdditionalAttributesInline, ImagesInline]
     readonly_fields = ['uuid_1C', 'code_1C', 'article_1C', 'stock']
 

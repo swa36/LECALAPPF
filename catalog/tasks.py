@@ -33,39 +33,50 @@ def after_catalog_update(results=None):
 
 @shared_task
 def archive_missing_products(api_uuids):
-    """Снимает с продажи товары, пропавшие из выгрузки 1С.
+    """Ставит и снимает метку «архив» по составу выгрузки 1С.
 
     Товар, перенесённый в 1С в «Удалено(архив)», перестаёт приходить в
     /products, но на сайте остаётся с замороженным остатком и продолжает
-    продаваться. Обнуляем остаток — дальше штатные задачи разнесут ноль на
-    WB/Ozon/Ali, а из фидов Avito и Ali товар выпадет по фильтру stock > 0.
-    Вернут из архива — остаток приедет из 1С обратно.
+    продаваться. Помечаем его и обнуляем остаток: дальше штатные задачи
+    разнесут ноль на WB/Ozon/Ali, из фидов Avito и Ali товар выпадет по метке,
+    а карточки WB переносятся в корзину командой trash_archived_wb.
+
+    Вернули товар из архива в 1С — метка снимается, остаток приезжает из
+    выгрузки сам.
     """
     total = Product.objects.count()
     if not api_uuids or (total and len(api_uuids) < total * 0.5):
         print(
             f"Выгрузка 1С подозрительно мала ({len(api_uuids)} против {total} в БД) — "
-            "снятие с продажи пропущено, чтобы не обнулить весь каталог"
+            "простановка метки «архив» пропущена, чтобы не снять с продажи весь каталог"
         )
         return 0
 
-    missing = Product.objects.exclude(uuid_1C__in=api_uuids).filter(stock__gt=0)
-    rows = list(missing.values_list("article_1C", "name", "stock"))
-    if not rows:
-        return 0
-
-    updated = missing.update(stock=0)
-
     os.makedirs("logs", exist_ok=True)
-    with open("logs/archived_1c.log", "a", encoding="utf-8") as log_file:
-        for article, name, stock in rows:
-            log_file.write(
-                f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\t"
-                f"{article}\t{name}\tбыл остаток: {stock}\n"
-            )
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    print(f"Нет в выгрузке 1С — остаток обнулён у {updated} товаров (см. logs/archived_1c.log)")
-    return updated
+    missing = Product.objects.exclude(uuid_1C__in=api_uuids).filter(
+        Q(is_archive=False) | Q(stock__gt=0)
+    )
+    rows = list(missing.values_list("article_1C", "name", "stock"))
+    archived = missing.update(is_archive=True, stock=0)
+
+    returned_qs = Product.objects.filter(uuid_1C__in=api_uuids, is_archive=True)
+    returned_rows = list(returned_qs.values_list("article_1C", "name"))
+    returned = returned_qs.update(is_archive=False)
+
+    if rows or returned_rows:
+        with open("logs/archived_1c.log", "a", encoding="utf-8") as log_file:
+            for article, name, stock in rows:
+                log_file.write(f"{timestamp}\tАРХИВ\t{article}\t{name}\tбыл остаток: {stock}\n")
+            for article, name in returned_rows:
+                log_file.write(f"{timestamp}\tВОЗВРАТ\t{article}\t{name}\n")
+
+    if archived:
+        print(f"Нет в выгрузке 1С — помечено архивом и снято с продажи: {archived}")
+    if returned:
+        print(f"Вернулись в выгрузку 1С — метка «архив» снята: {returned}")
+    return archived
 
 
 @shared_task

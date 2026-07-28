@@ -157,6 +157,16 @@ class GetData1C(ExChange1C):
                     "main_img_uuid": item.get("picture_file_key") or None,
                 }
 
+                # Второй источник метки «архив» — на будущее. Пока 1С помеченные
+                # на удаление товары просто не отдаёт, и метку ставит
+                # archive_missing_products по составу выгрузки. Когда в ответе
+                # появится deletion_mark, метка поедет отсюда, без правок.
+                deletion_mark = item.get("deletion_mark")
+                if deletion_mark is not None:
+                    defaults["is_archive"] = bool(deletion_mark)
+                    if deletion_mark:
+                        defaults["stock"] = 0
+
                 # Категории может не быть в дереве сайта: в 1С её перенесли в
                 # «Удалено(архив)», и /categories её больше не отдаёт. Тогда
                 # обновляем товару всё остальное, а категорию оставляем прежней.

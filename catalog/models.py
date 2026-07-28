@@ -44,6 +44,8 @@ class Product(models.Model):
     name = models.TextField(verbose_name='Наименование товара')
     description = models.TextField(verbose_name='Описание товара')
     stock = models.PositiveIntegerField(verbose_name='Остаток', default=0)
+    is_archive = models.BooleanField(default=False, db_index=True,
+                                     verbose_name='Архив (нет в выгрузке 1С)')
     category = TreeForeignKey(Category, null=True, on_delete=models.PROTECT, related_name='category',
                               verbose_name='Категория')
 

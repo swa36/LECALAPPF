@@ -116,7 +116,10 @@ def get_new_order_wb():
 def add_new_item_wb():
     wb_api = WBItemCard()
     exclude_cat = Category.objects.get(name='Инструмент и оборудование для нанесения плёнок').get_family()
-    product_not_wb = Product.objects.filter(Q(wb__isnull=True) & ~Q(category__id__in=[i.id for i in exclude_cat]))
+    product_not_wb = Product.objects.filter(
+        Q(wb__isnull=True) & Q(is_archive=False)
+        & ~Q(category__id__in=[i.id for i in exclude_cat])
+    )
     # product_not_wb = Product.objects.filter(code_1C="AA-00004773")
     # Обработка всех элементов в одном цикле
     batch = []

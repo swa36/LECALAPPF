@@ -157,10 +157,11 @@ class GetData1C(ExChange1C):
                     "main_img_uuid": item.get("picture_file_key") or None,
                 }
 
-                # Второй источник метки «архив» — на будущее. Пока 1С помеченные
-                # на удаление товары просто не отдаёт, и метку ставит
-                # archive_missing_products по составу выгрузки. Когда в ответе
-                # появится deletion_mark, метка поедет отсюда, без правок.
+                # Основной источник метки «архив»: 1С отдаёт помеченные на
+                # удаление товары вместе с живыми, с deletion_mark: true.
+                # Второй источник — archive_missing_products по составу
+                # выгрузки: он ловит товары, которые из /products пропали
+                # совсем (перенесены в 1С в «Удалено(архив)»).
                 deletion_mark = item.get("deletion_mark")
                 if deletion_mark is not None:
                     defaults["is_archive"] = bool(deletion_mark)

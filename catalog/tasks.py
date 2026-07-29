@@ -43,6 +43,10 @@ def archive_missing_products(api_uuids):
 
     Вернули товар из архива в 1С — метка снимается, остаток приезжает из
     выгрузки сам.
+
+    Ждёт в api_uuids только живые товары: помеченные на удаление приходят в
+    выгрузке, но для метки «архив» равны отсутствующим, и вызывающий код их
+    отфильтровывает (см. get_data_1C).
     """
     total = Product.objects.count()
     if not api_uuids or (total and len(api_uuids) < total * 0.5):
@@ -89,7 +93,13 @@ def get_data_1C():
     items = data1C.get_all_products()
     if not items:
         return
-    archive_missing_products([item["ref_key"] for item in items])
+    # Помеченные на удаление 1С теперь отдаёт вместе с живыми. Для метки
+    # «архив» они равны отсутствующим в выгрузке: не передадим их сюда —
+    # archive_missing_products снимет метку, которую тут же вернёт
+    # set_catalog_data_stock, и каждый прогон писал бы ложный «ВОЗВРАТ».
+    archive_missing_products(
+        [item["ref_key"] for item in items if not item.get("deletion_mark")]
+    )
     size = settings.CATALOG_CHUNK_SIZE
     chunks = [items[i:i + size] for i in range(0, len(items), size)]
     header = [process_catalog_chunk.s(chunk) for chunk in chunks]

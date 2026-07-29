@@ -355,6 +355,33 @@ class GetData1CCatalogStockTest(TestCase):
             0,
         )
 
+    def test_deletion_mark_archives_product_and_zeroes_stock(self):
+        item = self._item()
+        item["deletion_mark"] = True
+        with patch.object(self.data, "get_img"):
+            self.data.set_catalog_data_stock([item])
+        product = Product.objects.get(uuid_1C="7e019266-24a4-11ef-8009-00155d46f78d")
+        self.assertTrue(product.is_archive)
+        self.assertEqual(product.stock, 0)
+
+    def test_deletion_mark_false_returns_product_from_archive(self):
+        item = self._item()
+        item["deletion_mark"] = False
+        Product.objects.create(
+            uuid_1C=item["ref_key"],
+            article_1C="MEC18Z",
+            code_1C="AA-00002351",
+            name="Плёнка для зеркал",
+            category=self.cat,
+            stock=0,
+            is_archive=True,
+        )
+        with patch.object(self.data, "get_img"):
+            self.data.set_catalog_data_stock([item])
+        product = Product.objects.get(uuid_1C=item["ref_key"])
+        self.assertFalse(product.is_archive)
+        self.assertEqual(product.stock, 46)
+
     def test_missing_price_type_defaults_to_zero(self):
         item = self._item()
         item["prices"] = [
@@ -481,7 +508,9 @@ class GetData1COrchestratorTest(TestCase):
     def test_dispatches_chord_of_chunks(self, gd, pcc, group_mock, chord_mock, after):
         inst = gd.return_value
         inst.get_all_products.return_value = [
-            {"ref_key": "1"}, {"ref_key": "2"}, {"ref_key": "3"}
+            {"ref_key": "11111111-1111-1111-1111-111111111111"},
+            {"ref_key": "22222222-2222-2222-2222-222222222222"},
+            {"ref_key": "33333333-3333-3333-3333-333333333333"},
         ]
         from catalog.tasks import get_data_1C
 
@@ -492,6 +521,29 @@ class GetData1COrchestratorTest(TestCase):
         self.assertEqual(pcc.s.call_count, 2)
         chord_mock.assert_called_once_with(group_mock.return_value)
         chord_mock.return_value.assert_called_once_with(after.s.return_value)
+
+    @override_settings(CATALOG_CHUNK_SIZE=2)
+    @patch("catalog.tasks.after_catalog_update")
+    @patch("catalog.tasks.chord", create=True)
+    @patch("catalog.tasks.group", create=True)
+    @patch("catalog.tasks.process_catalog_chunk")
+    @patch("catalog.tasks.archive_missing_products")
+    @patch("catalog.tasks.GetData1C")
+    def test_products_marked_for_deletion_count_as_missing(
+        self, gd, archive, pcc, group_mock, chord_mock, after
+    ):
+        # 1С отдаёт помеченные на удаление товары. Для метки «архив» они
+        # равны отсутствующим в выгрузке, иначе archive_missing_products
+        # снимает метку, которую тут же вернёт set_catalog_data_stock.
+        gd.return_value.get_all_products.return_value = [
+            {"ref_key": "1", "deletion_mark": False},
+            {"ref_key": "2", "deletion_mark": True},
+            {"ref_key": "3"},
+        ]
+        from catalog.tasks import get_data_1C
+
+        get_data_1C()
+        archive.assert_called_once_with(["1", "3"])
 
     @override_settings(CATALOG_CHUNK_SIZE=2)
     @patch("catalog.tasks.chord", create=True)

@@ -34,7 +34,9 @@ class AliExpressReconciliationTests(TestCase):
 
         successful = requests.Response()
         successful.status_code = 200
-        successful._content = b'{"data": {}}'
+        successful._content = (
+            b'{"group_id": "1", "results": [{"ok": true}]}'
+        )
         successful.headers['Content-Type'] = 'application/json'
         request.side_effect = [rate_limited, successful]
 
@@ -45,6 +47,66 @@ class AliExpressReconciliationTests(TestCase):
         self.assertEqual(request.call_count, 2)
         sleep.assert_called_once_with(60.0)
         self.assertIn('HTTP 429', output.getvalue())
+
+    @patch.object(
+        AliExpress,
+        '_request',
+        return_value={
+            'group_id': '728551676',
+            'results': [
+                {
+                    'ok': True,
+                    'task_id': '0',
+                    'errors': {},
+                    'external_id': '',
+                },
+                {
+                    'ok': True,
+                    'task_id': '0',
+                    'errors': {},
+                    'external_id': '',
+                },
+            ],
+        },
+    )
+    def test_update_stock_accepts_successful_result_list(self, request):
+        output = StringIO()
+
+        with redirect_stdout(output):
+            result = AliExpress().update_stock(data=[])
+
+        self.assertTrue(result)
+        self.assertNotIn(
+            'AliExpress отклонил обновление остатков',
+            output.getvalue(),
+        )
+
+    @patch.object(AliExpress, '_request')
+    def test_update_stock_rejects_incomplete_result_list(self, request):
+        client = AliExpress()
+        for response in (
+            {'group_id': '1', 'results': []},
+            {'group_id': '1', 'results': [{'ok': True}, {'ok': False}]},
+            {'group_id': '1', 'results': [{'ok': True}, {}]},
+            {'group_id': '1', 'results': [{'ok': True}, 'malformed']},
+            {'group_id': '1', 'results': [{'ok': 1}]},
+        ):
+            with self.subTest(response=response):
+                request.return_value = response
+                self.assertFalse(client.update_stock(data=[]))
+
+    @patch.object(
+        AliExpress,
+        '_request',
+        return_value={
+            'error': 'denied',
+            'results': [{'ok': True}],
+        },
+    )
+    def test_update_stock_rejects_top_level_error_with_successful_results(
+        self, request
+    ):
+        self.assertFalse(AliExpress().update_stock(data=[]))
 
     @patch.object(AliExpress, '_request')
     def test_reads_all_ali_pages(self, request):
@@ -132,8 +194,8 @@ class AliExpressReconciliationTests(TestCase):
 
 
 class ReconcileAliCommandTests(TestCase):
-    def test_stock_updates_use_four_hundred_card_batches(self):
-        self.assertEqual(Command.STOCK_BATCH_SIZE, 400)
+    def test_stock_updates_use_one_hundred_card_batches(self):
+        self.assertEqual(Command.STOCK_BATCH_SIZE, 100)
 
     def setUp(self):
         category = Category.objects.create(

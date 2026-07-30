@@ -38,7 +38,7 @@ class AliExpress(BaseMarketPlace):
             self._save_payload_to_file(body)
             return body
         response = self._request("POST", endpoint, data=body, params=params)
-        if not self._is_success_response(response):
+        if not self._is_stock_update_success_response(response):
             print(f'AliExpress отклонил обновление остатков: {response!r}')
             return False
         return True
@@ -110,6 +110,22 @@ class AliExpress(BaseMarketPlace):
         result = response.get('result')
         return result is True or (
             isinstance(result, dict) and result.get('success') is True
+        )
+
+    @staticmethod
+    def _is_stock_update_success_response(response) -> bool:
+        if not isinstance(response, dict):
+            return False
+        if any(key in response for key in ('error', 'errors', 'code')):
+            return False
+        results = response.get('results')
+        return (
+            isinstance(results, list)
+            and bool(results)
+            and all(
+                isinstance(result, dict) and result.get('ok') is True
+                for result in results
+            )
         )
 
     def delete_products(self, ids: list[str]) -> bool:

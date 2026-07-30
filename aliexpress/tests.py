@@ -95,18 +95,20 @@ class AliExpressReconciliationTests(TestCase):
                 request.return_value = response
                 self.assertFalse(client.update_stock(data=[]))
 
-    @patch.object(
-        AliExpress,
-        '_request',
-        return_value={
-            'error': 'denied',
-            'results': [{'ok': True}],
-        },
-    )
-    def test_update_stock_rejects_top_level_error_with_successful_results(
+    @patch.object(AliExpress, '_request')
+    def test_update_stock_rejects_top_level_failure_with_successful_results(
         self, request
     ):
-        self.assertFalse(AliExpress().update_stock(data=[]))
+        client = AliExpress()
+        for failure in (
+            {'error': 'denied'},
+            {'errors': {'sku': 'denied'}},
+            {'code': 'denied'},
+        ):
+            response = {**failure, 'results': [{'ok': True}]}
+            with self.subTest(response=response):
+                request.return_value = response
+                self.assertFalse(client.update_stock(data=[]))
 
     @patch.object(AliExpress, '_request')
     def test_reads_all_ali_pages(self, request):

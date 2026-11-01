@@ -12,9 +12,16 @@ UPDATE_FIELDS = ('nmID', 'vendorCode', 'brand', 'title', 'description',
 DIMENSION_FIELDS = ('length', 'width', 'height', 'weightBrutto')
 
 
+FILM_SUBJECT_ID = 6466
+
 # Защитные стёкла — не плёнка, код 3919900000 им не подходит. Им нужен 7007…,
-# а его WB разрешает только в предмете 9226 «Стекла защитные для авто»; пока
-# стёкла лежат в 6466, ТН ВЭД им не ставим.
+# а его WB разрешает только в предмете 9226 «Стекла защитные для авто».
+# Сменить предмет через v2/cards/update нельзя (subjectID игнорируется), так что
+# старые стёкла из 6466 переносятся в личном кабинете, новые заводятся сразу в 9226.
+GLASS_SUBJECT_ID = 9226
+GLASS_TNVED_CODE = '7007198008'
+# «Материал изделия» есть только у 6466
+MATERIAL_CHARC_ID = 17596
 GLASS_CATEGORY_NAMES = (
     'Защитное стекло экранов мультимедиа, приборных панелей, климат-контроля',
 )
@@ -38,19 +45,31 @@ def is_glass(product):
     return any(name in names for name in GLASS_CATEGORY_NAMES)
 
 
-def tnved_characteristic():
-    return {"id": TNVED_CHARC_ID, "value": [TNVED_CODE]}
+# Подтверждение продавца, что разрешительные документы не нужны (галочка
+# «Документы не требуются» в кабинете). Без него WB по 289-ФЗ блокирует новые и
+# изменённые карточки с причиной documents_missing. Продукция своя, документы не
+# требуются — решение владельца от 2026-11-01.
+DOCUMENTS_NOT_REQUIRED = {"excludeDocuments": True}
 
 
-def has_tnved(card):
+def documents_not_required(card):
+    return bool((card.get('documents') or {}).get('excludeDocuments'))
+
+
+def tnved_characteristic(code=TNVED_CODE):
+    return {"id": TNVED_CHARC_ID, "value": [code]}
+
+
+def has_tnved(card, code=TNVED_CODE):
     return any(
-        ch.get('id') == TNVED_CHARC_ID and ch.get('value') == [TNVED_CODE]
+        ch.get('id') == TNVED_CHARC_ID and ch.get('value') == [code]
         for ch in card.get('characteristics') or []
     )
 
 
-def card_with_tnved(card):
-    """Тело для v2/cards/update: карточка как есть плюс ТН ВЭД.
+def card_with_tnved(card, code=TNVED_CODE):
+    """Тело для v2/cards/update: карточка как есть плюс ТН ВЭД и отметка
+    «документы не требуются».
 
     update перезаписывает карточку целиком, поэтому все характеристики
     переносим с WB без изменений, а не собираем из базы.
@@ -65,7 +84,8 @@ def card_with_tnved(card):
         {"id": ch['id'], "value": ch['value']}
         for ch in card.get('characteristics') or []
         if ch.get('id') != TNVED_CHARC_ID
-    ] + [tnved_characteristic()]
+    ] + [tnved_characteristic(code)]
+    payload['documents'] = dict(DOCUMENTS_NOT_REQUIRED)
     return payload
 
 
@@ -88,16 +108,22 @@ class WBItem:
         attribs = self.prod.additional_attributes.all()
         return {i.attribute_name.slug_name: i.value_attribute for i in attribs}
 
+    def subject_id(self):
+        return GLASS_SUBJECT_ID if is_glass(self.prod) else FILM_SUBJECT_ID
+
     def characteristics(self):
-        list_characteristics = [
-            {"id": 17596, "value": [self.attribs.get('material', 'Полиуритан')]},
+        if is_glass(self.prod):
+            return [
+                {"id": 378533, "value": [self.attribs['equipment']]},
+                {"id": 14177451, "value": ["Россия"]},
+                tnved_characteristic(GLASS_TNVED_CODE),
+            ]
+        return [
+            {"id": MATERIAL_CHARC_ID, "value": [self.attribs.get('material', 'Полиуритан')]},
             {"id": 378533, "value": [self.attribs['equipment']]},
             {"id": 14177451, "value": ["Россия"]},
+            tnved_characteristic(),
         ]
-        if not is_glass(self.prod):
-            list_characteristics.append(tnved_characteristic())
-
-        return list_characteristics
 
     def dataItemCard(self):
         if self.attribs.get('material') and self.attribs.get('width') and self.attribs.get(
@@ -106,7 +132,7 @@ class WBItem:
             weight = self.attribs.get('weight_netto') or self.attribs.get('weight_brutto') or 0.3
             weight_brutto = float(str(weight).strip().replace(',', '.'))
             data = {
-                "subjectID": self.SUB_CAT_ID,
+                "subjectID": self.subject_id(),
                 "variants": [
                     {
                         "vendorCode": self.prod.article_1C,
@@ -120,6 +146,7 @@ class WBItem:
                             "weightBrutto": weight_brutto,
                         },
                         "characteristics": list_characteristics,
+                        "documents": dict(DOCUMENTS_NOT_REQUIRED),
                     }
                 ]
             }

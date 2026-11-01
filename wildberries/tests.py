@@ -4,7 +4,13 @@ from src.lekala_class.class_marketplace.WBItem import (
     TNVED_CHARC_ID,
     GLASS_CATEGORY_NAMES,
     TNVED_CODE,
+    GLASS_SUBJECT_ID,
+    GLASS_TNVED_CODE,
+    FILM_SUBJECT_ID,
+    MATERIAL_CHARC_ID,
+    WBItem,
     card_with_tnved,
+    documents_not_required,
     glass_category_ids,
     has_tnved,
     is_glass,
@@ -56,8 +62,9 @@ class CardWithTnvedTest(SimpleTestCase):
         self.assertEqual(
             set(payload),
             {"nmID", "vendorCode", "brand", "title", "description",
-             "dimensions", "characteristics", "sizes"},
+             "dimensions", "characteristics", "sizes", "documents"},
         )
+        self.assertEqual(payload["documents"], {"excludeDocuments": True})
         self.assertEqual(
             payload["dimensions"],
             {"width": 5, "height": 5, "length": 30, "weightBrutto": 0.3},
@@ -75,6 +82,11 @@ class CardWithTnvedTest(SimpleTestCase):
             payload["characteristics"],
             [{"id": TNVED_CHARC_ID, "value": [TNVED_CODE]}],
         )
+
+    def test_documents_not_required(self):
+        self.assertFalse(documents_not_required(wb_card()))
+        self.assertFalse(documents_not_required(wb_card(documents={"excludeDocuments": False})))
+        self.assertTrue(documents_not_required(wb_card(documents={"excludeDocuments": True})))
 
     def test_has_tnved(self):
         self.assertFalse(has_tnved(wb_card()))
@@ -105,3 +117,21 @@ class GlassTest(TestCase):
     def test_glass_category_ids_include_descendants(self):
         self.assertIn(self.glass_category.id, glass_category_ids())
         self.assertNotIn(self.film.category_id, glass_category_ids())
+
+    def _wb_item(self, product):
+        item = WBItem.__new__(WBItem)
+        item.prod = product
+        item.attribs = {'equipment': 'Комплект', 'material': 'Полиуретан'}
+        return item
+
+    def test_glass_goes_to_glass_subject_with_glass_code(self):
+        item = self._wb_item(self.glass)
+        self.assertEqual(item.subject_id(), GLASS_SUBJECT_ID)
+        chars = item.characteristics()
+        self.assertIn({"id": TNVED_CHARC_ID, "value": [GLASS_TNVED_CODE]}, chars)
+        self.assertNotIn(MATERIAL_CHARC_ID, [c["id"] for c in chars])
+
+    def test_film_keeps_film_subject_and_code(self):
+        item = self._wb_item(self.film)
+        self.assertEqual(item.subject_id(), FILM_SUBJECT_ID)
+        self.assertIn({"id": TNVED_CHARC_ID, "value": [TNVED_CODE]}, item.characteristics())

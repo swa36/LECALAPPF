@@ -7,9 +7,14 @@ from src.lekala_class.class_marketplace.WB import WBItemCard
 from src.lekala_class.class_marketplace.WBItem import (
     TNVED_CODE,
     card_with_tnved,
+    documents_not_required,
     glass_category_ids,
     has_tnved,
 )
+
+
+def is_done(card):
+    return has_tnved(card) and documents_not_required(card)
 
 # v2/cards/update: до 3000 карточек в запросе, лимит 10 запросов в минуту.
 BATCH_SIZE = 100
@@ -18,7 +23,8 @@ PAUSE_SECONDS = 7
 
 class Command(BaseCommand):
     help = (
-        f"Проставляет ТН ВЭД {TNVED_CODE} карточкам плёнок на WB, где его нет. "
+        f"Проставляет карточкам плёнок на WB ТН ВЭД {TNVED_CODE} и отметку "
+        "«документы не требуются» (excludeDocuments). "
         "Стёкла пропускает. "
         "Карточка берётся с WB как есть, меняется только ТН ВЭД. "
         "По умолчанию только отчёт, отправка — с --apply."
@@ -43,8 +49,8 @@ class Command(BaseCommand):
             Product.objects.filter(category_id__in=glass_category_ids())
             .values_list("article_1C", flat=True)
         )
-        done = [card for card in cards if has_tnved(card)]
-        rest = [card for card in cards if not has_tnved(card)]
+        done = [card for card in cards if is_done(card)]
+        rest = [card for card in cards if not is_done(card)]
         glass_cards = [card for card in rest if card.get("vendorCode") in glass]
         unknown = [card for card in rest if card.get("vendorCode") not in articles]
         pending = [
@@ -68,6 +74,11 @@ class Command(BaseCommand):
             return
 
         show = options["show"]
+        blocked = sum(
+            1 for card in pending
+            if ((card.get("documents") or {}).get("overallVerdict") or {}).get("reason")
+        )
+        self.stdout.write(f"    из них заблокированы WB за документы: {blocked}")
         for card in pending if show == 0 else pending[:show]:
             self.stdout.write(
                 f"    nmID {card['nmID']:<12} {card.get('vendorCode', '')[:24]:<24} "
@@ -97,7 +108,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(
             f"\nОтправлено: {sent}, не принято пачками: {failed}. Изменения на WB "
             "применяются до 30 минут; непрошедшие карточки — в v2/cards/error/list. "
-            "Повторный запуск возьмёт только карточки, где ТН ВЭД так и не появился."
+            "Повторный запуск возьмёт только карточки, где изменения так и не появились."
         ))
 
     def _collect_cards(self, api):

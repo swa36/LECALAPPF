@@ -9,7 +9,9 @@ from src.lekala_class.class_marketplace.WBItem import (
     FILM_SUBJECT_ID,
     MATERIAL_CHARC_ID,
     WBItem,
+    card_is_done,
     card_with_tnved,
+    target_tnved,
     documents_not_required,
     glass_category_ids,
     has_tnved,
@@ -82,6 +84,36 @@ class CardWithTnvedTest(SimpleTestCase):
             payload["characteristics"],
             [{"id": TNVED_CHARC_ID, "value": [TNVED_CODE]}],
         )
+
+    def test_without_code_keeps_characteristics_and_sets_flag(self):
+        card = wb_card(characteristics=[
+            {"id": TNVED_CHARC_ID, "name": "ТНВЭД", "value": ["1234567890"]},
+            {"id": 378533, "name": "Комплектация", "value": ["Стекло"]},
+        ])
+
+        payload = card_with_tnved(card, code=None)
+
+        self.assertEqual(payload["characteristics"], [
+            {"id": TNVED_CHARC_ID, "value": ["1234567890"]},
+            {"id": 378533, "value": ["Стекло"]},
+        ])
+        self.assertEqual(payload["documents"], {"excludeDocuments": True})
+
+    def test_target_tnved(self):
+        self.assertEqual(target_tnved(wb_card(), is_glass_card=False), TNVED_CODE)
+        self.assertIsNone(target_tnved(wb_card(subjectID=FILM_SUBJECT_ID), is_glass_card=True))
+        self.assertEqual(
+            target_tnved(wb_card(subjectID=GLASS_SUBJECT_ID), is_glass_card=True),
+            GLASS_TNVED_CODE,
+        )
+
+    def test_card_is_done(self):
+        flag = {"excludeDocuments": True}
+        with_code = [{"id": TNVED_CHARC_ID, "value": [TNVED_CODE]}]
+        self.assertFalse(card_is_done(wb_card(characteristics=with_code), TNVED_CODE))
+        self.assertFalse(card_is_done(wb_card(documents=flag), TNVED_CODE))
+        self.assertTrue(card_is_done(wb_card(documents=flag, characteristics=with_code), TNVED_CODE))
+        self.assertTrue(card_is_done(wb_card(documents=flag), None))
 
     def test_documents_not_required(self):
         self.assertFalse(documents_not_required(wb_card()))

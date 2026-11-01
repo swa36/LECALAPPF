@@ -72,7 +72,8 @@ def card_with_tnved(card, code=TNVED_CODE):
     «документы не требуются».
 
     update перезаписывает карточку целиком, поэтому все характеристики
-    переносим с WB без изменений, а не собираем из базы.
+    переносим с WB без изменений, а не собираем из базы. code=None — ТН ВЭД
+    не трогаем (стёкла в 6466: стекольный код этот предмет не принимает).
     """
     payload = {key: card[key] for key in UPDATE_FIELDS if key in card}
     if 'dimensions' in payload:
@@ -80,13 +81,31 @@ def card_with_tnved(card, code=TNVED_CODE):
             key: payload['dimensions'][key]
             for key in DIMENSION_FIELDS if key in payload['dimensions']
         }
-    payload['characteristics'] = [
+    characteristics = [
         {"id": ch['id'], "value": ch['value']}
         for ch in card.get('characteristics') or []
-        if ch.get('id') != TNVED_CHARC_ID
-    ] + [tnved_characteristic(code)]
+        if code is None or ch.get('id') != TNVED_CHARC_ID
+    ]
+    if code is not None:
+        characteristics.append(tnved_characteristic(code))
+    payload['characteristics'] = characteristics
     payload['documents'] = dict(DOCUMENTS_NOT_REQUIRED)
     return payload
+
+
+def target_tnved(card, is_glass_card):
+    """Какой ТН ВЭД должен стоять на карточке; None — не ставить."""
+    if not is_glass_card:
+        return TNVED_CODE
+    if card.get('subjectID') == GLASS_SUBJECT_ID:
+        return GLASS_TNVED_CODE
+    return None
+
+
+def card_is_done(card, code):
+    if not documents_not_required(card):
+        return False
+    return code is None or has_tnved(card, code)
 
 
 class WBItem:

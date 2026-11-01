@@ -1,4 +1,8 @@
+from unittest import mock
+
 from django.test import SimpleTestCase, TestCase
+
+import src.lekala_class.class_marketplace.WBItem as WBItem_module
 
 from src.lekala_class.class_marketplace.WBItem import (
     TNVED_CHARC_ID,
@@ -101,11 +105,17 @@ class CardWithTnvedTest(SimpleTestCase):
 
     def test_target_tnved(self):
         self.assertEqual(target_tnved(wb_card(), is_glass_card=False), TNVED_CODE)
-        self.assertIsNone(target_tnved(wb_card(subjectID=FILM_SUBJECT_ID), is_glass_card=True))
         self.assertEqual(
             target_tnved(wb_card(subjectID=GLASS_SUBJECT_ID), is_glass_card=True),
             GLASS_TNVED_CODE,
         )
+
+    def test_glass_in_film_subject_gets_film_code_while_9226_disabled(self):
+        self.assertEqual(target_tnved(wb_card(subjectID=FILM_SUBJECT_ID), is_glass_card=True), TNVED_CODE)
+
+    def test_glass_in_film_subject_waits_when_9226_enabled(self):
+        with mock.patch.object(WBItem_module, 'GLASS_SUBJECT_ENABLED', True):
+            self.assertIsNone(target_tnved(wb_card(subjectID=FILM_SUBJECT_ID), is_glass_card=True))
 
     def test_card_is_done(self):
         flag = {"excludeDocuments": True}
@@ -156,6 +166,12 @@ class GlassTest(TestCase):
         item.attribs = {'equipment': 'Комплект', 'material': 'Полиуретан'}
         return item
 
+    def test_glass_stays_in_film_subject_while_9226_disabled(self):
+        item = self._wb_item(self.glass)
+        self.assertEqual(item.subject_id(), FILM_SUBJECT_ID)
+        self.assertIn({"id": TNVED_CHARC_ID, "value": [TNVED_CODE]}, item.characteristics())
+
+    @mock.patch.object(WBItem_module, 'GLASS_SUBJECT_ENABLED', True)
     def test_glass_goes_to_glass_subject_with_glass_code(self):
         item = self._wb_item(self.glass)
         self.assertEqual(item.subject_id(), GLASS_SUBJECT_ID)

@@ -20,6 +20,10 @@ FILM_SUBJECT_ID = 6466
 # старые стёкла из 6466 переносятся в личном кабинете, новые заводятся сразу в 9226.
 GLASS_SUBJECT_ID = 9226
 GLASS_TNVED_CODE = '7007198008'
+# Бренд LEKALAPPF в предмете 9226 не зарегистрирован — WB отклоняет карточки
+# с ошибкой «Бренд не найден». Пока бренд не одобрят, стёкла живут в 6466 с
+# плёночным кодом. После одобрения — True: новые стёкла пойдут в 9226.
+GLASS_SUBJECT_ENABLED = False
 # «Материал изделия» есть только у 6466
 MATERIAL_CHARC_ID = 17596
 GLASS_CATEGORY_NAMES = (
@@ -95,11 +99,12 @@ def card_with_tnved(card, code=TNVED_CODE):
 
 def target_tnved(card, is_glass_card):
     """Какой ТН ВЭД должен стоять на карточке; None — не ставить."""
-    if not is_glass_card:
-        return TNVED_CODE
-    if card.get('subjectID') == GLASS_SUBJECT_ID:
+    if is_glass_card and card.get('subjectID') == GLASS_SUBJECT_ID:
         return GLASS_TNVED_CODE
-    return None
+    if is_glass_card and GLASS_SUBJECT_ENABLED:
+        # стекло ждёт переноса в 9226 — плёночный код не ставим
+        return None
+    return TNVED_CODE
 
 
 def card_is_done(card, code):
@@ -127,11 +132,14 @@ class WBItem:
         attribs = self.prod.additional_attributes.all()
         return {i.attribute_name.slug_name: i.value_attribute for i in attribs}
 
+    def _glass_subject(self):
+        return GLASS_SUBJECT_ENABLED and is_glass(self.prod)
+
     def subject_id(self):
-        return GLASS_SUBJECT_ID if is_glass(self.prod) else FILM_SUBJECT_ID
+        return GLASS_SUBJECT_ID if self._glass_subject() else FILM_SUBJECT_ID
 
     def characteristics(self):
-        if is_glass(self.prod):
+        if self._glass_subject():
             return [
                 {"id": 378533, "value": [self.attribs['equipment']]},
                 {"id": 14177451, "value": ["Россия"]},

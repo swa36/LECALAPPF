@@ -58,7 +58,7 @@ class Command(BaseCommand):
         )
 
         unknown, done, pending = [], [], []
-        groups = {"film": 0, "glass_9226": 0, "glass_6466": 0}
+        groups = {"film": 0, "glass_9226": 0, "glass_6466_code": 0, "glass_6466": 0}
         glass_to_move = []
         for card in cards:
             code_vendor = card.get("vendorCode")
@@ -67,7 +67,7 @@ class Command(BaseCommand):
                 continue
             is_glass_card = code_vendor in glass
             code = target_tnved(card, is_glass_card)
-            if is_glass_card and code is None:
+            if is_glass_card and card.get("subjectID") != GLASS_SUBJECT_ID:
                 glass_to_move.append(card)
             if card_is_done(card, code):
                 done.append(card)
@@ -75,10 +75,12 @@ class Command(BaseCommand):
             pending.append((card, code))
             if not is_glass_card:
                 groups["film"] += 1
+            elif card.get("subjectID") == GLASS_SUBJECT_ID:
+                groups["glass_9226"] += 1
             elif code is None:
                 groups["glass_6466"] += 1
             else:
-                groups["glass_9226"] += 1
+                groups["glass_6466_code"] += 1
 
         blocked = sum(1 for card, _ in pending if blocked_for_documents(card))
         self.stdout.write(
@@ -89,6 +91,7 @@ class Command(BaseCommand):
             f"        плёнки → ТН ВЭД {TNVED_CODE} + excludeDocuments: {groups['film']}\n"
             f"        стёкла в {GLASS_SUBJECT_ID} → ТН ВЭД {GLASS_TNVED_CODE} + excludeDocuments: "
             f"{groups['glass_9226']}\n"
+            f"        стёкла в 6466 → ТН ВЭД {TNVED_CODE} + excludeDocuments: {groups['glass_6466_code']}\n"
             f"        стёкла в 6466 → только excludeDocuments: {groups['glass_6466']}\n"
             f"Стёкол ещё не в предмете {GLASS_SUBJECT_ID} (перенести в кабинете): {len(glass_to_move)}"
         )

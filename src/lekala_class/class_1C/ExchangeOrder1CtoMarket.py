@@ -150,6 +150,12 @@ class OrderMarketplaceTo1C:
             except ValueError:
                 response_data = {}
 
+            if self._already_in_1c(order_data, response_data):
+                # Заказ уже создан прошлой попыткой (например, ответ 1С не
+                # дошёл по таймауту). Без отметки он слался бы каждые 5 минут.
+                print(f"Заказ {order_data['Номер']} уже есть в 1С — отмечен переданным")
+                return self._mark_exchanged()
+
             if response.status_code >= 400 or response_data.get("code"):
                 print(f"Ошибка отправки заказа в 1С: {response.status_code} {response_data}")
                 return False
@@ -159,9 +165,19 @@ class OrderMarketplaceTo1C:
                 print(f"1С не вернула ref_key заказа: {response_data}")
                 return False
 
-            self.order.exchange_1c = True
-            self.order.save(update_fields=["exchange_1c"])
-            return True
+            return self._mark_exchanged()
         except requests.exceptions.RequestException as exc:
             print(f"Ошибка отправки заказа в 1С: {exc}")
             return False
+
+    def _mark_exchanged(self) -> bool:
+        self.order.exchange_1c = True
+        self.order.save(update_fields=["exchange_1c"])
+        return True
+
+    @staticmethod
+    def _already_in_1c(order_data: Dict, response_data: Dict) -> bool:
+        """1С отказала, потому что документ с нашим номером уже существует."""
+        number = order_data.get("Номер")
+        error = str(response_data.get("error") or "")
+        return bool(number) and f'"{number}"' in error and "не уникально" in error

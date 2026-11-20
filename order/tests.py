@@ -150,6 +150,35 @@ class OrderMarketplaceTo1CTest(TestCase):
         self.assertEqual(len(urls), 1)
         self.assertFalse(any("/Post()" in url for url in urls))
 
+    @patch("src.lekala_class.class_1C.ExchangeOrder1CtoMarket.requests.post")
+    def test_number_already_in_1c_marks_order_as_exchanged(self, post):
+        post.return_value = fake_response(
+            {
+                "error": 'Ошибка создания заказа: Значение "OZ00-123456789" поля "Номер" не уникально',
+                "code": "ORDER_CREATE_FAILED",
+            },
+            status=500,
+        )
+
+        result = self._client_class()(self.order).send_to_1c()
+
+        self.assertTrue(result)
+        self.order.refresh_from_db()
+        self.assertTrue(self.order.exchange_1c)
+
+    @patch("src.lekala_class.class_1C.ExchangeOrder1CtoMarket.requests.post")
+    def test_other_create_failure_keeps_order_unsent(self, post):
+        post.return_value = fake_response(
+            {"error": "Ошибка создания заказа: нет склада", "code": "ORDER_CREATE_FAILED"},
+            status=500,
+        )
+
+        result = self._client_class()(self.order).send_to_1c()
+
+        self.assertFalse(result)
+        self.order.refresh_from_db()
+        self.assertFalse(self.order.exchange_1c)
+
     def test_avito_payload_uses_marketplace_order_number(self):
         avito_order = OrderAvito.objects.create(
             number_avito="AVITO-987654",

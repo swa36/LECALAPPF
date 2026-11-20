@@ -122,6 +122,14 @@ class ExChange1C:
             if not is_main:
                 sequence_number += 1
 
+        # Картинки перекачиваются при любой смене data_version товара (правка
+        # описания, реквизитов). Если сами файлы не поменялись — не трогаем ни
+        # сайт, ни WB: иначе каждая правка карточки в 1С перезаливала бы фото.
+        new_signature = [(image["main"], image["bytes"]) for image in pending_images]
+        if self._current_signature(product) == new_signature:
+            print(f"Изображения товара {product.name} не изменились")
+            return
+
         product.images.all().delete()
         media_path = Path(settings.MEDIA_ROOT) / "img" / product.code_1C
         if media_path.exists() and media_path.is_dir():
@@ -142,7 +150,22 @@ class ExChange1C:
         #     from ozon.tasks import update_img_ozon as sent_img_ozon
         #
         #     sent_img_ozon.delay(id=product.id)
-        # if hasattr(product, "wb"):
-        #     from wildberries.tasks import sent_img_video as sent_img_wb
-        #
-        #     sent_img_wb.delay(id=product.id)
+        if hasattr(product, "wb"):
+            from wildberries.tasks import sent_img_video as sent_img_wb
+
+            sent_img_wb.delay(id=product.id)
+
+    @staticmethod
+    def _current_signature(product):
+        """Картинки товара на сайте как [(main, bytes)] в порядке выгрузки из 1С.
+
+        None, если какой-то файл не читается — тогда считаем, что фото менялись.
+        """
+        signature = []
+        for img in product.images.order_by("id"):
+            try:
+                with img.image.open("rb") as file:
+                    signature.append((img.main, file.read()))
+            except (OSError, ValueError):
+                return None
+        return signature

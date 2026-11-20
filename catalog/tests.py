@@ -183,6 +183,64 @@ class ExChange1CImagesTest(TestCase):
         self.assertEqual(imgs.filter(main=True).count(), 1)
         self.assertTrue(imgs.get(main=True).filename.startswith("main_"))
 
+    def _payload(self, *datas):
+        return {
+            "nomenclature_key": str(self.product.uuid_1C),
+            "images": [
+                {"file_uuid": f"00000000-0000-0000-0000-00000000000{n}",
+                 "is_main": n == 0, "data_base64": data}
+                for n, data in enumerate(datas)
+            ],
+        }
+
+    def _add_wb(self):
+        from wildberries.models import WBData
+
+        WBData.objects.create(product=self.product, offer_id="ART1", wb_id=123)
+
+    def test_get_img_sends_changed_images_to_wb(self):
+        self._add_wb()
+        with patch.object(self.client, "_make_request", return_value=self._payload(ONE_PX_PNG)), \
+             patch("wildberries.tasks.sent_img_video.delay") as wb_delay:
+            self.client.get_img(self.product.uuid_1C)
+        wb_delay.assert_called_once_with(id=self.product.id)
+
+    def test_get_img_skips_unchanged_images(self):
+        self._add_wb()
+        payload = self._payload(ONE_PX_PNG, ONE_PX_PNG)
+        with patch.object(self.client, "_make_request", return_value=payload), \
+             patch("wildberries.tasks.sent_img_video.delay"):
+            self.client.get_img(self.product.uuid_1C)
+        before = list(self.product.images.values_list("id", "filename"))
+
+        with patch.object(self.client, "_make_request", return_value=payload), \
+             patch("wildberries.tasks.sent_img_video.delay") as wb_delay:
+            self.client.get_img(self.product.uuid_1C)
+
+        wb_delay.assert_not_called()
+        self.assertEqual(list(self.product.images.values_list("id", "filename")), before)
+
+    def test_get_img_resends_when_photo_added_in_1c(self):
+        self._add_wb()
+        with patch.object(self.client, "_make_request", return_value=self._payload(ONE_PX_PNG)), \
+             patch("wildberries.tasks.sent_img_video.delay"):
+            self.client.get_img(self.product.uuid_1C)
+
+        with patch.object(self.client, "_make_request",
+                          return_value=self._payload(ONE_PX_PNG, ONE_PX_PNG)), \
+             patch("wildberries.tasks.sent_img_video.delay") as wb_delay:
+            self.client.get_img(self.product.uuid_1C)
+
+        wb_delay.assert_called_once_with(id=self.product.id)
+        self.assertEqual(self.product.images.count(), 2)
+
+    def test_get_img_without_wb_card_does_not_send(self):
+        with patch.object(self.client, "_make_request", return_value=self._payload(ONE_PX_PNG)), \
+             patch("wildberries.tasks.sent_img_video.delay") as wb_delay:
+            self.client.get_img(self.product.uuid_1C)
+        wb_delay.assert_not_called()
+        self.assertEqual(self.product.images.count(), 1)
+
 
 class GetData1CAttributesTest(TestCase):
     def setUp(self):

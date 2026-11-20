@@ -183,3 +183,33 @@ class GlassTest(TestCase):
         item = self._wb_item(self.film)
         self.assertEqual(item.subject_id(), FILM_SUBJECT_ID)
         self.assertIn({"id": TNVED_CHARC_ID, "value": [TNVED_CODE]}, item.characteristics())
+
+
+class PostImgLinkRetryTest(SimpleTestCase):
+    def _resp(self, status):
+        resp = mock.MagicMock(status_code=status)
+        resp.json.return_value = {}
+        return resp
+
+    def test_retries_after_429(self):
+        from src.lekala_class.class_marketplace.WB import WBItemCard
+
+        with mock.patch("src.lekala_class.class_marketplace.WB.requests.post",
+                        side_effect=[self._resp(429), self._resp(200)]) as post, \
+             mock.patch("src.lekala_class.class_marketplace.WB.time.sleep"):
+            result = WBItemCard().post_img_link(data='{"nmId": 1, "data": []}')
+
+        self.assertEqual(post.call_count, 2)
+        self.assertEqual(post.call_args.kwargs["data"], '{"nmId": 1, "data": []}')
+        self.assertEqual(result.status_code, 200)
+
+    def test_gives_up_after_several_429(self):
+        from src.lekala_class.class_marketplace.WB import WBItemCard
+
+        with mock.patch("src.lekala_class.class_marketplace.WB.requests.post",
+                        return_value=self._resp(429)) as post, \
+             mock.patch("src.lekala_class.class_marketplace.WB.time.sleep"):
+            result = WBItemCard().post_img_link(data="{}")
+
+        self.assertLessEqual(post.call_count, 5)
+        self.assertEqual(result.status_code, 429)

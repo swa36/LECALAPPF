@@ -142,14 +142,16 @@ class WBItemCard(BaseMarketPlace):
         if save_to_file:
             self._save_payload_to_file(data)
             return
-        req = requests.post(self.BASE_URL+endpoint, data=data, headers={
-            'Content-Type':'application/json',
-            'Authorization':settings.WB_KEY
-        })
-        print(req.json())
-        if req.status_code == 429:
+        for attempt in range(5):
+            req = requests.post(self.BASE_URL+endpoint, data=data, headers={
+                'Content-Type':'application/json',
+                'Authorization':settings.WB_KEY
+            }, timeout=60)
+            print(req.json())
+            if req.status_code != 429:
+                break
             print('Шлем повтор')
-            self.post_img_link(self, data, params, save_to_file)
+            time.sleep(10 * (attempt + 1))
         return req
 
 

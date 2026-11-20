@@ -21,7 +21,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ozon/', include('ozon.urls', namespace='ozon')),
+    # С Ozon сейчас не работаем: push-уведомления создавали бы заказы,
+    # которые потом уходят в 1С. Вернуть — раскомментировать.
+    # path('ozon/', include('ozon.urls', namespace='ozon')),
     path('avito/', include('avito.urls', namespace='avito')),
     path('ali/', include('aliexpress.urls', namespace='aliexpress')),
     path('yamarket/', include('yamarket.urls', namespace='yamarket')),

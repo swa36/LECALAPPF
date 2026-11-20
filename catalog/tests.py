@@ -533,14 +533,15 @@ class CatalogChunkTaskTest(TestCase):
 
 
 class CatalogAfterUpdateTest(TestCase):
-    def test_after_catalog_update_triggers_marketplaces(self):
+    def test_after_catalog_update_triggers_wb_and_ali_only(self):
         import catalog.tasks as t
 
         with patch.object(t, "update_remains_ozon") as ozon, \
              patch.object(t, "update_remains_wb") as wb, \
              patch.object(t, "update_stock_ali") as ali:
             t.after_catalog_update()
-        ozon.delay.assert_called_once_with()
+        # С Ozon не работаем — остатки туда не уходят.
+        ozon.delay.assert_not_called()
         wb.delay.assert_called_once_with()
         ali.delay.assert_called_once_with()
 
@@ -551,7 +552,8 @@ class CatalogAfterUpdateTest(TestCase):
              patch.object(t, "update_remains_wb") as wb, \
              patch.object(t, "update_stock_ali") as ali:
             t.after_catalog_update([1, 2, 3])
-        ozon.delay.assert_called_once_with()
+        # С Ozon не работаем — остатки туда не уходят.
+        ozon.delay.assert_not_called()
         wb.delay.assert_called_once_with()
         ali.delay.assert_called_once_with()
 

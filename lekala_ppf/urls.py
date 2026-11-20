@@ -26,7 +26,9 @@ urlpatterns = [
     # path('ozon/', include('ozon.urls', namespace='ozon')),
     path('avito/', include('avito.urls', namespace='avito')),
     path('ali/', include('aliexpress.urls', namespace='aliexpress')),
-    path('yamarket/', include('yamarket.urls', namespace='yamarket')),
+    # С Яндекс.Маркетом не работаем: order/accept и notify создавали бы
+    # заказы, которые потом уходят в 1С. Вернуть — раскомментировать.
+    # path('yamarket/', include('yamarket.urls', namespace='yamarket')),
 ]
 
 
